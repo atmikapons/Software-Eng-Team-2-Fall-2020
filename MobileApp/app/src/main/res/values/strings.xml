@@ -1,7 +1,29 @@
 <resources>
     <string name="app_name">ZippyPark</string>
     <string name="login">Login</string>
-    <string name="username">Username</string>
+    <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="sign_up">Sign Up</string>
+    <string name="sign_up">Sign Up!</string>
+    <string name="create_account">Create a New Account</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_num">Phone Number</string>
+    <string name="license_num">License Plate #</string>
+    <string name="registration_num">Registration #</string>
+    <string name="basic_info">Basic Info</string>
+    <string name="vehicle_info">Vehicle Info</string>
+    <string name="payment_info">Payment Info</string>
+    <string name="credit_card_type">Credit Card Type</string>
+    <string name="credit_card_num">Credit Card #</string>
+    <string name="exp_date">Expiration Date</string>
+    <string name="cvv">CVV</string>
+    <string name="next">Next</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="welcome">Welcome, user!</string>
+    <string name="view_profile">View Profile</string>
+    <string name="view_reservations">Current\nReservations</string>
+    <string name="reservation_history">Reservation\nHistory</string>
+    <string name="create_reservation">Create\nReservation</string>
+
+
 </resources>
