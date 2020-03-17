@@ -1,0 +1,9 @@
+{
+    "name": "node-ejs",
+    "main": "server.js",
+    "dependencies": {
+        "ejs": "2.5.5",
+        "express": "^4.6.1",
+        "mysql": "2.14.1"
+    }
+}
