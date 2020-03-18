@@ -1,25 +1,33 @@
 var express = require('express');
-var router = express.Router();
-
-router.get('/', function (req, res) {
-    //res.send('Hello World');
-    res.render('pages/dashboard');
-});
-
-router.get('/statistics', function (req, res) {
-    res.render('pages/statistics');
-});
-
-router.get('/reservations', function (req, res) {
-    res.render('pages/reservations');
-});
-
-router.get('/customers', function (req, res) {
-    res.render('pages/customers', {
-        // customers: info.data.filter(function(item) {
-        //     return item.role === "";
-        // })
+var router = function (app, db) {
+    app.get('/', function (req, res) {
+        //res.send('Hello World');
+        res.render('pages/dashboard');
     });
-});
+    
+    app.get('/statistics', function (req, res) {
+        res.render('pages/statistics');
+    });
+    
+    app.get('/reservations', function (req, res) {
+        res.render('pages/reservations');
+    });
+    
+    app.get('/customers', function (req, res) {
+        db.query('SELECT * FROM CustomerInfo', function (err, rows) {
+            if ( err ) {
+                res.render('pages/customers', {
+                    customers: null,
+                });
+            } else {
+                res.render('pages/customers', {
+                    customers: rows,
+                });
+            }
+        });
+    });
+};
+
+
 
 module.exports = router;

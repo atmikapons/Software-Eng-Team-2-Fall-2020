@@ -19,7 +19,31 @@
                             <th class="text">Select</th>
                         </tr>
                     </thead>
-                    
+                    <tbody>
+                        <% if ( customers != null ) { %>
+                            <% customers.forEach(function(customer) {  %>
+                                <tr value="<%= customer.Barcode %>">
+                                    <td>
+                                        <%= customer.FirstName %>
+                                    </td>
+                                    <td>
+                                        <%= customer.LastName %>
+                                    </td>
+                                    <td>
+                                        <%= customer.Barcode %>
+                                    </td>
+                                    <td>
+                                        <%= customer.LicenseNum %>
+                                    </td>
+                                    <td>
+                                        <%= customer.Points %>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
                 </table>
             </div>
         </div>
