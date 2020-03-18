@@ -8,30 +8,13 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname,'public')));
 
-app.get('/', function (req, res) {
-    //res.send('Hello World');
-    res.render('pages/dashboard');
-});
-
-app.get('/statistics', function (req, res) {
-    res.render('pages/statistics');
-});
-
-app.get('/reservations', function (req, res) {
-    res.render('pages/reservations');
-});
-
-app.get('/customers', function (req, res) {
-    res.render('pages/customers');
-});
+app.use('/', require('./routes'));
 
 var db = mysql.createConnection({
-    //host: '128.6.238.10',
     host: '127.0.0.1',
     user: 'zippypark',
     password: 'goyhVynIiLcJgHpN',
     database: 'zippypark'
-    //port:
 });
 
 // db.connect( function (err) {
