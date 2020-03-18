@@ -1,5 +1,6 @@
 var express = require('express');
 var router = function (app, db) {
+    ////// GET WEBPAGES //////////
     app.get('/', function (req, res) {
         res.render('pages/dashboard');
     });
@@ -25,6 +26,7 @@ var router = function (app, db) {
             }
         });
     });
+    //////////////////////////////
 };
 
 module.exports = router;

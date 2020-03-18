@@ -1,3 +1,4 @@
+<!-- views/pages/customers.ejs -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +12,7 @@
                 <table id = "customer_table" class = "table table-bordered">
                     <thead>
                         <tr>
+                            <!-- table headings -->
                             <th class="text">First Name</th>
                             <th class="text">Last Name</th>
                             <th class="text">Barcode</th>
@@ -20,6 +22,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <!-- take data from CustomerInfo table -->
                         <% if ( customers != null ) { %>
                             <% customers.forEach(function(customer) {  %>
                                 <tr value="<%= customer.Barcode %>">
@@ -52,7 +55,7 @@
     </div>
 <script>
     $(document).ready( function () {
-        $('#customer_table').DataTable();
+        $('#customer_table').DataTable(); // from datatables.net
     });
 </script>
 </body>
