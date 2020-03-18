@@ -22,7 +22,6 @@ var router = function (app, db) {
                 res.render('pages/customers', {
                     customers: rows,
                 });
-                console.log(rows);
             }
         });
     });
