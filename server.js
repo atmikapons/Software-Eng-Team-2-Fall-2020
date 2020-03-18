@@ -14,7 +14,7 @@ var db = mysql.createConnection({
     password: 'goyhVynIiLcJgHpN',
     database: 'zippypark'
 });
-//app.use('/', require('./routes'))(app, db);
+
 var routes = require('./routes/index.js')(app,db);
 db.connect( function (err) {
     if ( err ) {
@@ -23,14 +23,7 @@ db.connect( function (err) {
     }
 
     console.log('connected as id ' + db.threadId);
-})
-
-// var server = app.listen(8081, function () {
-//     var host = server.address().address;
-//     var port = server.address().port;
-
-//     console.log("Example app listening at https://%s:%s", host, port);
-// });
+});
 
 var httpServer = http.createServer( app );
 httpServer.listen(8080);

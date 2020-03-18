@@ -1,7 +1,6 @@
 var express = require('express');
 var router = function (app, db) {
     app.get('/', function (req, res) {
-        //res.send('Hello World');
         res.render('pages/dashboard');
     });
     
@@ -23,11 +22,10 @@ var router = function (app, db) {
                 res.render('pages/customers', {
                     customers: rows,
                 });
+                console.log(rows);
             }
         });
     });
 };
-
-
 
 module.exports = router;
