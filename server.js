@@ -4,9 +4,6 @@ var http = require('http');
 var path = require('path');
 var app = express();
 const bodyParser = require('body-parser');
-const {getHomePage} = require('./routes/index');
-const {addPlayerPage, addPlayer, deletePlayer, editPlayer, editPlayerPage} = require('./routes/customer');
-
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -14,19 +11,23 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); // parse form data client
 app.use(express.static(path.join(__dirname, 'public'))); // configure express to use public folder
-//app.get('/', getHomePage);
-//app.get('/add', addPlayerPage);
-//app.get('/edit/:id', editPlayerPage);
-//app.get('/delete/:barcode', deletePlayer);
-//app.post('/add', addPlayer);
-//app.post('/edit/:id', editPlayer);
 
 // database connection
+// var db = mysql.createConnection({
+//     host: '127.0.0.1', // local host
+//     user: 'zippypark',
+//     password: 'goyhVynIiLcJgHpN',
+//     database: 'zippypark'
+// });
+
+
+/// Sam's remote database for testing:
 var db = mysql.createConnection({
-    host: '127.0.0.1', // local host
-    user: 'zippypark',
-    password: 'goyhVynIiLcJgHpN',
-    database: 'zippypark'
+    host: 'remotemysql.com',
+    user: 'dhI47C5XFR',
+    password: 'R5EYIRUesL',
+    database: 'dhI47C5XFR',
+    port: 3306
 });
 
 db.connect( function (err) {

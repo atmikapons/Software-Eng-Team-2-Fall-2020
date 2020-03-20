@@ -27,8 +27,19 @@ var router = function (app, db) {
         });
     });
 
-
     //////////////////////////////
+
+    app.get('/deleteCustomer/:barcode', function (req, res) {
+        let id = req.params.barcode;
+        let deleteCustomerQuery = 'DELETE FROM CustomerInfo WHERE barcode = "' + id + '"';
+        db.query(deleteCustomerQuery, function (err, result) {
+            if ( err ) {
+                return res.status(500).send(err);
+            }
+            res.redirect('/customers');
+        });
+    });
+
 };
 
 module.exports = router;
