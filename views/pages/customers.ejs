@@ -50,14 +50,49 @@
                         <% } %>
                     </tbody>
                 </table>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#customerModal">
+                    Add Customer
+                </button>
             </div>
         </div>
         
         <% include ../partials/footer %>
     </div>
+    <% include ../partials/add-customer %>
 <script>
     $(document).ready( function () {
         $('#customer_table').DataTable(); // from datatables.net
+    });
+
+    $('#customerModal').on('hidden.bs.modal', function () {
+        $('#customerModal form')[0].reset();
+    }); // reset form
+
+    $("#add-customer-button").click(function (event) {
+        event.preventDefault();
+        $.post("/addCustomer", {
+            "first" : $("#first-name").val(),
+            "last" : $("#last-name").val(),
+            "email" : $("#customer-email").val(),
+            "phone" : $("#phone-number").val(),
+            "password" : $("#customer-password").val(),
+            "barcode" : $("#barcode").val(),
+            "license" : $("#license").val(),
+            "reg" : $("#registration").val(),
+            "cctype" : $("#cc-type").val(),
+            "ccnum" : $("#cc-num").val(),
+            "ccexp" : $("#cc-exp").val(),
+            "cccvv" : $("#cc-cvv").val(),
+            "points" : $("#points").val(),
+            "handicap" : ($('#handicap').prop('checked')) ? 1 : 0,
+        },
+        function (data, status) {
+            if (data.status == "Success") {
+                location.reload();
+            } else {
+                alert("Error adding customer");
+            }
+        });
     });
 </script>
 </body>
