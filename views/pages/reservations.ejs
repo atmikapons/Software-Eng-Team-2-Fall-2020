@@ -9,89 +9,89 @@
         <% include ../partials/sidebar %>
         <div class = "content-container">
             <div class = "container-fluid">
-              <table id = "reservation_table" class = "table table-bordered">
-                <thead>
-                  <tr>
-                    <!-- table headings -->
-                    <th class="text">Date</th>
-                    <th class="text">Start Time</th>
-                    <th class="text">End Time</th>
-                    <th class="text">Barcode</th>
-                    <th class="text">Assigned Spot</th>
-                    <th class="text">Charge</th>
-                    <th class="text">rID</th>
-                    <th class="text">Select</th>
-                  </tr>
-                </thead>
-                <tbody>
-    <!-- take data from Reservations table-->
-                  <% if ( reservations != null ) { %>
-                    <% reservations.forEach(function(reservation) {  %>
-                      <tr value="<%= reservation.Barcode %>">
-                        <td>
-                          <%= reservation.Date %>
-                        </td>
-                        <td>
-                          <%= reservation.StartTime %>
-                        </td>
-                        <td>
-                          <%= reservation.EndTime %>
-                        </td>
-                        <td>
-                          <%= reservation.Barcode %>
-                        </td>
-                        <td>
-                          <%= reservation.AssignedSpot %>
-                        </td>
-                        <td>
-                          <%= reservation.Charge %>
-                        </td>
-                        <td>
-                          <%= reservation.rID %>
-                        </td>
-                        <td>
-                          <a href="/editReservation/<%= reservation.Barcode %>" target="_blank" rel="noopener" class="btn btn-primary" data-toggle="modal" data-target="#reservationModal">Update</a>
-                          <a href="/deleteReservation/<%= reservation.Barcode %>" class="btn btn-sm btn-danger">Delete</a>
-                        </td>
-                      </tr>
-                    <% }) %>
-                  <% } %>
-                </tbody>
-              </table>
+                <table id = "reservation_table" class = "table table-bordered">
+                    <thead>
+                        <tr>
+                            <!-- table headings -->
+                            <th class="text">Date</th>
+                            <th class="text">Start Time</th>
+                            <th class="text">End Time</th>
+                            <th class="text">Barcode</th>
+                            <th class="text">Assigned Spot</th>
+                            <th class="text">Charge</th>
+                            <th class="text">rID</th>
+                            <th class="text">Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <!-- take data from Reservations table-->
+                        <% if ( reservations != null ) { %>
+                            <% reservations.forEach(function(reservation) {  %>
+                                <tr value="<%= reservation.Barcode %>">
+                                    <td>
+                                        <%= reservation.Date %>
+                                    </td>
+                                    <td>
+                                        <%= reservation.StartTime %>
+                                    </td>
+                                    <td>
+                                        <%= reservation.EndTime %>
+                                    </td>
+                                    <td>
+                                        <%= reservation.Barcode %>
+                                    </td>
+                                    <td>
+                                        <%= reservation.AssignedSpot %>
+                                    </td>
+                                    <td>
+                                        <%= reservation.Charge %>
+                                    </td>
+                                    <td>
+                                        <%= reservation.rID %>
+                                    </td>
+                                    <td>
+                                        <a href="/editReservation/<%= reservation.Barcode %>" target="_blank" rel="noopener" class="btn btn-primary" data-toggle="modal" data-target="#reservationModal">Update</a>
+                                        <a href="/deleteReservation/<%= reservation.Barcode %>" class="btn btn-sm btn-danger">Delete</a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+                </table>
             </div>
-          </div>
-
-          <% include ../partials/footer %>
         </div>
-        <% include ../partials/edit-reservation%>
-      <script>
-          $(document).ready( function () {
-              $('reservation_table').DataTable(); //from datatables.net
-          });
 
-          $('#reservationModal').on('hidden.bs.modal', function()) {
-              $('#reservationModal form')[0].reset();
-          }); //reset form
+        <% include ../partials/footer %>
+    </div>
+    <% include ../partials/edit-reservation%>
+<script>
+    $(document).ready( function () {
+        $('#reservation_table').DataTable(); //from datatables.net
+    });
 
-          $("#edit-reservation-button").click(function (event)) {
-              event.preventDefault();
-              $.post("/editReservation", {
-                  "date" : $("#date").val(),
-                  "starttime" : $("#start-time").val(),
-                  "endtime" : $("#end-time").val(),
-                  "barcode" : $("#barcode").val(),
-                  "assignedspot" : $("#assigned-spot").val(),
-                  "charge" : $("#charge").val(),
-                  "rID" : $("#rID").val(),
-              },
-              function (data, status) {
-                if (data.status == "Success") {
-                  location.reload();
-                } else {
-                  alert("Error editing reservation");
-                }
-              });
-          });
-        </script>
+    $('#reservationModal').on('hidden.bs.modal', function() {
+        $('#reservationModal form')[0].reset();
+    }); //reset form
+
+    $("#edit-reservation-button").click(function (event) {
+        event.preventDefault();
+        $.post("/editReservation", {
+            "date" : $("#date").val(),
+            "starttime" : $("#start-time").val(),
+            "endtime" : $("#end-time").val(),
+            "barcode" : $("#barcode").val(),
+            "assignedspot" : $("#assigned-spot").val(),
+            "charge" : $("#charge").val(),
+            "rID" : $("#rID").val(),
+        },
+        function (data, status) {
+          if (data.status == "Success") {
+            location.reload();
+          } else {
+            alert("Error editing reservation");
+          }
+        });
+    });
+  </script>
 </body>
 </html>
