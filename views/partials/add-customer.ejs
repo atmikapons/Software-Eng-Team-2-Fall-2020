@@ -55,21 +55,26 @@
                         </div>
                     </div>
                     <div class = "form-row">
-                        <label for="cc-number" class="col-md-8">Credit Card Number</label>
-                        <label for="cc-type" class="col-md-2">Type</label>
-                        <label for="cc-cvv" class="col-md-2">CVV</label>
+                        <label for="cc-number" class="col-md-9">Credit Card Number</label>
+                        <label for="cc-cvv" class="col-md-3">CVV</label>
                     </div>
                     <div class = "form-row">
-                        <input type="number" class="form-control col-md-8" name="cc-num" id="cc-number" placeholder="Credit card number">
-                        <select id="cc-type" name="cc-type" class="form-control col-md-2">
+                        <input type="number" class="form-control col-md-9" name="cc-num" id="cc-num" placeholder="Credit card number">
+                        <input type="number" class="form-control col-md-3" name="cc-cvv" id="cc-cvv" placeholder="123">
+                    </div>
+                    <div class = "form-row">
+                        <label for="cc-exp" class="col-md-6">Expiration Date</label>
+                        <label for="cc-type" class="col-md-6">Type</label>
+                    </div>
+                    <div class = "form-row">
+                        <input type="text" class="form-control col-md-6" name="cc-exp" id="cc-exp" placeholder="01/20">
+                        <select id="cc-type" name="cc-type" class="form-control col-md-6">
                             <option selected disabled>Credit card type</option>
                             <option>Visa</option>
                             <option>MasterCard</option>
                             <option>American Express</option>
                         </select>
-                        <input type="number" class="form-control col-md-2" name="cc-cvv" id="cc-cvv" placeholder="123">
                     </div>
-
                 </div>
                 <div class = "modal-footer">
                     <button type="submit" class="btn btn-primary float-right" id="add-customer-button">Add Customer</button>
