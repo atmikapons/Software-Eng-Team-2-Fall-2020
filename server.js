@@ -20,15 +20,23 @@ app.use(express.static(path.join(__dirname, 'public'))); // configure express to
 //     database: 'zippypark'
 // });
 
-
-/// Sam's remote database for testing:
+/// Kylie's remote database for testing:
 const db = mysql.createConnection({
     host: 'remotemysql.com',
-    user: 'dhI47C5XFR',
-    password: 'R5EYIRUesL',
-    database: 'dhI47C5XFR',
+    user: 'KUU6GpyPt4',
+    password: 'XIbBmfeIWj',
+    database: 'KUU6GpyPt4',
     port: 3306
 });
+
+/// Sam's remote database for testing:
+// const db = mysql.createConnection({
+//     host: 'remotemysql.com',
+//     user: 'dhI47C5XFR',
+//     password: 'R5EYIRUesL',
+//     database: 'dhI47C5XFR',
+//     port: 3306
+// });
 
 db.connect( function (err) {
     if ( err ) {

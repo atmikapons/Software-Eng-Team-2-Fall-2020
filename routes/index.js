@@ -5,15 +5,25 @@ var router = function (app, db) {
     app.get('/', function (req, res) {
         res.render('pages/dashboard');
     });
-    
+
     app.get('/statistics', function (req, res) {
         res.render('pages/statistics');
     });
-    
+
     app.get('/reservations', function (req, res) {
-        res.render('pages/reservations');
+      db.query('SELECT * FROM Reservations', function (err, rows) {
+          if ( err ) {
+              res.render('pages/reservations', {
+                  reservations: null,
+              });
+          } else {
+              res.render('pages/reservations', {
+                  reservations: rows,
+              });
+          }
+      });
     });
-    
+
     app.get('/customers', function (req, res) {
         db.query('SELECT * FROM CustomerInfo', function (err, rows) {
             if ( err ) {
@@ -27,6 +37,43 @@ var router = function (app, db) {
             }
         });
     });
+
+    ////// RESERVATION ROUTES //////
+
+    app.get('/deleteReservation/:barcode', function (req, res) {
+        let id = req.params.barcode;
+        let deleteReservationQuery = 'DELETE FROM Reservations WHERE barcode = "' + id + '"';
+        db.query(deleteReservationQuery, function (err, result) {
+            if ( err ) {
+                return res.status(500).send(err);
+            }
+            res.redirect('/reservations');
+        });
+    });
+
+    app.post('/editReservation/:barcode', function (req, res) {
+        let date = req.body.date;
+        let start = req.body.start;
+        let end = req.body.end;
+        let barcode = req.body.barcode;
+        let spot = req.body.spot;
+        let charge = req.body.charge;
+        let rid = req.body.rid;
+        let values = [];
+        values.push([date,start,end,barcode,spot,reg,charge]);
+        let editQuery = "UPDATE Reservations (Date, StartTime, EndTime, Barcode, \
+                        AssignedSpot, Charge, rID) VALUES ?;";
+        db.query(editQuery, [values], function (err, result) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else {
+                return res.status(200).send({
+                    'status': "Success"
+                });
+            }
+        });
+    });
+
 
     ////// CUSTOMER ROUTES //////
 
@@ -72,6 +119,7 @@ var router = function (app, db) {
             }
         });
     });
+
 };
 
 module.exports = router;
