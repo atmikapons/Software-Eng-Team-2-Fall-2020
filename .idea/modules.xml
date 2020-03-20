@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ZippyPark.iml" filepath="$PROJECT_DIR$/ZippyPark.iml" />
-      <module fileurl="file://C:\Users\user\AndroidStudioProjects\ZippyPark\ZippyPark - Copy.iml" filepath="C:\Users\user\AndroidStudioProjects\ZippyPark\ZippyPark - Copy.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zippypark2.iml" filepath="$PROJECT_DIR$/zippypark2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/zippypark2-app.iml" filepath="$PROJECT_DIR$/app/zippypark2-app.iml" />
     </modules>
   </component>
 </project>
