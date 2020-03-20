@@ -1,8 +1,8 @@
-var express = require('express');
-var mysql = require('mysql');
-var http = require('http');
-var path = require('path');
-var app = express();
+const express = require('express');
+const mysql = require('mysql');
+const http = require('http');
+const path = require('path');
+const app = express();
 const bodyParser = require('body-parser');
 
 app.set('view engine', 'ejs');
@@ -22,7 +22,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // configure express to
 
 
 /// Sam's remote database for testing:
-var db = mysql.createConnection({
+const db = mysql.createConnection({
     host: 'remotemysql.com',
     user: 'dhI47C5XFR',
     password: 'R5EYIRUesL',
@@ -38,7 +38,7 @@ db.connect( function (err) {
     console.log('connected as id ' + db.threadId);
 });
 
-var routes = require('./routes/index.js')(app,db);
+const routes = require('./routes/index.js')(app,db);
 
-var httpServer = http.createServer( app );
+const httpServer = http.createServer( app );
 httpServer.listen(8080); // can change port
