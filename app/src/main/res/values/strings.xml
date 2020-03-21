@@ -45,4 +45,9 @@
     <string name="start_time">Start Time</string>
     <string name="end_time">End Time</string>
     <string name="res_history">Reservation History</string>
+    <string name="handicap">Handicap Status</string>
+    <string-array name="handicap_options">
+        <item>No</item>
+        <item>Yes</item>
+    </string-array>
 </resources>
