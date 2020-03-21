@@ -70,6 +70,10 @@
 
     $("#add-customer-button").click(function (event) {
         event.preventDefault();
+        let date = $("#cc-exp").val();
+        let year = parseInt(date.substring(3)) + 2000;
+        let month = date.substring(0,2);
+        let dateString = year + "-" + month + "-01";
         $.post("/addCustomer", {
             "first" : $("#first-name").val(),
             "last" : $("#last-name").val(),
@@ -81,7 +85,7 @@
             "reg" : $("#registration").val(),
             "cctype" : $("#cc-type").val(),
             "ccnum" : $("#cc-num").val(),
-            "ccexp" : $("#cc-exp").val(),
+            "ccexp" : dateString,
             "cccvv" : $("#cc-cvv").val(),
             "points" : $("#points").val(),
             "handicap" : ($('#handicap').prop('checked')) ? 1 : 0,

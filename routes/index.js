@@ -128,7 +128,7 @@ var router = function (app, db) {
             cctype, ccnum, ccexp, cccvv, points, handicap]);
         let addQuery = "INSERT INTO CustomerInfo (FirstName, LastName, Email, PhoneNum, \
                         Password, Barcode, LicenseNum, RegistrationNum, CreditCardType, \
-                        CreditCardNum, ExpDate, CVV, Points, Handicap) VALUES ?;";
+                        CreditCardNum, ExpDate, CVV, Points, Handicapped) VALUES ?;";
         db.query(addQuery, [values], function (err, result) {
             if ( err ) {
                 return res.status(500).send(err);
