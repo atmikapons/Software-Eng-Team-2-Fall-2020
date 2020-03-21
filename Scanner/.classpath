@@ -6,12 +6,15 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+	<classpathentry kind="lib" path="libraries/jsch-0.1.55.jar">
 		<attributes>
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/parth/Downloads/jsch-0.1.55.jar"/>
-	<classpathentry kind="lib" path="/Users/parth/Downloads/jar_files (1)/mysql-connector-java-8.0.16.jar"/>
+	<classpathentry kind="lib" path="libraries/mysql-connector-java-8.0.16.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
