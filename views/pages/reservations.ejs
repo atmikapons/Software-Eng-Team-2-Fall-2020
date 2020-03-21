@@ -27,7 +27,7 @@
                     <!-- take data from Reservations table-->
                         <% if ( reservations != null ) { %>
                             <% reservations.forEach(function(reservation) {  %>
-                                <tr value="<%= reservation.Barcode %>">
+                                <tr value="<%= reservation.rID %>">
                                     <td>
                                         <%= reservation.Date %>
                                     </td>
@@ -50,7 +50,7 @@
                                         <%= reservation.rID %>
                                     </td>
                                     <td>
-                                        <a href="/editReservation/<%= reservation.Barcode %>" target="_blank" rel="noopener" class="btn btn-primary" data-toggle="modal" data-target="#reservationModal">Update</a>
+                                        <button class="btn btn-primary get-reservation">Update</button>
                                         <a href="/deleteReservation/<%= reservation.Barcode %>" class="btn btn-sm btn-danger">Delete</a>
                                     </td>
                                 </tr>
@@ -73,16 +73,54 @@
         $('#reservationModal form')[0].reset();
     }); //reset form
 
+    
+    $(".get-reservation").click(function (event) {
+        event.preventDefault();
+        let rid = $(this).closest('tr').attr('value');
+        console.log("rid is " + rid);
+        $.post("/getReservation", {
+            "rid" : rid
+        },
+        function (data, status) {
+            console.log(status);
+            console.log(data.data);
+            let date = (data.data[0].Date).substring(0,10);
+            $("#dt").val(date);
+            $("#start-time").val(data.data[0].StartTime);
+            $("#end-time").val(data.data[0].EndTime);
+            $("#barcode").val(data.data[0].Barcode);
+            $("#assigned-spot").val(data.data[0].AssignedSpot);
+            $("#charge").val(data.data[0].Charge);
+            $("#rid").val(rid);
+        });
+        $("#reservationModal").modal();
+    });
+
     $("#edit-reservation-button").click(function (event) {
         event.preventDefault();
+        let dateString = $("#dt").val()
+        // let year = parseInt(dateString.substring(0,4));
+        // let month = parseInt(dateString.substring(5,7));
+        // let day = parseInt(dateString.substring(8));
+        // let date = new Date(year, month-1, day);
+        // dateString = date.toISOString().split('T')[0] + ' ' + date.toTimeString().split(' ')[0];
+        // console.log(dateString);
+        // console.log(date);
+        console.log(dateString);
+        console.log($("#start-time").val());
+        console.log($("#end-time").val());
+        console.log($("#barcode").val());
+        console.log($("#assigned-spot").val());
+        console.log($("#charge").val());
+        console.log($("#rid").val());
         $.post("/editReservation", {
-            "date" : $("#date").val(),
-            "starttime" : $("#start-time").val(),
-            "endtime" : $("#end-time").val(),
+            "date" : dateString,
+            "start" : $("#start-time").val(),
+            "end" : $("#end-time").val(),
             "barcode" : $("#barcode").val(),
-            "assignedspot" : $("#assigned-spot").val(),
+            "spot" : $("#assigned-spot").val(),
             "charge" : $("#charge").val(),
-            "rID" : $("#rID").val(),
+            "rid" : $("#rid").val(),
         },
         function (data, status) {
           if (data.status == "Success") {

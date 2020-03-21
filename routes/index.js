@@ -51,7 +51,27 @@ var router = function (app, db) {
         });
     });
 
-    app.post('/editReservation/:barcode', function (req, res) {
+    app.post('/getReservation', function (req, res) {
+        let rid = req.body.rid;
+        let getReservationQuery = 'SELECT Date, StartTime, EndTime, Barcode, AssignedSpot, Charge FROM Reservations WHERE rID = (?)';
+        db.query(getReservationQuery, rid, function (err, rows) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else if ( rows.length === 0 ) {
+                return res.status(404).send({
+                    'status' : 'not found'
+                });
+            } else {
+                JSON.stringify(rows);
+                return res.status(200).send({
+                    'status' : "Success",
+                    'data' : rows,
+                });
+            }
+        });
+    });
+
+    app.post('/editReservation', function (req, res) {
         let date = req.body.date;
         let start = req.body.start;
         let end = req.body.end;
@@ -60,15 +80,15 @@ var router = function (app, db) {
         let charge = req.body.charge;
         let rid = req.body.rid;
         let values = [];
-        values.push([date,start,end,barcode,spot,reg,charge]);
-        let editQuery = "UPDATE Reservations (Date, StartTime, EndTime, Barcode, \
-                        AssignedSpot, Charge, rID) VALUES ?;";
+        values.push([date,start,end,barcode,spot,charge, rid]);
+        let editQuery = "UPDATE Reservations SET Date = ?, StartTime = ?, EndTime = ?, \
+                        Barcode = ?, AssignedSpot = ?, Charge = ? WHERE rID = ?;";
         db.query(editQuery, [values], function (err, result) {
             if ( err ) {
                 return res.status(500).send(err);
             } else {
                 return res.status(200).send({
-                    'status': "Success"
+                    'status': "Success",
                 });
             }
         });
