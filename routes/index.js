@@ -79,11 +79,9 @@ var router = function (app, db) {
         let spot = req.body.spot;
         let charge = req.body.charge;
         let rid = req.body.rid;
-        let values = [];
-        values.push([date,start,end,barcode,spot,charge, rid]);
         let editQuery = "UPDATE Reservations SET Date = ?, StartTime = ?, EndTime = ?, \
-                        Barcode = ?, AssignedSpot = ?, Charge = ? WHERE rID = ?;";
-        db.query(editQuery, [values], function (err, result) {
+                         Barcode = ?, AssignedSpot = ?, Charge = ? WHERE rID = ?";
+        db.query(editQuery, [date, start, end, barcode, spot, charge, rid], function (err, result) {
             if ( err ) {
                 return res.status(500).send(err);
             } else {

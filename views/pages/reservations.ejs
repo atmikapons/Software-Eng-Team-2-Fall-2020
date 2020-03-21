@@ -77,13 +77,10 @@
     $(".get-reservation").click(function (event) {
         event.preventDefault();
         let rid = $(this).closest('tr').attr('value');
-        console.log("rid is " + rid);
         $.post("/getReservation", {
             "rid" : rid
         },
         function (data, status) {
-            console.log(status);
-            console.log(data.data);
             let date = (data.data[0].Date).substring(0,10);
             $("#dt").val(date);
             $("#start-time").val(data.data[0].StartTime);
@@ -98,23 +95,8 @@
 
     $("#edit-reservation-button").click(function (event) {
         event.preventDefault();
-        let dateString = $("#dt").val()
-        // let year = parseInt(dateString.substring(0,4));
-        // let month = parseInt(dateString.substring(5,7));
-        // let day = parseInt(dateString.substring(8));
-        // let date = new Date(year, month-1, day);
-        // dateString = date.toISOString().split('T')[0] + ' ' + date.toTimeString().split(' ')[0];
-        // console.log(dateString);
-        // console.log(date);
-        console.log(dateString);
-        console.log($("#start-time").val());
-        console.log($("#end-time").val());
-        console.log($("#barcode").val());
-        console.log($("#assigned-spot").val());
-        console.log($("#charge").val());
-        console.log($("#rid").val());
         $.post("/editReservation", {
-            "date" : dateString,
+            "date" : $("#dt").val(),
             "start" : $("#start-time").val(),
             "end" : $("#end-time").val(),
             "barcode" : $("#barcode").val(),
