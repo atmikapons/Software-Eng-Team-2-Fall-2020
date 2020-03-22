@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ZippyPark.iml" filepath="$PROJECT_DIR$/ZippyPark.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/ZippyPark-app.iml" filepath="$PROJECT_DIR$/app/ZippyPark-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

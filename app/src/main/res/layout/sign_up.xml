@@ -242,7 +242,7 @@
                 android:textColor="@color/hint"
                 android:textSize="18sp"
                 tools:layout_editor_absoluteX="69dp" />
-            
+
             <DatePicker
                 android:id="@+id/expDateEditText"
                 android:layout_width="wrap_content"

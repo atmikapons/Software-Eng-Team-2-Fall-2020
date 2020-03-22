@@ -246,6 +246,16 @@
                 android:textColor="@color/colorPrimary" />
 
             <Button
+                android:id="@+id/homeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:layout_gravity="center"
+                android:background="@color/hint"
+                android:textColor="@color/colorPrimary"
+                android:text="@string/home"/>
+
+            <Button
                 android:id="@+id/delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

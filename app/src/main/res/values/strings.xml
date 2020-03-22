@@ -50,4 +50,5 @@
         <item>No</item>
         <item>Yes</item>
     </string-array>
+    <string name="home">Home</string>
 </resources>

@@ -19,6 +19,7 @@ import java.sql.*;
 
 public class HomeMenuActivity extends AppCompatActivity {
     Button currentReservationsButton;
+    Button profileButton;
     int barcode;
 
     @Override
@@ -35,6 +36,17 @@ public class HomeMenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(HomeMenuActivity.this,
                         CurrentReservationsActivity.class);
+                i.putExtras(b);
+                startActivity(i);
+            }
+        });
+
+        profileButton = findViewById(R.id.viewProfile);
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(HomeMenuActivity.this,
+                        ProfileActivity.class);
                 i.putExtras(b);
                 startActivity(i);
             }
