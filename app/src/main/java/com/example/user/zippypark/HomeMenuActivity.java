@@ -18,12 +18,27 @@ import java.sql.*;
 
 
 public class HomeMenuActivity extends AppCompatActivity {
-
+    Button currentReservationsButton;
+    int barcode;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_menu);
+
+        final Bundle b = getIntent().getExtras();
+
+
+        currentReservationsButton = findViewById(R.id.currentReservations);
+        currentReservationsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(HomeMenuActivity.this,
+                        CurrentReservationsActivity.class);
+                i.putExtras(b);
+                startActivity(i);
+            }
+        });
 
     }
 }
