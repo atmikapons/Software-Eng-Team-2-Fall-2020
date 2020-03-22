@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -24,6 +25,7 @@ import java.sql.*;
 public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Button nxt;
     Button cancel;
+    DatePicker picker;
     EditText firstNameEditText;
     EditText lastNameEditText;
     EditText emailEditText;
@@ -54,6 +56,10 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
+        //EXPDATE SPINNER SETUP
+        picker=(DatePicker)findViewById(R.id.expDateEditText);
+
+
         //SIGN UP INFO
         firstNameEditText = findViewById(R.id.firstNameEditText);
         lastNameEditText = findViewById(R.id.lastNameEditText);
@@ -64,7 +70,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
         registrationNumEditText = findViewById(R.id.registrationNumEditText);
         creditCardTypeEditText = findViewById(R.id.creditCardTypeEditText);
         creditCardNumEditText = findViewById(R.id.creditCardNumEditText);
-        expDateEditText = findViewById(R.id.expDateEditText);
+        //expDateEditText = findViewById(R.id.expDateEditText);
         cvvEditText = findViewById(R.id.cvvEditText);
 
         //NEXT BUTTON
@@ -82,17 +88,41 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                 final String registrationNum = registrationNumEditText.getText().toString();
                 final String creditCardType = creditCardTypeEditText.getText().toString();
                 final String creditCardNum = creditCardNumEditText.getText().toString();
-                final String expDate = expDateEditText.getText().toString();
+                //final String expDate = expDateEditText.getText().toString();
                 final String cvv = cvvEditText.getText().toString();
                 final String handicapAns = spinner.getSelectedItem().toString();
 
-                //convert handicap response to number for database
+                //formatting handicap response: convert to binary
                 int num = 0;
                 if (handicapAns.equals("Yes")) {
                     num = 1;
                 }
                 final int handicapAnsNum = num;
 
+                //formatting expDate response: convert to YYYY-MM-DD
+                final String year = Integer.toString(picker.getYear()); //year
+
+                final String tempMonth; //month
+                int num2 = picker.getMonth();
+                if(num2<10){
+                    tempMonth = "0" + picker.getMonth();
+                }else {
+                    tempMonth = Integer.toString(picker.getMonth());
+                }
+                final String month = tempMonth;
+
+                final String tempDay; //day
+                int num3 = picker.getDayOfMonth();
+                if(num3<10){
+                    tempDay = "0" + picker.getDayOfMonth();
+                }else {
+                    tempDay = Integer.toString(picker.getMonth());
+                }
+                final String day = tempDay;
+
+                final String expDate = year + "-" + month + "-" + day; //combining format
+
+                //EXECUTE SQL STATEMENT
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
@@ -115,6 +145,7 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                     }
                 });
 
+                //MOVE TO HOMESCREEN
                 Intent i = new Intent(SignUpActivity.this, HomeMenuActivity.class);
                 startActivity(i);
             }
