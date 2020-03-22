@@ -20,6 +20,7 @@ import java.sql.*;
 public class HomeMenuActivity extends AppCompatActivity {
     Button currentReservationsButton;
     Button profileButton;
+    Button createResButton;
     int barcode;
 
     @Override
@@ -52,6 +53,16 @@ public class HomeMenuActivity extends AppCompatActivity {
             }
         });
 
+        createResButton = findViewById(R.id.createReservation);
+        createResButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeMenuActivity.this,
+                        CreateReservationActivity.class);
+                i.putExtras(b);
+                startActivity(i);
+            }
+        });
     }
 }
 

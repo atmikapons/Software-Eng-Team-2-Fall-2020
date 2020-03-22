@@ -111,7 +111,7 @@
             tools:layout_editor_absoluteX="69dp" />
 
         <EditText
-            android:id="@+id/EndTime"
+            android:id="@+id/endTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
