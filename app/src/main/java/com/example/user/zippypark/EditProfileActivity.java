@@ -101,6 +101,16 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                         points.setText(rs.getString("Points"));
 
                         //SET EXP DATE + HANDICAP TO PREPOP!!!!
+                        //handicap pre pop
+                        if(rs.getInt("Handicapped")==1){
+                            ArrayAdapter myAdap = (ArrayAdapter) spinner.getAdapter();
+                            int spinnerPosition = myAdap.getPosition("Yes");
+                            spinner.setSelection(spinnerPosition);
+                        }else{
+                            ArrayAdapter myAdap = (ArrayAdapter) spinner.getAdapter();
+                            int spinnerPosition = myAdap.getPosition("No");
+                            spinner.setSelection(spinnerPosition);
+                        }
 
                     }
                 } catch (SQLException e) {
@@ -141,7 +151,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 
                 //formatting expDate response: convert to YYYY-MM-DD
                 final String year = Integer.toString(picker.getYear()); //year
-                System.out.println("UPDATED YEAR: " + year);
+                //System.out.println("UPDATED YEAR: " + year);
 
                 final String tempMonth; //month
                 int num2 = picker.getMonth();
@@ -151,23 +161,23 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                     tempMonth = Integer.toString(picker.getMonth()+1);
                 }
                 final String month = tempMonth;
-                System.out.println("UPDATED MONTH: " + month);
+                //System.out.println("UPDATED MONTH: " + month);
 
 
                 final String tempDay; //day
                 int num3 = picker.getDayOfMonth();
-                System.out.println("ORIGINAL MONTH: " + num3);
+                //System.out.println("ORIGINAL MONTH: " + num3);
                 if(num3<10){
                     tempDay = "0" + picker.getDayOfMonth();
                 }else {
                     tempDay = Integer.toString(picker.getDayOfMonth());
                 }
                 final String day = tempDay;
-                System.out.println("UPDATED DAY: " + day);
+                //System.out.println("UPDATED DAY: " + day);
 
 
                 final String expDate = year + "-" + month + "-" + day; //combining format
-                System.out.println("UPDATED FULL DATE: " + expDate);
+                //System.out.println("UPDATED FULL DATE: " + expDate);
 
 
 
