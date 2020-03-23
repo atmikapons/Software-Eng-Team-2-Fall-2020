@@ -100,7 +100,7 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                         cvvEditText.setText(rs.getString("CVV"));
                         points.setText(rs.getString("Points"));
 
-                        //SET EXP DATE + HANDICAP TO PREPOP!!!!
+
                         //handicap pre pop
                         if(rs.getInt("Handicapped")==1){
                             ArrayAdapter myAdap = (ArrayAdapter) spinner.getAdapter();
@@ -111,6 +111,18 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                             int spinnerPosition = myAdap.getPosition("No");
                             spinner.setSelection(spinnerPosition);
                         }
+
+                        //ExpDate pre pop
+                        String expDateDB = rs.getString("ExpDate");
+                        String[] arrDate = expDateDB.split("-");
+                        int yearInt = Integer.parseInt(arrDate[0]);
+                        //System.out.println("YEARINT: " + yearInt);
+                        int monthInt = Integer.parseInt(arrDate[1])-1;
+                        //System.out.println("MONTHINT: " + monthInt);
+                        int dayInt = Integer.parseInt(arrDate[2]);
+                        //System.out.println("DAYINT: " + dayInt);
+                        picker.updateDate(yearInt,monthInt,dayInt);
+
 
                     }
                 } catch (SQLException e) {
