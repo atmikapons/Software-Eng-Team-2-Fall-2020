@@ -61,8 +61,6 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
         picker=(DatePicker)findViewById(R.id.expDateEditText);
 
 
-        //pull data from DB like in Profile
-        //to prepopulate .setText() for EditText fields kinda like SignUp
         //FIELDS TO UPDATE INFO
         firstNameEditText = findViewById(R.id.firstNameEditText);
         lastNameEditText = findViewById(R.id.lastNameEditText);
@@ -76,6 +74,43 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
         //expDateEditText = findViewById(R.id.expDateEditText);
         cvvEditText = findViewById(R.id.cvvEditText);
         points = findViewById(R.id.points);
+
+        //PREPOPULATE CUSTOMER INFO FIELDS
+        //EXECUTE SQL STATEMENT
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Statement stmt = MainActivity.conn.createStatement();
+                    //query displays all
+                    String query = "SELECT * FROM `CustomerInfo` WHERE `Barcode` = " + barcode;
+                    //System.out.println(query);
+                    ResultSet rs = stmt.executeQuery(query);
+
+                    if(rs.next()) {
+                        firstNameEditText.setText(rs.getString("FirstName"));
+                        lastNameEditText.setText(rs.getString("LastName"));
+                        emailEditText.setText(rs.getString("Email"));
+                        phoneEditText.setText(rs.getString("PhoneNum"));
+                        passwordEditText.setText(rs.getString("Password"));
+                        licenseNumEditText.setText(rs.getString("LicenseNum"));
+                        registrationNumEditText.setText(rs.getString("RegistrationNum"));
+                        creditCardTypeEditText.setText(rs.getString("CreditCardType"));
+                        creditCardNumEditText.setText(rs.getString("CreditCardNum"));
+                        cvvEditText.setText(rs.getString("CVV"));
+                        points.setText(rs.getString("Points"));
+
+                        //SET EXP DATE + HANDICAP TO PREPOP!!!!
+
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+
 
 //CONFIRM BUTTON
         confirmEditProfileButton = findViewById(R.id.confirm);
@@ -106,28 +141,36 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
 
                 //formatting expDate response: convert to YYYY-MM-DD
                 final String year = Integer.toString(picker.getYear()); //year
+                System.out.println("UPDATED YEAR: " + year);
 
                 final String tempMonth; //month
                 int num2 = picker.getMonth();
                 if(num2<10){
-                    tempMonth = "0" + picker.getMonth();
+                    tempMonth = "0" + (picker.getMonth()+1);
                 }else {
-                    tempMonth = Integer.toString(picker.getMonth());
+                    tempMonth = Integer.toString(picker.getMonth()+1);
                 }
                 final String month = tempMonth;
+                System.out.println("UPDATED MONTH: " + month);
+
 
                 final String tempDay; //day
                 int num3 = picker.getDayOfMonth();
+                System.out.println("ORIGINAL MONTH: " + num3);
                 if(num3<10){
                     tempDay = "0" + picker.getDayOfMonth();
                 }else {
-                    tempDay = Integer.toString(picker.getMonth());
+                    tempDay = Integer.toString(picker.getDayOfMonth());
                 }
                 final String day = tempDay;
+                System.out.println("UPDATED DAY: " + day);
+
 
                 final String expDate = year + "-" + month + "-" + day; //combining format
+                System.out.println("UPDATED FULL DATE: " + expDate);
 
-                
+
+
                 //EXECUTE SQL STATEMENT
                 AsyncTask.execute(new Runnable() {
                     @Override
