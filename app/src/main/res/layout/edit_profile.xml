@@ -65,6 +65,17 @@
                 android:textSize="20sp"
                 tools:layout_editor_absoluteX="69dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10sp"
+                android:textStyle="italic"
+                android:text="@string/first_name_info"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="69dp" />
+
             <EditText
                 android:id="@+id/firstNameEditText"
                 android:layout_width="match_parent"
@@ -77,6 +88,17 @@
                 android:textColorHint="@color/hint"
                 android:hint="@string/first_name" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10sp"
+                android:textStyle="italic"
+                android:text="@string/last_name_info"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="69dp" />
+
             <EditText
                 android:id="@+id/lastNameEditText"
                 android:layout_width="match_parent"
@@ -88,6 +110,17 @@
                 android:background="@drawable/cutom_edit_text"
                 android:padding="10sp"
                 android:textColorHint="@color/hint"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10sp"
+                android:textStyle="italic"
+                android:text="@string/email_info"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="69dp" />
 
             <EditText
                 android:id="@+id/emailEditText"
@@ -102,6 +135,17 @@
                 android:padding="10sp"
                 android:textColorHint="@color/hint"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10sp"
+                android:textStyle="italic"
+                android:text="@string/phone_num_info"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="69dp" />
+
             <EditText
                 android:id="@+id/phoneEditText"
                 android:layout_width="match_parent"
@@ -114,6 +158,17 @@
                 android:background="@drawable/cutom_edit_text"
                 android:padding="10sp"
                 android:textColorHint="@color/hint"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10sp"
+                android:textStyle="italic"
+                android:text="@string/password_info"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="69dp" />
 
             <EditText
                 android:id="@+id/passwordEditText"
@@ -156,6 +211,17 @@
                 android:textSize="20sp"
                 tools:layout_editor_absoluteX="69dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10sp"
+                android:textStyle="italic"
+                android:text="@string/license_num_info"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="69dp" />
+
             <EditText
                 android:id="@+id/licenseNumEditText"
                 android:layout_width="match_parent"
@@ -167,6 +233,17 @@
                 android:padding="10sp"
                 android:textColorHint="@color/hint"
                 android:hint="@string/license_num" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10sp"
+                android:textStyle="italic"
+                android:text="@string/registration_num_info"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="69dp" />
 
             <EditText
                 android:id="@+id/registrationNumEditText"
@@ -192,6 +269,17 @@
                 android:textSize="20sp"
                 tools:layout_editor_absoluteX="69dp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10sp"
+                android:textStyle="italic"
+                android:text="@string/credit_card_type_info"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="69dp" />
+
             <EditText
                 android:id="@+id/creditCardTypeEditText"
                 android:layout_width="match_parent"
@@ -203,6 +291,17 @@
                 android:padding="10sp"
                 android:textColorHint="@color/hint"
                 android:hint="@string/credit_card_type" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10sp"
+                android:textStyle="italic"
+                android:text="@string/credit_card_num_info"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="69dp" />
 
             <EditText
                 android:id="@+id/creditCardNumEditText"
@@ -246,6 +345,17 @@
                 android:layout_height="wrap_content"
                 android:datePickerMode="spinner"
                 android:calendarViewShown="false"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10sp"
+                android:textStyle="italic"
+                android:text="@string/cvv_info"
+                android:textColor="@color/colorAccent"
+                android:textSize="18sp"
+                tools:layout_editor_absoluteX="69dp" />
 
             <EditText
                 android:id="@+id/cvvEditText"

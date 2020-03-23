@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Spinner;
 
 /**
@@ -16,6 +17,7 @@ import android.widget.Spinner;
 public class EditProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Button confirmEditProfileButton;
     Button cancelEditProfileButton;
+    DatePicker picker;
     Button profileButton;
     int barcode;
 
@@ -36,6 +38,16 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
+        //EXPDATE SPINNER SETUP
+        picker=(DatePicker)findViewById(R.id.expDateEditText);
+
+
+        //pull data from DB like in Profile
+        //to prepopulate .setText() for EditText fields kinda like SignUp
+
+
+
 
 
         //TRANSITION TO PROFILE SCREEN (confirm)
