@@ -51,4 +51,18 @@
         <item>Yes</item>
     </string-array>
     <string name="home">Home</string>
+    <string name="points">Points</string>
+    <string name="first_name_info">First Name: </string>
+    <string name="last_name_info">Last Name: </string>
+    <string name="email_info">Email: </string>
+    <string name="phone_num_info">Phone Number: </string>
+    <string name="password_info">Password: </string>
+    <string name="license_num_info">License Plate #: </string>
+    <string name="registration_num_info">Registration #: </string>
+    <string name="credit_card_type_info">Credit Card Type: </string>
+    <string name="credit_card_num_info">Credit Card #: </string>
+    <string name="exp_date_info">Expiration Date: </string>
+    <string name="cvv_info">CVV: </string>
+    <string name="points_info">Points: </string>
+    <string name="handicap_info">Handicap Status: </string>
 </resources>
