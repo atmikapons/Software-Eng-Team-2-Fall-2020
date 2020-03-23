@@ -206,6 +206,28 @@
                 android:layout_marginStart="10sp"
                 android:layout_marginTop="20sp"
                 android:textStyle="bold"
+                android:text="@string/points"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                tools:layout_editor_absoluteX="69dp" />
+
+            <TextView
+                android:id="@+id/points"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:layout_margin="10sp"
+                android:textColorHint="@color/hint"
+                android:text="@string/points" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="20sp"
+                android:textStyle="bold"
                 android:text="@string/vehicle_info"
                 android:textColor="@color/colorPrimary"
                 android:textSize="20sp"
