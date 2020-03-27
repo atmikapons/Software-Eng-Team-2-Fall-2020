@@ -19,7 +19,7 @@
     <string name="cvv">CVV</string>
     <string name="next">Next</string>
     <string name="no_account">Don\'t have an account?</string>
-    <string name="welcome">Welcome, user!</string>
+    <string name="welcome">Welcome!</string>
     <string name="view_profile">View Profile</string>
     <string name="view_reservations">Current\nReservations</string>
     <string name="reservation_history">Reservation\nHistory</string>

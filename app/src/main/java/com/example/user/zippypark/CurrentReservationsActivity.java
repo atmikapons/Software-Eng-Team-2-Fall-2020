@@ -89,7 +89,7 @@ public class CurrentReservationsActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            if(reservations != null) {
+            if(reservations != null && !reservations.isEmpty()) {
                 listView = findViewById(R.id.listview);
                 customAdapter = new CustomAdapter(reservations, getApplicationContext());
                 listView.setAdapter(customAdapter);

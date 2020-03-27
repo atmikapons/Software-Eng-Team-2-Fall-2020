@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import java.sql.Date;
 import java.sql.Time;
 
@@ -54,7 +56,8 @@ public class CreateReservationActivity extends AppCompatActivity {
                             Statement stmt = MainActivity.conn.createStatement();
                             String query =("INSERT INTO `Reservations`" +
                                     "(`Date`, `StartTime`, `EndTime`, `Barcode`, `Charge`)" +
-                                    "VALUES ('" + date + "', '" + start + "', '" + end + "', '" + barcode + "', '160')");
+                                    "VALUES ('" + date + "', '" + start + "', '" + end + "', '" +
+                                    barcode + "', '160')");
                             //System.out.println(query);
                             stmt.executeUpdate(query);
                         } catch(SQLException e) {
@@ -65,6 +68,14 @@ public class CreateReservationActivity extends AppCompatActivity {
 
                 Intent i = new Intent(CreateReservationActivity.this,
                         HomeMenuActivity.class);
+                i.putExtras(b);
+
+                int duration = Toast.LENGTH_SHORT;
+
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Reservation Created", duration);
+                toast.show();
+
                 startActivity(i);
             }
         });

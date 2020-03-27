@@ -55,19 +55,19 @@ public class ReservationHistoryActivity extends AppCompatActivity {
                 String today = sdf.format(Calendar.getInstance().getTime());
 
                 Statement stmt = MainActivity.conn.createStatement();
-                ResultSet rs = stmt.executeQuery("SELECT * FROM Reservations WHERE " +
+                ResultSet rs = stmt.executeQuery("SELECT * FROM Records WHERE " +
                         "Barcode=" + barcode + " AND Date < " + today + " ORDER BY Date DESC");
 
-                if(!rs.next()) Log.d("CurrentReservations", "no reservations for this user");
+                if(!rs.next()) Log.d("ResHistory", "no reservations for this user");
 
                 while (rs.next()) {
 
-//                          String msg = "Date" + rs.getDate("Date") +
-//                                  "StartTime" + rs.getTime("StartTime") +
-//                                  "EndTime" + rs.getTime("EndTime") +
-//                                  "Barcode" + rs.getInt("Barcode");
-//
-//                          Log.d("CurrentReservations", msg);
+                          String msg = "Date" + rs.getDate("Date") +
+                                  "StartTime" + rs.getTime("StartTime") +
+                                  "EndTime" + rs.getTime("EndTime") +
+                                  "Barcode" + rs.getInt("Barcode");
+
+                          Log.d("ResHistory", msg);
 
                     Reservation r = new Reservation(rs.getDate("Date"),
                             rs.getTime("StartTime"),
