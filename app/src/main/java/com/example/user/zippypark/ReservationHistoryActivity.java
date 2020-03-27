@@ -56,18 +56,18 @@ public class ReservationHistoryActivity extends AppCompatActivity {
 
                 Statement stmt = MainActivity.conn.createStatement();
                 ResultSet rs = stmt.executeQuery("SELECT * FROM Records WHERE " +
-                        "Barcode=" + barcode + " AND Date < " + today + " ORDER BY Date DESC");
+                        "Barcode=" + barcode + " ORDER BY Date DESC");
 
                 if(!rs.next()) Log.d("ResHistory", "no reservations for this user");
 
                 while (rs.next()) {
 
-                          String msg = "Date" + rs.getDate("Date") +
-                                  "StartTime" + rs.getTime("StartTime") +
-                                  "EndTime" + rs.getTime("EndTime") +
-                                  "Barcode" + rs.getInt("Barcode");
-
-                          Log.d("ResHistory", msg);
+//                          String msg = "Date" + rs.getDate("Date") +
+//                                  "StartTime" + rs.getTime("StartTime") +
+//                                  "EndTime" + rs.getTime("EndTime") +
+//                                  "Barcode" + rs.getInt("Barcode");
+//
+//                          Log.d("ResHistory", msg);
 
                     Reservation r = new Reservation(rs.getDate("Date"),
                             rs.getTime("StartTime"),
@@ -77,7 +77,7 @@ public class ReservationHistoryActivity extends AppCompatActivity {
                             rs.getDouble("Charge"),
                             rs.getInt("rID"));
                     reservations.add(r);
-                    Log.d("CurrentRes", ""+reservations.contains(r));
+//                    Log.d("CurrentRes", ""+reservations.contains(r));
 
 //                    msg = "Date" + r.getDate() +
 //                            "StartTime" + r.getStartTime() +
