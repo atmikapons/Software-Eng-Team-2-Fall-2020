@@ -17,6 +17,8 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -38,54 +40,72 @@ public class CurrentReservationsActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         barcode = b.getInt("barcode");
-        //Date today = (java.sql.Date) Calendar.getInstance().getTime();
+        reservations = new ArrayList<>(10);
 
-        AsyncTask.execute(new Runnable() {
-              @Override
-              public void run() {
-                  try {
-                      Statement stmt = MainActivity.conn.createStatement();
-                      ResultSet rs = stmt.executeQuery("SELECT * FROM Reservations WHERE Barcode=" + barcode);
-                      reservations = new ArrayList<>();
-                      while (rs.next()) {
-                          Reservation r = new Reservation(rs.getDate("Date"),
-                                  rs.getTime("StartTime"),
-                                  rs.getTime("EndTime"),
-                                  rs.getInt("Barcode"),
-                                  rs.getInt("AssignedSpot"),
-                                  rs.getDouble("Charge"),
-                                  rs.getInt("rID"));
-                          reservations.add(r);
-                      }
-                  } catch (SQLException e) {
-                      e.printStackTrace();
-                  }
-              }
-          });
-
-
-
-        listView = findViewById(R.id.listview);
-        customAdapter = new CustomAdapter(reservations, getApplicationContext());
-        listView.setAdapter(customAdapter);
-
+        new GetReservationsTask().execute();
     }
 
     public static void updateAdapter() {
         customAdapter.notifyDataSetChanged();
     }
+
+    class GetReservationsTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                String today = sdf.format(Calendar.getInstance().getTime());
+
+                Statement stmt = MainActivity.conn.createStatement();
+                ResultSet rs = stmt.executeQuery("SELECT * FROM Reservations WHERE " +
+                        "Barcode=" + barcode + " AND Date >= " + today + " ORDER BY Date ASC");
+
+                if(!rs.next()) Log.d("CurrentReservations", "no reservations for this user");
+
+                while (rs.next()) {
+                    Reservation r = new Reservation(rs.getDate("Date"),
+                            rs.getTime("StartTime"),
+                            rs.getTime("EndTime"),
+                            rs.getInt("Barcode"),
+                            rs.getInt("AssignedSpot"),
+                            rs.getDouble("Charge"),
+                            rs.getInt("rID"));
+                    reservations.add(r);
+                    Log.d("CurrentRes", ""+reservations.contains(r));
+
+                    String msg = "Date" + r.getDate() +
+                            "StartTime" + r.getStartTime() +
+                            "EndTime" + r.getEndTime() +
+                            "Barcode" + r.getBarcode();
+
+                    Log.d("CurrentReservationsInside", msg);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if(reservations != null) {
+                listView = findViewById(R.id.listview);
+                customAdapter = new CustomAdapter(reservations, getApplicationContext());
+                listView.setAdapter(customAdapter);
+            }
+        }
+    }
+
 }
 
 class CustomAdapter extends ArrayAdapter<Reservation> implements View.OnClickListener {
 
     private List<Reservation> dataSet;
-    private TextView date;
-    private TextView startTime;
-    private TextView endTime;
-    private TextView charge;
-    Context mContext;
 
-    public CustomAdapter(List<Reservation> reservations, Context context) {
+    private Context mContext;
+
+    CustomAdapter(List<Reservation> reservations, Context context) {
         super(context, R.layout.res_list_item, reservations);
         dataSet = reservations;
         mContext = context;
@@ -93,6 +113,10 @@ class CustomAdapter extends ArrayAdapter<Reservation> implements View.OnClickLis
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
+        TextView date;
+        TextView startTime;
+        TextView endTime;
+        TextView charge;
 
         View v = view;
         if (v == null) v = LayoutInflater.from(mContext)
@@ -109,7 +133,7 @@ class CustomAdapter extends ArrayAdapter<Reservation> implements View.OnClickLis
         endTime.setText(p.getEndTime().toString());
 
         charge = v.findViewById(R.id.charge);
-        charge.setText("" + p.getCharge());
+        charge.setText("$" + p.getCharge() + "0");
 
         return v;
     }
@@ -117,6 +141,6 @@ class CustomAdapter extends ArrayAdapter<Reservation> implements View.OnClickLis
     @Override
     public void onClick(View view) {
     }
-
 }
+
 

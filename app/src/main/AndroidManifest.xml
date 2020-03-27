@@ -25,19 +25,24 @@
             android:name=".SignUpActivity">
         </activity>
         <activity
-            android:name=".CreateReservationActivity">
+            android:name=".CreateReservationActivity"
+            android:parentActivityName=".HomeMenuActivity">
         </activity>
         <activity
-            android:name=".CurrentReservationsActivity">
+            android:name=".CurrentReservationsActivity"
+            android:parentActivityName=".HomeMenuActivity">
         </activity>
         <activity
-            android:name=".ProfileActivity">
+            android:name=".ProfileActivity"
+            android:parentActivityName=".HomeMenuActivity">
         </activity>
         <activity
-            android:name=".EditProfileActivity">
+            android:name=".EditProfileActivity"
+            android:parentActivityName=".ProfileActivity">
         </activity>
         <activity
-            android:name=".ReservationHistoryActivity">
+            android:name=".ReservationHistoryActivity"
+            android:parentActivityName=".HomeMenuActivity">
         </activity>
     </application>
 

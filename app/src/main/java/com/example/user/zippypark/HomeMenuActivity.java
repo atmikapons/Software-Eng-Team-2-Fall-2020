@@ -21,6 +21,7 @@ public class HomeMenuActivity extends AppCompatActivity {
     Button currentReservationsButton;
     Button profileButton;
     Button createResButton;
+    Button resHistoryButton;
     int barcode;
 
     @Override
@@ -59,6 +60,17 @@ public class HomeMenuActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(HomeMenuActivity.this,
                         CreateReservationActivity.class);
+                i.putExtras(b);
+                startActivity(i);
+            }
+        });
+
+        resHistoryButton = findViewById(R.id.reservationHistory);
+        resHistoryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeMenuActivity.this,
+                        ReservationHistoryActivity.class);
                 i.putExtras(b);
                 startActivity(i);
             }
