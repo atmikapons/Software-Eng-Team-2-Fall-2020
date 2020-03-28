@@ -35,7 +35,7 @@ describe('Customer Account', () => {
     //             ccnum:'1234576578',
     //             ccexp:'01-24',
     //             cccvv:'123',
-    //             points:50,
+    //             points:0,
     //             handicap:0
     //         }
     //         chai.request(server)
@@ -67,7 +67,7 @@ describe('Reservation', () => {
     describe('/GET reservation', () => {
         it('it should GET a reservation given the id', (done) => {
             const reservation = {
-                rid: 23145
+                rid: 134569
             }
             chai.request(server)
             .post('/getReservation')
@@ -87,7 +87,7 @@ describe('Reservation', () => {
                 barcode: 2345678,
                 spot: -1,
                 charge: 160,
-                rid: 134576,
+                rid: 134569,
             }
             chai.request(server)
             .post('/editReservation')
