@@ -5,7 +5,7 @@ Future Plans:
 As we move forward in this project, we aim to integrate data collection aspects so that they can be exhibited by the time of our second demonstration.
 Our data collecion features will be displayed through a manager statistics page that is viewable through the manager webiste.
 Currently, this page is blank in the manager portal web application.
-Values of interest will be demonstarted through charts and graphs that show how these variables change with respect to time.
+Values of interest will be demonstrated through charts and graphs that show how these variables change with respect to time.
 Purely numerical respresentations and formulas may be displayed as well if the group sees a need for it.
 
 Reasoning for Manager Statistics:
