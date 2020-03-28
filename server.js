@@ -13,21 +13,21 @@ app.use(bodyParser.json()); // parse form data client
 app.use(express.static(path.join(__dirname, 'public'))); // configure express to use public folder
 
 // database connection
-// var db = mysql.createConnection({
-//     host: '127.0.0.1', // local host
-//     user: 'zippypark',
-//     password: 'goyhVynIiLcJgHpN',
-//     database: 'zippypark'
-// });
+var db = mysql.createConnection({
+    host: '127.0.0.1', // local host
+    user: 'zippypark',
+    password: 'goyhVynIiLcJgHpN',
+    database: 'zippypark'
+});
 
 /// Kylie's remote database for testing:
-const db = mysql.createConnection({
-    host: 'remotemysql.com',
-    user: 'KUU6GpyPt4',
-    password: 'XIbBmfeIWj',
-    database: 'KUU6GpyPt4',
-    port: 3306
-});
+// const db = mysql.createConnection({
+//     host: 'remotemysql.com',
+//     user: 'KUU6GpyPt4',
+//     password: 'XIbBmfeIWj',
+//     database: 'KUU6GpyPt4',
+//     port: 3306
+// });
 
 // // Sam's remote database for testing:
 // const db = mysql.createConnection({
