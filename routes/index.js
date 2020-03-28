@@ -40,9 +40,9 @@ var router = function (app, db) {
 
     ////// RESERVATION ROUTES //////
 
-    app.get('/deleteReservation/:barcode', function (req, res) {
-        let id = req.params.barcode;
-        let deleteReservationQuery = 'DELETE FROM Reservations WHERE barcode = "' + id + '"';
+    app.get('/deleteReservation/:rid', function (req, res) {
+        let rid = req.params.rid;
+        let deleteReservationQuery = 'DELETE FROM Reservations WHERE rID = "' + rid + '"';
         db.query(deleteReservationQuery, function (err, result) {
             if ( err ) {
                 return res.status(500).send(err);
