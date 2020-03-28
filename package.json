@@ -12,14 +12,17 @@
         "express-validator": "^6.4.0",
         "flash": "^1.1.0",
         "method-override": "^3.0.0",
-        "mysql": "^2.14.1"
+        "mysql": "^2.16.0"
     },
     "devDependencies": {
         "chai": "^4.2.0",
-        "mocha": "^7.1.1"
+        "chai-http": "^4.3.0",
+        "mocha": "^7.1.1",
+        "sequelize": "^5.21.5",
+        "sequelize-cli": "^5.5.1"
     },
-    "scripts" : {
-        "start" : "node server.js",
-        "test" : "mocha --timeout 10000"
+    "scripts": {
+        "start": "node server.js",
+        "test": "mocha --timeout 10000"
     }
 }
