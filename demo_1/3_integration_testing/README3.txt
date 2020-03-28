@@ -22,7 +22,7 @@ b. Enter “npm install” in the terminal
 Automated testing:
 In this folder, subgroup3_test_routes.js contains code for automated testing for the manager website. This cannot be used on its own; it is a representative copy of ZippyPark/test/test_routes.js. Testing is done using Mocha, a Javascript test framework that runs on Node.js, and Chai, an assertion library that pairs with Mocha. 
 
-Currently, the code runs basic tests on a few of the routes to confirm that the server returns HTTP status code 200 after an SQL query. It checks the routes to add and delete a customer account, as well as to get and edit a reservation. These tests will become more advanced as we move further along in the project. In the future, we will use Sequelize, a Node.js Object Relational Mapping for MySQL, to validate specific table fields to confirm that a test passes, along with the HTTP status code.
+Currently, the code runs basic tests on a few of the routes to confirm that the server returns HTTP status code 200 after an SQL query. It checks the routes to delete a customer account, as well as to get and edit a reservation. These tests will become more advanced as we move further along in the project. In the future, we will use Sequelize, a Node.js Object Relational Mapping for MySQL, to validate specific table fields to confirm that a test passes, along with the HTTP status code.
 
 Run this test in the terminal with “npm test” (making sure steps 2a and 2b are followed). When the test completes, the terminal will display the test cases, the time it takes to complete each case, and whether the test has passed or failed. Upon completion, the node server remains running. We can now continue with manual testing so we can utilize user inputs.
 
