@@ -13,5 +13,9 @@
         "flash": "^1.1.0",
         "method-override": "^3.0.0",
         "mysql": "^2.14.1"
+    },
+    "devDependencies": {
+        "chai": "^4.2.0",
+        "mocha": "^7.1.1"
     }
 }
