@@ -20,33 +20,6 @@ describe('Initializing', () => {
 });
 
 describe('Customer Account', () => {
-    // describe('/ADD customer', () => {
-    //     it('it should ADD a customer account', (done) => {
-    //         const customer = {
-    //             first: 'Sam',
-    //             last: 'Cheng',
-    //             email: 'test@email.com',
-    //             phone:'555-555-5555',
-    //             password: 'password',
-    //             barcode: 31415926535,
-    //             license: '123ABC',
-    //             reg: '1234567',
-    //             cctype: 'Visa',
-    //             ccnum:'1234576578',
-    //             ccexp:'01-24',
-    //             cccvv:'123',
-    //             points:50,
-    //             handicap:0
-    //         }
-    //         chai.request(server)
-    //         .post('/addCustomer')
-    //         .send(customer)
-    //         .end((err, res) => {
-    //             res.should.have.status(200);
-    //             done();
-    //         });
-    //     });
-    // });
     describe('/DELETE customer', () => {
         it('it should DELETE a customer given the barcode', (done) => {
             const customer = {
