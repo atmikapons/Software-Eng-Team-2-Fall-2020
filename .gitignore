@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *.iml
 .gradle
 /local.properties
@@ -7,3 +8,7 @@
 /build
 /captures
 .externalNativeBuild
+||||||| merged common ancestors
+=======
+node_modules
+>>>>>>> sam-website
