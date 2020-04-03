@@ -42,7 +42,7 @@
                                         <%= customer.Points %>
                                     </td>
                                     <td>
-                                        <a href="/update/<%= customer.Barcode %>" target="_blank" rel="noopener" class="btn btn-sm btn-success">Update</a>
+                                        <button class="btn btn-primary get-customer">Update</button>
                                         <a href="/deleteCustomer/<%= customer.Barcode %>" class="btn btn-sm btn-danger">Delete</a>
                                     </td>
                                 </tr>
@@ -50,7 +50,7 @@
                         <% } %>
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#customerModal">
+                <button type="button" class="btn btn-primary" id="add-customer" data-toggle="modal" data-target="#customerModal">
                     Add Customer
                 </button>
             </div>
@@ -67,6 +67,12 @@
     $('#customerModal').on('hidden.bs.modal', function () {
         $('#customerModal form')[0].reset();
     }); // reset form
+
+    $("#add-customer").click(function (event) {
+        $("#barcode").removeAttr("readonly");
+        $("#add-customer-button").show();
+        $("#edit-customer-button").hide();
+    })
 
     $("#add-customer-button").click(function (event) {
         event.preventDefault();
@@ -97,6 +103,13 @@
                 alert("Error adding customer");
             }
         });
+    });
+
+    $(".get-customer").click(function (event) {
+        event.preventDefault();
+        $("#add-customer-button").hide();
+        $("#edit-customer-button").show();
+        $("#barcode").attr("readonly", "readonly");
     });
 </script>
 </body>
