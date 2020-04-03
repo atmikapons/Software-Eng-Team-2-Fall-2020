@@ -58,7 +58,7 @@
                         <% } %>
                     </tbody>
                 </table>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#reservationModal">
+                <button type="button" class="btn btn-primary" id="add-reservation" data-toggle="modal" data-target="#reservationModal">
                     Add Reservation
                 </button>
             </div>
@@ -76,9 +76,14 @@
         $('#reservationModal form')[0].reset();
     }); //reset form
 
-    
+    $("#add-reservation").click(function (event) {
+        $("#rid").removeAttr("readonly");
+    })
+
     $(".get-reservation").click(function (event) {
         event.preventDefault();
+        $("#rid").attr("readonly", "readonly");
+        
         let rid = $(this).closest('tr').attr('value');
         $.post("/getReservation", {
             "rid" : rid
