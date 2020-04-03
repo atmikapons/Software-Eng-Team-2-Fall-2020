@@ -129,6 +129,29 @@ var router = function (app, db) {
         });
     });
 
+    app.post('/getCustomer', function (req, res) {
+        let barcode = req.body.barcode;
+        let getCustomerQuery = 'SELECT FirstName, LastName, Email, PhoneNum, \
+        Password, LicenseNum, RegistrationNum, CreditCardType, \
+        CreditCardNum, ExpDate, CVV, Points, Handicapped FROM CustomerInfo \
+        WHERE Barcode = (?)';
+        db.query(getCustomerQuery, barcode, function (err, rows) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else if ( rows.length === 0 ) {
+                return res.status(404).send({
+                    'status' : 'not found'
+                });
+            } else {
+                JSON.stringify(rows);
+                return res.status(200).send({
+                    'status' : "Success",
+                    'data' : rows,
+                });
+            }
+        });
+    });
+
     app.post('/addCustomer', function (req, res) {
         let first = req.body.first;
         let last = req.body.last;
@@ -156,6 +179,38 @@ var router = function (app, db) {
             } else {
                 return res.status(200).send({
                     'status': "Success"
+                });
+            }
+        });
+    });
+
+    app.post('/editCustomer', function (req, res) {
+        let first = req.body.first;
+        let last = req.body.last;
+        let email = req.body.email;
+        let phone = req.body.phone;
+        let pass = req.body.password;
+        let barcode = req.body.barcode;
+        let license = req.body.license;
+        let reg = req.body.reg;
+        let cctype = req.body.cctype;
+        let ccnum = req.body.ccnum;
+        let ccexp = req.body.ccexp;
+        let cccvv = req.body.cccvv;
+        let points = req.body.points;
+        let handicap = req.body.handicap;
+
+        let editQuery = "UPDATE CustomerInfo SET FirstName = ?, LastName = ?, Email = ?, \
+                         PhoneNum = ?, Password = ?, LicenseNum = ?, RegistrationNum = ?, \
+                         CreditCardType = ?, CreditCardNum = ?, ExpDate = ?, CVV = ?, Points = ?, \
+                         Handicapped = ? WHERE Barcode = ?";
+        db.query(editQuery, [first, last, email, phone, pass, license, reg, cctype, ccnum,
+                             ccexp, cccvv, points, handicap, barcode], function (err, result) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else {
+                return res.status(200).send({
+                    'status': "Success",
                 });
             }
         });

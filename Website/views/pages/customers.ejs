@@ -110,6 +110,57 @@
         $("#add-customer-button").hide();
         $("#edit-customer-button").show();
         $("#barcode").attr("readonly", "readonly");
+
+        let barcode = $(this).closest('tr').attr('value');
+        $.post("/getCustomer", {
+            "barcode" : barcode
+        },
+        function (data, status) {
+            $("#first-name").val(data.data[0].FirstName);
+            $("#last-name").val(data.data[0].LastName);
+            $("#customer-email").val(data.data[0].Email);
+            $("#phone-number").val(data.data[0].PhoneNum);
+            $("#customer-password").val(data.data[0].Password);
+            $("#barcode").val(barcode);
+            $("#license").val(data.data[0].LicenseNum);
+            $("#registration").val(data.data[0].RegistrationNum);
+            $("#cc-type").val(data.data[0].CreditCardType);
+            $("#cc-num").val(data.data[0].CreditCardNum);
+            $("#cc-exp").val(data.data[0].ExpDate);
+            $("#cc-cvv").val(data.data[0].CVV);
+            $("#points").val(data.data[0].Points);
+            if ( data.data[0].Handicapped === 1 ) {
+                $("#handicap").prop("checked", true);
+            }
+        });
+        $("#customerModal").modal();
+    });
+
+    $("#edit-customer-button").click(function (event) {
+        event.preventDefault();
+        $.post("/editCustomer", {
+            "first" : $("#first-name").val(),
+            "last" : $("#last-name").val(),
+            "email" : $("#customer-email").val(),
+            "phone" : $("#phone-number").val(),
+            "password" : $("#customer-password").val(),
+            "barcode" : $("#barcode").val(),
+            "license" : $("#license").val(),
+            "reg" : $("#registration").val(),
+            "cctype" : $("#cc-type").val(),
+            "ccnum" : $("#cc-num").val(),
+            "ccexp" : $("#cc-exp").val(),
+            "cccvv" : $("#cc-cvv").val(),
+            "points" : $("#points").val(),
+            "handicap" : ($('#handicap').prop('checked')) ? 1 : 0,
+        },
+        function (data, status) {
+          if (data.status == "Success") {
+            location.reload();
+          } else {
+            alert("Error editing customer");
+          }
+        });
     });
 </script>
 </body>
