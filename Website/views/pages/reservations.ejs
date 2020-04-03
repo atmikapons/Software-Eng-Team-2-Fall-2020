@@ -78,10 +78,14 @@
 
     $("#add-reservation").click(function (event) {
         $("#rid").removeAttr("readonly");
+        $("#add-reservation-button").show();
+        $("#edit-reservation-button").hide();
     })
 
     $(".get-reservation").click(function (event) {
         event.preventDefault();
+        $("#add-reservation-button").hide();
+        $("#edit-reservation-button").show();
         $("#rid").attr("readonly", "readonly");
         
         let rid = $(this).closest('tr').attr('value');
