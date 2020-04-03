@@ -82,6 +82,26 @@
         $("#edit-reservation-button").hide();
     })
 
+    $("#add-reservation-button").click(function (event) {
+        event.preventDefault();
+        $.post("/addReservation", {
+            "date" : $("#dt").val(),
+            "start" : $("#start-time").val(),
+            "end" : $("#end-time").val(),
+            "barcode" : $("#barcode").val(),
+            "spot" : $("#assigned-spot").val(),
+            "charge" : $("#charge").val(),
+            "rid" : $("#rid").val(),
+        },
+        function (data, status) {
+            if (data.status == "Success") {
+                location.reload();
+            } else {
+                alert("Error adding reservation");
+            }
+        });
+    });
+
     $(".get-reservation").click(function (event) {
         event.preventDefault();
         $("#add-reservation-button").hide();

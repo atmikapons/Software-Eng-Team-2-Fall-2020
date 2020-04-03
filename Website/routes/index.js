@@ -71,6 +71,29 @@ var router = function (app, db) {
         });
     });
 
+    app.post('/addReservation', function (req, res) {
+        let date = req.body.date;
+        let start = req.body.start;
+        let end = req.body.end;
+        let barcode = req.body.barcode;
+        let spot = req.body.spot;
+        let charge = req.body.charge;
+        let rid = req.body.rid;
+        let values = [];
+        values.push([date, start, end, barcode, spot, charge, rid]);
+        let addQuery = "INSERT INTO Reservations (Date, StartTime, EndTime, Barcode, AssignedSpot, \
+                        Charge, Rid) VALUES ?;";
+        db.query(addQuery, [values], function (err, result) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else {
+                return res.status(200).send({
+                    'status': "Success",
+                });
+            }
+        });
+    });
+
     app.post('/editReservation', function (req, res) {
         let date = req.body.date;
         let start = req.body.start;
