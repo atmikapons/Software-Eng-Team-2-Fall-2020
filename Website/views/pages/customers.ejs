@@ -43,7 +43,7 @@
                                     </td>
                                     <td>
                                         <button class="btn btn-primary get-customer">Update</button>
-                                        <a href="/deleteCustomer/<%= customer.Barcode %>" class="btn btn-sm btn-danger">Delete</a>
+                                        <button class="btn btn-primary btn-danger delete-customer" data-toggle="modal" data-target="#deleteCustomerModal">Delete</button>
                                     </td>
                                 </tr>
                             <% }) %>
@@ -59,6 +59,7 @@
         <% include ../partials/footer %>
     </div>
     <% include ../partials/add-customer %>
+    <% include ../partials/delete-customer %>
 <script>
     $(document).ready( function () {
         $('#customer_table').DataTable(); // from datatables.net
@@ -103,6 +104,11 @@
                 alert("Error adding customer");
             }
         });
+    });
+
+    $(".delete-customer").click(function (event) {
+        let barcode = $(this).closest('tr').attr('value');
+        $("#delete-customer-button").attr("href", "/deleteCustomer/" + barcode);
     });
 
     $(".get-customer").click(function (event) {

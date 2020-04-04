@@ -51,7 +51,7 @@
                                     </td>
                                     <td>
                                         <button class="btn btn-primary get-reservation">Update</button>
-                                        <a href="/deleteReservation/<%= reservation.rID %>" class="btn btn-sm btn-danger">Delete</a>
+                                        <button class="btn btn-primary btn-danger delete-reservation" data-toggle="modal" data-target="#deleteReservationModal">Delete</button>
                                     </td>
                                 </tr>
                             <% }) %>
@@ -67,6 +67,7 @@
         <% include ../partials/footer %>
     </div>
     <% include ../partials/add-reservation%>
+    <% include ../partials/delete-reservation %>
 <script>
     $(document).ready( function () {
         $('#reservation_table').DataTable(); //from datatables.net
@@ -100,6 +101,11 @@
                 alert("Error adding reservation");
             }
         });
+    });
+
+    $(".delete-reservation").click(function (event) {
+        let rid = $(this).closest('tr').attr('value');
+        $("#delete-reservation-button").attr("href", "/deleteReservation/" + rid);
     });
 
     $(".get-reservation").click(function (event) {
