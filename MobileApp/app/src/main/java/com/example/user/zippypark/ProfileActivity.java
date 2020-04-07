@@ -19,6 +19,7 @@ import java.sql.Statement;
 public class ProfileActivity extends AppCompatActivity {
     Button editProfileButton;
     Button homeProfileButton;
+    Button deleteProfileButton;
 
     //customer's info pulled from DB
     int barcode;
@@ -146,6 +147,18 @@ public class ProfileActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent i = new Intent(ProfileActivity.this,
                         HomeMenuActivity.class);
+                i.putExtras(b);
+                startActivity(i);
+            }
+        });
+
+        //DELETE PROFILE
+        deleteProfileButton = findViewById(R.id.deleteProfButton);
+        deleteProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(ProfileActivity.this,
+                        DeleteProfileActivity.class);
                 i.putExtras(b);
                 startActivity(i);
             }

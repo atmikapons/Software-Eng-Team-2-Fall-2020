@@ -14,6 +14,7 @@
         android:textSize="40sp"
         android:layout_marginTop="80sp"
         android:layout_marginBottom="50sp"
+        android:gravity="center"
         android:textColor="@color/colorPrimary"
         android:fontFamily="sans-serif-smallcaps"
         app:layout_constraintBottom_toTopOf="@id/delete_msg"
@@ -26,6 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/delete_msg"
+        android:gravity="center"
         android:layout_gravity="center"
         android:textSize="20sp"
         android:layout_marginTop="80sp"
@@ -37,15 +39,27 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <Button
-        android:id="@+id/closeButton"
+        android:id="@+id/confirmDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="20sp"
         android:padding="10sp"
         android:textSize="24sp"
-        android:hint="@string/close"
+        android:hint="@string/confirm"
         android:background="@color/hint"
-        android:textColor="@color/text"/>
+        android:textColor="@color/colorPrimary"/>
+
+    <Button
+        android:id="@+id/cancelDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="20sp"
+        android:padding="10sp"
+        android:textSize="24sp"
+        android:hint="@string/cancel"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"/>
 
 </LinearLayout>

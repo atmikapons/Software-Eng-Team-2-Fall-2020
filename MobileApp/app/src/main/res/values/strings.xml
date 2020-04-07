@@ -25,12 +25,12 @@
     <string name="reservation_history">Reservation\nHistory</string>
     <string name="create_reservation">Create\nReservation</string>
     <string name="profile">Profile</string>
-    <string name="delete_profile">Delete Profile</string>
+    <string name="delete_profile">Confirm Delete Profile</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="barcode">Barcode</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
-    <string name="delete_msg">Your account has been deleted.</string>
+    <string name="delete_msg">Are you sure you want to delete your account?</string>
     <string name="close">Close</string>
     <string name="edit_button">Update</string>
     <string name="delete_button">Delete</string>

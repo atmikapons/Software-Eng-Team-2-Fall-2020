@@ -44,6 +44,10 @@
             android:name=".ReservationHistoryActivity"
             android:parentActivityName=".HomeMenuActivity">
         </activity>
+        <activity
+            android:name=".DeleteProfileActivity"
+            android:parentActivityName=".ProfileActivity">
+        </activity>
     </application>
 
 </manifest>
