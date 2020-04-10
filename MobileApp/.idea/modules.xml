@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MobileApp.iml" filepath="$PROJECT_DIR$/MobileApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/MobileApp-app.iml" filepath="$PROJECT_DIR$/app/MobileApp-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zippypark5-MobileApp.iml" filepath="$PROJECT_DIR$/zippypark5-MobileApp.iml" />
     </modules>
   </component>
 </project>

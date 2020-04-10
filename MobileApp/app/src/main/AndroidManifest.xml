@@ -52,6 +52,10 @@
             android:name=".EditReservationActivity"
             android:parentActivityName=".CurrentReservationsActivity">
         </activity>
+        <activity
+            android:name=".DeleteReservationActivity"
+            android:parentActivityName=".EditReservationActivity">
+        </activity>
     </application>
 
 </manifest>

@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.concurrent.TimeUnit;
 
 import com.jcraft.jsch.*;
 
@@ -25,6 +26,9 @@ public class EditReservationActivity extends AppCompatActivity {
     Button deleteResButton;
     int barcode;
     int resID;
+    int multiplier;
+    int base;
+    String start1;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -66,7 +70,7 @@ public class EditReservationActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 String date1 = resDateEditText.getText().toString();
-                String start1 = startTimeEditText.getText().toString();
+                start1 = startTimeEditText.getText().toString();
                 String end1 = endTimeEditText.getText().toString();
 
                 final Date date = Date.valueOf(date1);
@@ -78,6 +82,21 @@ public class EditReservationActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try{
+                            Statement stmt1 = MainActivity.conn.createStatement();
+                            ResultSet rs = stmt1.executeQuery("SELECT * FROM `Payment` WHERE `StartTime`=\"" + start1 + "\"");
+                            if(rs.next()){
+                                multiplier = rs.getInt("Multiplier");
+                                System.out.println(multiplier);
+                                base = rs.getInt("BasePrice");
+                                System.out.println(base);
+                            }
+
+                            long diff = end.getTime() - start.getTime(); //length of the reservation
+                            long minutes = TimeUnit.MILLISECONDS.toMinutes(diff); //conversion to minutes
+                            long charge1 = base * (minutes/15) * multiplier; //price formula
+                            final double charge = (double) charge1;
+
+
                             Statement stmt = MainActivity.conn.createStatement();
                             String query = "UPDATE `Reservations` SET `Date`='" + date +
                                     "', `StartTime`='" + start + "', `EndTime`='" + end +
@@ -110,24 +129,8 @@ public class EditReservationActivity extends AppCompatActivity {
         deleteResButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            Statement stmt = MainActivity.conn.createStatement();
-                            String query = "DELETE FROM `Reservations` WHERE `rID`=\"" + resID + "\"";
-
-                            System.out.println(resID);
-                            stmt.executeUpdate(query);
-
-                        } catch(SQLException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
                 Intent i = new Intent(EditReservationActivity.this,
-                        HomeMenuActivity.class);
+                        DeleteReservationActivity.class);
                 i.putExtras(bundle);
                 startActivity(i);
             }

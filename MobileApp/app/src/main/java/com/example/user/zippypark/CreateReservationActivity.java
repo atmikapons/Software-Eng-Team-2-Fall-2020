@@ -35,6 +35,7 @@ public class CreateReservationActivity extends AppCompatActivity {
     int base;
     int vip;
     int numpoints;
+    int points;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -95,6 +96,20 @@ public class CreateReservationActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try{
+                            Statement statement = MainActivity.conn.createStatement();
+                            String query1 = "SELECT `Points` FROM `CustomerInfo` WHERE `Barcode`=" + barcode;
+                            ResultSet rs1 = statement.executeQuery(query1);
+                            if(rs1.next()){
+                                points = rs1.getInt("Points");
+                            }
+
+                            int updatePoints = points + 10;
+
+                            Statement statement1 = MainActivity.conn.createStatement();
+                            String query2 = "UPDATE `CustomerInfo` SET `Points`='" + updatePoints + "' " +
+                                    "WHERE `Barcode`=" + barcode;
+                            statement1.executeUpdate(query2);
+
                             Statement stmt1 = MainActivity.conn.createStatement();
                             ResultSet rs = stmt1.executeQuery(
                                     "SELECT * FROM `Payment` WHERE `StartTime`=\"" + start1 + "\"");
