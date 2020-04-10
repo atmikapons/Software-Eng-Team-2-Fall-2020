@@ -2,6 +2,7 @@ package com.example.user.zippypark;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -75,79 +76,103 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
         //NEXT BUTTON
         nxt = findViewById(R.id.nextButton);
+
         nxt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String firstName = firstNameEditText.getText().toString();
-                final String lastName = lastNameEditText.getText().toString();
-                final String email = emailEditText.getText().toString();
-                //final int phone = Integer.parseInt(phoneEditText.getText().toString());
-                final String phone = phoneEditText.getText().toString();
-                final String password = passwordEditText.getText().toString();
-                final String licenseNum = licenseNumEditText.getText().toString();
-                final String registrationNum = registrationNumEditText.getText().toString();
-                final String creditCardType = creditCardTypeEditText.getText().toString();
-                final String creditCardNum = creditCardNumEditText.getText().toString();
-                //final String expDate = expDateEditText.getText().toString();
-                final String cvv = cvvEditText.getText().toString();
-                final String handicapAns = spinner.getSelectedItem().toString();
+                if(TextUtils.isEmpty(firstNameEditText.getText().toString())){
+                    firstNameEditText.setError("Enter first name");
+                } else if(TextUtils.isEmpty(lastNameEditText.getText().toString())){
+                    lastNameEditText.setError("Enter last name");
+                } else if(TextUtils.isEmpty(emailEditText.getText().toString())){
+                    emailEditText.setError("Enter email");
+                } else if(TextUtils.isEmpty(phoneEditText.getText().toString())){
+                    phoneEditText.setError("Enter phone number");
+                } else if(TextUtils.isEmpty(passwordEditText.getText().toString())){
+                    passwordEditText.setError("Enter password");
+                } else if(TextUtils.isEmpty(licenseNumEditText.getText().toString())){
+                    licenseNumEditText.setError("Enter license plate number");
+                } else if(TextUtils.isEmpty(registrationNumEditText.getText().toString())){
+                    registrationNumEditText.setError("Enter vehicle registration number");
+                } else if(TextUtils.isEmpty(creditCardNumEditText.getText().toString())){
+                    creditCardNumEditText.setError("Enter credit card number");
+                } else if(TextUtils.isEmpty(creditCardTypeEditText.getText().toString())){
+                    creditCardTypeEditText.setError("Enter credit card type");
+                } else if(TextUtils.isEmpty(cvvEditText.getText().toString())){
+                    cvvEditText.setError("Enter CVV");
+                } else {
 
-                //formatting handicap response: convert to binary
-                int num = 0;
-                if (handicapAns.equals("Yes")) {
-                    num = 1;
-                }
-                final int handicapAnsNum = num;
+                    final String firstName = firstNameEditText.getText().toString();
+                    final String lastName = lastNameEditText.getText().toString();
+                    final String email = emailEditText.getText().toString();
+                    //final int phone = Integer.parseInt(phoneEditText.getText().toString());
+                    final String phone = phoneEditText.getText().toString();
+                    final String password = passwordEditText.getText().toString();
+                    final String licenseNum = licenseNumEditText.getText().toString();
+                    final String registrationNum = registrationNumEditText.getText().toString();
+                    final String creditCardType = creditCardTypeEditText.getText().toString();
+                    final String creditCardNum = creditCardNumEditText.getText().toString();
+                    //final String expDate = expDateEditText.getText().toString();
+                    final String cvv = cvvEditText.getText().toString();
+                    final String handicapAns = spinner.getSelectedItem().toString();
 
-                //formatting expDate response: convert to YYYY-MM-DD
-                final String year = Integer.toString(picker.getYear()); //year
-
-                final String tempMonth; //month
-                int num2 = picker.getMonth();
-                if(num2<10){
-                    tempMonth = "0" + picker.getMonth();
-                }else {
-                    tempMonth = Integer.toString(picker.getMonth());
-                }
-                final String month = tempMonth;
-
-                final String tempDay; //day
-                int num3 = picker.getDayOfMonth();
-                if(num3<10){
-                    tempDay = "0" + picker.getDayOfMonth();
-                }else {
-                    tempDay = Integer.toString(picker.getMonth());
-                }
-                final String day = tempDay;
-
-                final String expDate = year + "-" + month + "-" + day; //combining format
-
-                //EXECUTE SQL STATEMENT
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Statement stmt = MainActivity.conn.createStatement();
-                            //query has no barcode (autoincrement) and user starts with 10 points
-                            String query = "INSERT INTO `CustomerInfo`" +
-                                    "(`FirstName`, `LastName`, `Email`, `PhoneNum`, `Password`, " +
-                                    "`LicenseNum`, `RegistrationNum`, `CreditCardType`, " +
-                                    "`CreditCardNum`, `ExpDate`, `CVV`,`Points`, `Handicapped`) " +
-                                    "VALUES ('" + firstName + "', '" + lastName + "', '" +
-                                    email + "', '" + phone + "', '" + password + "', '" + licenseNum + "', '" +
-                                    registrationNum + "', '" + creditCardType + "', '" + creditCardNum +
-                                    "', '" + expDate + "', '" + cvv + "', '10', '" + handicapAnsNum + "')";
-                            //System.out.println(query);
-                            stmt.executeUpdate(query);
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
+                    //formatting handicap response: convert to binary
+                    int num = 0;
+                    if (handicapAns.equals("Yes")) {
+                        num = 1;
                     }
-                });
+                    final int handicapAnsNum = num;
 
-                //MOVE TO HOMESCREEN
-                Intent i = new Intent(SignUpActivity.this, HomeMenuActivity.class);
-                startActivity(i);
+                    //formatting expDate response: convert to YYYY-MM-DD
+                    final String year = Integer.toString(picker.getYear()); //year
+
+                    final String tempMonth; //month
+                    int num2 = picker.getMonth();
+                    if (num2 < 10) {
+                        tempMonth = "0" + picker.getMonth();
+                    } else {
+                        tempMonth = Integer.toString(picker.getMonth());
+                    }
+                    final String month = tempMonth;
+
+                    final String tempDay; //day
+                    int num3 = picker.getDayOfMonth();
+                    if (num3 < 10) {
+                        tempDay = "0" + picker.getDayOfMonth();
+                    } else {
+                        tempDay = Integer.toString(picker.getMonth());
+                    }
+                    final String day = tempDay;
+
+                    final String expDate = year + "-" + month + "-" + day; //combining format
+
+                    //EXECUTE SQL STATEMENT
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Statement stmt = MainActivity.conn.createStatement();
+                                //query has no barcode (autoincrement) and user starts with 10 points
+                                String query = "INSERT INTO `CustomerInfo`" +
+                                        "(`FirstName`, `LastName`, `Email`, `PhoneNum`, `Password`, " +
+                                        "`LicenseNum`, `RegistrationNum`, `CreditCardType`, " +
+                                        "`CreditCardNum`, `ExpDate`, `CVV`,`Points`, `Handicapped`) " +
+                                        "VALUES ('" + firstName + "', '" + lastName + "', '" +
+                                        email + "', '" + phone + "', '" + password + "', '" + licenseNum + "', '" +
+                                        registrationNum + "', '" + creditCardType + "', '" + creditCardNum +
+                                        "', '" + expDate + "', '" + cvv + "', '10', '" + handicapAnsNum + "')";
+                                //System.out.println(query);
+                                stmt.executeUpdate(query);
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    //MOVE TO HOMESCREEN
+                    Intent i = new Intent(SignUpActivity.this, HomeMenuActivity.class);
+                    startActivity(i);
+                }
             }
 
         });
