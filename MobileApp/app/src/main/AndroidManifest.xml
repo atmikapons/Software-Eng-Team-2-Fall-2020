@@ -48,6 +48,10 @@
             android:name=".DeleteProfileActivity"
             android:parentActivityName=".ProfileActivity">
         </activity>
+        <activity
+            android:name=".EditReservationActivity"
+            android:parentActivityName=".CurrentReservationsActivity">
+        </activity>
     </application>
 
 </manifest>
