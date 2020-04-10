@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.concurrent.TimeUnit;
 
 import com.jcraft.jsch.*;
 
@@ -24,6 +25,8 @@ public class CreateReservationActivity extends AppCompatActivity {
     EditText endTimeEditText;
     Button createButton;
     int barcode;
+    int multiplier;
+    int base;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -35,13 +38,15 @@ public class CreateReservationActivity extends AppCompatActivity {
         resDateEditText = findViewById(R.id.reservationDateEditText);
         startTimeEditText = findViewById(R.id.startTime);
         endTimeEditText = findViewById(R.id.endTime);
+
+
         createButton = findViewById(R.id.create);
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 String date1 = resDateEditText.getText().toString();
-                String start1 = startTimeEditText.getText().toString();
+                final String start1 = startTimeEditText.getText().toString();
                 String end1 = endTimeEditText.getText().toString();
 
                 final Date date = Date.valueOf(date1);
@@ -53,11 +58,25 @@ public class CreateReservationActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try{
+                            Statement stmt1 = MainActivity.conn.createStatement();
+                            ResultSet rs = stmt1.executeQuery("SELECT * FROM `Payment` WHERE `StartTime`=\"" + start1 + "\"");
+                            if(rs.next()){
+                                multiplier = rs.getInt("Multiplier");
+                                System.out.println(multiplier);
+                                base = rs.getInt("BasePrice");
+                                System.out.println(base);
+                            }
+
+                            long diff = end.getTime() - start.getTime(); //length of the reservation
+                            long minutes = TimeUnit.MILLISECONDS.toMinutes(diff); //conversion to minutes
+                            long charge1 = base * (minutes/15) * multiplier; //price formula
+                            final double charge = (double) charge1;
+
                             Statement stmt = MainActivity.conn.createStatement();
                             String query =("INSERT INTO `Reservations`" +
                                     "(`Date`, `StartTime`, `EndTime`, `Barcode`, `Charge`)" +
                                     "VALUES ('" + date + "', '" + start + "', '" + end + "', '" +
-                                    barcode + "', '160')");
+                                    barcode + "', '" + charge + "')");
                             //System.out.println(query);
                             stmt.executeUpdate(query);
                         } catch(SQLException e) {
@@ -73,7 +92,7 @@ public class CreateReservationActivity extends AppCompatActivity {
                 int duration = Toast.LENGTH_SHORT;
 
                 Toast toast = Toast.makeText(getApplicationContext(),
-                        "Reservation Created", duration);
+                        "Reservation Created, Payment made", duration);
                 toast.show();
 
                 startActivity(i);

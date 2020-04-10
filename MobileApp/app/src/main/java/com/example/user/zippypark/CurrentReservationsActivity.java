@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -43,6 +44,25 @@ public class CurrentReservationsActivity extends AppCompatActivity {
         reservations = new ArrayList<>(10);
 
         new GetReservationsTask().execute();
+
+        listView = findViewById(R.id.listview);
+        customAdapter = new CustomAdapter(reservations, getApplicationContext());
+        listView.setAdapter(customAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int i, long id) {
+                int resID = reservations.get(i).getResID();
+                Intent intent = new Intent(CurrentReservationsActivity.this,
+                        EditReservationActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("resID", resID);
+                bundle.putInt("barcode", barcode);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+            }
+        });
     }
 
     public static void updateAdapter() {

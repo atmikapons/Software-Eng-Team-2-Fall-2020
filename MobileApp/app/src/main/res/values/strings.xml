@@ -39,7 +39,7 @@
     <string name="create_res">Create Reservation</string>
     <string name="current_reservation">Current Reservations</string>
     <string name="edit_reservations">Edit Reservation</string>
-    <string name="reservation_date">0000-00-00</string>
+    <string name="reservation_date">yyyy-yy-yy</string>
     <string name="date">Date</string>
     <string name="time">00:00:00</string>
     <string name="start_time">Start Time</string>
