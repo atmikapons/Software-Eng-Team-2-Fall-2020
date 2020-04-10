@@ -4,13 +4,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import com.jcraft.jsch.*;
@@ -24,9 +28,13 @@ public class CreateReservationActivity extends AppCompatActivity {
     EditText startTimeEditText;
     EditText endTimeEditText;
     Button createButton;
+    Button rewardButton;
+    TextView pointsRequired;
     int barcode;
     int multiplier;
     int base;
+    int vip;
+    int numpoints;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -39,6 +47,35 @@ public class CreateReservationActivity extends AppCompatActivity {
         startTimeEditText = findViewById(R.id.startTime);
         endTimeEditText = findViewById(R.id.endTime);
 
+        new GetPointsTask().execute();
+
+        rewardButton = findViewById(R.id.reward);
+        rewardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vip = 1;
+
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            Statement stmt = MainActivity.conn.createStatement();
+                            String query = "UPDATE `CustomerInfo` SET `Points`='" + (numpoints - 100) + "\'";
+
+                            stmt.executeUpdate(query);
+
+                        } catch(SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "VIP Spot reward applied", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        });
 
         createButton = findViewById(R.id.create);
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -59,7 +96,8 @@ public class CreateReservationActivity extends AppCompatActivity {
                     public void run() {
                         try{
                             Statement stmt1 = MainActivity.conn.createStatement();
-                            ResultSet rs = stmt1.executeQuery("SELECT * FROM `Payment` WHERE `StartTime`=\"" + start1 + "\"");
+                            ResultSet rs = stmt1.executeQuery(
+                                    "SELECT * FROM `Payment` WHERE `StartTime`=\"" + start1 + "\"");
                             if(rs.next()){
                                 multiplier = rs.getInt("Multiplier");
                                 System.out.println(multiplier);
@@ -74,9 +112,9 @@ public class CreateReservationActivity extends AppCompatActivity {
 
                             Statement stmt = MainActivity.conn.createStatement();
                             String query =("INSERT INTO `Reservations`" +
-                                    "(`Date`, `StartTime`, `EndTime`, `Barcode`, `Charge`)" +
+                                    "(`Date`, `StartTime`, `EndTime`, `Barcode`, `VIP`, `Charge`)" +
                                     "VALUES ('" + date + "', '" + start + "', '" + end + "', '" +
-                                    barcode + "', '" + charge + "')");
+                                    barcode + "', '" + vip + "', '" + charge + "')");
                             //System.out.println(query);
                             stmt.executeUpdate(query);
                         } catch(SQLException e) {
@@ -89,15 +127,42 @@ public class CreateReservationActivity extends AppCompatActivity {
                         HomeMenuActivity.class);
                 i.putExtras(b);
 
-                int duration = Toast.LENGTH_SHORT;
-
                 Toast toast = Toast.makeText(getApplicationContext(),
-                        "Reservation Created, Payment made", duration);
+                        "Reservation Created, Payment made", Toast.LENGTH_SHORT);
                 toast.show();
 
                 startActivity(i);
             }
         });
 
+    }
+    class GetPointsTask extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                Statement stmt1 = MainActivity.conn.createStatement();
+                ResultSet rs = stmt1.executeQuery(
+                        "SELECT `Points` FROM `CustomerInfo` WHERE `Barcode`=\"" + barcode + "\"");
+                if (rs.next()) {
+                    numpoints = rs.getInt("Points");
+                    Log.d("numpoints", "numpoints inside: " + numpoints);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            if (numpoints < 100) {
+                pointsRequired = findViewById(R.id.pointsrequired);
+                int numPointsRequired = 100 - numpoints;
+                Log.d("numpoints", "numpoints outside: " + numpoints);
+                pointsRequired.setText(numPointsRequired + " more points until next reward");
+                rewardButton.setEnabled(false);
+                rewardButton.setBackgroundColor(getColor(R.color.grey));
+            }
+        }
     }
 }

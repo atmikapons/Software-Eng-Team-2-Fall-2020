@@ -15,9 +15,10 @@ public class Reservation {
     int assignedSpot;
     double charge;
     int resID;
+    int vip;
 
     public Reservation(Date date, Time startTime, Time endTime, int barcode,
-                       int assignedSpot, double charge, int resID) {
+                       int assignedSpot, double charge, int resID, int vip) {
         this.date = date;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -25,6 +26,7 @@ public class Reservation {
         this.assignedSpot = assignedSpot;
         this.charge = charge;
         this.resID = resID;
+        this.vip = vip;
     }
 
     public Date getDate() {
@@ -77,6 +79,15 @@ public class Reservation {
 
     public int getResID() {
         return resID;
+    }
+
+    public String getVip() {
+        if(vip == 0) return "";
+        else return "VIP Reward Applied";
+    }
+
+    public void setVip(int vip) {
+        this.vip = vip;
     }
 
     public void setResID(int resID) {

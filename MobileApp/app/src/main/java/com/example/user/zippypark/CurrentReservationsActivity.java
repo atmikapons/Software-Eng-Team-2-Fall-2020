@@ -90,7 +90,8 @@ public class CurrentReservationsActivity extends AppCompatActivity {
                             rs.getInt("Barcode"),
                             rs.getInt("AssignedSpot"),
                             rs.getDouble("Charge"),
-                            rs.getInt("rID"));
+                            rs.getInt("rID"),
+                            rs.getInt("VIP"));
                     reservations.add(r);
                     Log.d("CurrentRes", ""+reservations.contains(r));
 
@@ -137,6 +138,7 @@ class CustomAdapter extends ArrayAdapter<Reservation> implements View.OnClickLis
         TextView startTime;
         TextView endTime;
         TextView charge;
+        TextView vip;
 
         View v = view;
         if (v == null) v = LayoutInflater.from(mContext)
@@ -151,6 +153,9 @@ class CustomAdapter extends ArrayAdapter<Reservation> implements View.OnClickLis
 
         endTime = v.findViewById(R.id.endTime);
         endTime.setText(p.getEndTime().toString());
+
+        vip = v.findViewById(R.id.vip);
+        vip.setText(p.getVip());
 
         charge = v.findViewById(R.id.charge);
         charge.setText("$" + p.getCharge() + "0");

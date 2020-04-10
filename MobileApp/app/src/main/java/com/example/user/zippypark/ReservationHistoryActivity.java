@@ -75,7 +75,8 @@ public class ReservationHistoryActivity extends AppCompatActivity {
                             rs.getInt("Barcode"),
                             rs.getInt("AssignedSpot"),
                             rs.getDouble("Charge"),
-                            rs.getInt("rID"));
+                            rs.getInt("rID"),
+                            rs.getInt("VIP"));
                     reservations.add(r);
 //                    Log.d("CurrentRes", ""+reservations.contains(r));
 

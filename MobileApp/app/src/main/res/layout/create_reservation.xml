@@ -102,6 +102,17 @@
             android:textColorHint="@color/hint"
             android:hint="@string/time" />
 
+        <TextView
+            android:id="@+id/pointsrequired"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10sp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12sp"
+            tools:layout_editor_absoluteX="69dp" />
+
         <Button
             android:id="@+id/reward"
             android:layout_width="167sp"
