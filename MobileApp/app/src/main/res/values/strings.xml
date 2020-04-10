@@ -65,4 +65,5 @@
     <string name="cvv_info">CVV: </string>
     <string name="points_info">Points: </string>
     <string name="handicap_info">Handicap Status: </string>
+    <string name="apply_reward">Apply Reward</string>
 </resources>

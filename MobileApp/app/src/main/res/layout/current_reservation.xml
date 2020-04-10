@@ -10,19 +10,6 @@
     android:padding="30sp">
 
     <TextView
-        android:id="@+id/zippy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        android:layout_gravity="center"
-        android:textSize="20sp"
-        android:textColor="@color/colorPrimaryDark"
-        android:fontFamily="sans-serif-smallcaps"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
-    <TextView
         android:id="@+id/current_reservations"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,7 +33,7 @@
             android:id="@+id/listview"
             android:layout_width="match_parent"
             android:layout_height="570dp"
-            android:layout_marginTop="100dp" />
+            android:layout_marginTop="50dp" />
 
 
     </LinearLayout>
