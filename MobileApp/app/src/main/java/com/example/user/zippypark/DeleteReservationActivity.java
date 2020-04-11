@@ -20,6 +20,7 @@ public class DeleteReservationActivity extends AppCompatActivity {
     int barcode;
     int resID;
     int points;
+    int varpoints;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,23 +35,33 @@ public class DeleteReservationActivity extends AppCompatActivity {
         confirmReservationDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                final String action = "Cancels";
+
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
                         try{
-                            Statement statement = MainActivity.conn.createStatement();
+                            Statement statement = MainActivity.conn.createStatement(); //pull points from CustomerInfo
                             String query1 = "SELECT Points FROM `CustomerInfo` WHERE `Barcode`=" + barcode;
                             ResultSet rs1 = statement.executeQuery(query1);
                             if(rs1.next()){
                                 points = rs1.getInt("Points");
                             }
 
-                            int updatePoints = points - 10;
+                            Statement statement1 = MainActivity.conn.createStatement(); //get the subtraction of points
+                            String query2 = "SELECT `Points` FROM `Points` WHERE `Action`=\"" + action + "\"";
+                            ResultSet rs2 = statement1.executeQuery(query2);
+                            if(rs2.next()){
+                                varpoints = rs2.getInt("Points");
+                            }
 
-                            Statement statement1 = MainActivity.conn.createStatement();
-                            String query2 = "UPDATE `CustomerInfo` SET `Points`='" + updatePoints + "' " +
+                            int updatePoints = points + varpoints;
+
+                            Statement statement2 = MainActivity.conn.createStatement(); //update points in CustomerInfo
+                            String query3 = "UPDATE `CustomerInfo` SET `Points`='" + updatePoints + "' " +
                                     "WHERE `Barcode`=" + barcode;
-                            statement1.executeUpdate(query2);
+                            statement2.executeUpdate(query3);
 
                             Statement stmt = MainActivity.conn.createStatement();
                             String query = "DELETE FROM `Reservations` WHERE `rID`=\"" + resID + "\"";

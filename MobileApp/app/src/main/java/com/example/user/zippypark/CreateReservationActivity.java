@@ -36,6 +36,7 @@ public class CreateReservationActivity extends AppCompatActivity {
     int vip;
     int numpoints;
     int points;
+    int varpoints;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -86,6 +87,7 @@ public class CreateReservationActivity extends AppCompatActivity {
                 String date1 = resDateEditText.getText().toString();
                 final String start1 = startTimeEditText.getText().toString();
                 String end1 = endTimeEditText.getText().toString();
+                final String action = "CreateRes";
 
                 final Date date = Date.valueOf(date1);
                 final Time start = Time.valueOf(start1);
@@ -96,21 +98,28 @@ public class CreateReservationActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try{
-                            Statement statement = MainActivity.conn.createStatement();
+                            Statement statement = MainActivity.conn.createStatement(); //get points from CustomerInfo
                             String query1 = "SELECT `Points` FROM `CustomerInfo` WHERE `Barcode`=" + barcode;
                             ResultSet rs1 = statement.executeQuery(query1);
                             if(rs1.next()){
                                 points = rs1.getInt("Points");
                             }
 
-                            int updatePoints = points + 10;
+                            Statement statement1 = MainActivity.conn.createStatement(); //get the addition of points
+                            String query2 = "SELECT `Points` FROM `Points` WHERE `Action`=\"" + action + "\"";
+                            ResultSet rs2 = statement1.executeQuery(query2);
+                            if(rs2.next()){
+                               varpoints = rs2.getInt("Points");
+                            }
 
-                            Statement statement1 = MainActivity.conn.createStatement();
-                            String query2 = "UPDATE `CustomerInfo` SET `Points`='" + updatePoints + "' " +
+                            int updatePoints = points + varpoints;
+
+                            Statement statement2 = MainActivity.conn.createStatement(); //update points in CustomerInfo
+                            String query3 = "UPDATE `CustomerInfo` SET `Points`='" + updatePoints + "' " +
                                     "WHERE `Barcode`=" + barcode;
-                            statement1.executeUpdate(query2);
+                            statement2.executeUpdate(query3);
 
-                            Statement stmt1 = MainActivity.conn.createStatement();
+                            Statement stmt1 = MainActivity.conn.createStatement(); //calculate charge
                             ResultSet rs = stmt1.executeQuery(
                                     "SELECT * FROM `Payment` WHERE `StartTime`=\"" + start1 + "\"");
                             if(rs.next()){
