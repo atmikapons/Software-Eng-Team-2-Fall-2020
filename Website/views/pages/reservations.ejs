@@ -81,6 +81,7 @@
         $("#rid").removeAttr("readonly");
         $("#add-reservation-button").show();
         $("#edit-reservation-button").hide();
+        $("#reservationModalLabel").html("Add new reservation");
     })
 
     $("#add-reservation-button").click(function (event) {
@@ -112,6 +113,7 @@
         event.preventDefault();
         $("#add-reservation-button").hide();
         $("#edit-reservation-button").show();
+        $("#reservationModalLabel").html("Update reservation");
         $("#rid").attr("readonly", "readonly");
         
         let rid = $(this).closest('tr').attr('value');
