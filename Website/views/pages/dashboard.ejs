@@ -13,6 +13,13 @@
                 <div class="jumbotron">
                     <h1>Dashboard </h1>
                 </div>
+                <div class="col-md-4">
+                    <div class="card-counter success">
+                      <i class="fa fa-car"></i>
+                      <span class="count-numbers" id="num-parking-spots">#</span>
+                      <span class="count-name">open parking spots</span>
+                    </div>
+                  </div>
             </div>
         </div>
         
@@ -21,3 +28,23 @@
 
 </body>
 </html>
+
+<script>
+    $(document).ready( function () {
+        getParking();
+    });
+
+    function getParking() {
+        $.post("/getParkingSpots", {
+        },
+        function (data, status) {
+            if (data.status == "Success") {
+                //$("#first-name").val(data.data[0].FirstName);
+                $("#num-parking-spots").html(data.data[0].spots);
+                console.log(data.data[0].spots);
+            } else {
+                alert("Error getting parking spots");
+            }
+        });
+    }
+</script>
