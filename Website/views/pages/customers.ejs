@@ -73,6 +73,7 @@
         $("#barcode").removeAttr("readonly");
         $("#add-customer-button").show();
         $("#edit-customer-button").hide();
+        $("#customerModalLabel").html("Add new customer");
     })
 
     $("#add-customer-button").click(function (event) {
@@ -113,6 +114,7 @@
 
     $(".get-customer").click(function (event) {
         event.preventDefault();
+        $("#customerModalLabel").html("Update customer");
         $("#add-customer-button").hide();
         $("#edit-customer-button").show();
         $("#barcode").attr("readonly", "readonly");
