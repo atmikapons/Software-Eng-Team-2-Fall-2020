@@ -92,6 +92,7 @@
             "end" : $("#end-time").val(),
             "barcode" : $("#barcode").val(),
             "spot" : $("#assigned-spot").val(),
+            "vip" : ($('#vip').prop('checked')) ? 1 : 0,
             "charge" : $("#charge").val(),
             "rid" : $("#rid").val(),
         },
@@ -127,6 +128,9 @@
             $("#end-time").val(data.data[0].EndTime);
             $("#barcode").val(data.data[0].Barcode);
             $("#assigned-spot").val(data.data[0].AssignedSpot);
+            if ( data.data[0].VIP === 1 ) {
+                $("#vip").prop("checked", true);
+            }
             $("#charge").val(data.data[0].Charge);
             $("#rid").val(rid);
         });
@@ -141,6 +145,7 @@
             "end" : $("#end-time").val(),
             "barcode" : $("#barcode").val(),
             "spot" : $("#assigned-spot").val(),
+            "vip" : ($('#vip').prop('checked')) ? 1 : 0,
             "charge" : $("#charge").val(),
             "rid" : $("#rid").val(),
         },

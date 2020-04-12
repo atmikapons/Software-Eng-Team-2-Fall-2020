@@ -53,7 +53,7 @@ var router = function (app, db) {
 
     app.post('/getReservation', function (req, res) {
         let rid = req.body.rid;
-        let getReservationQuery = 'SELECT Date, StartTime, EndTime, Barcode, AssignedSpot, Charge FROM Reservations WHERE rID = (?)';
+        let getReservationQuery = 'SELECT Date, StartTime, EndTime, Barcode, AssignedSpot, VIP, Charge FROM Reservations WHERE rID = (?)';
         db.query(getReservationQuery, rid, function (err, rows) {
             if ( err ) {
                 return res.status(500).send(err);
@@ -77,12 +77,13 @@ var router = function (app, db) {
         let end = req.body.end;
         let barcode = req.body.barcode;
         let spot = req.body.spot;
+        let vip = req.body.vip;
         let charge = req.body.charge;
         let rid = req.body.rid;
         let values = [];
-        values.push([date, start, end, barcode, spot, charge, rid]);
+        values.push([date, start, end, barcode, spot, vip, charge, rid]);
         let addQuery = "INSERT INTO Reservations (Date, StartTime, EndTime, Barcode, AssignedSpot, \
-                        Charge, Rid) VALUES ?;";
+                        VIP, Charge, Rid) VALUES ?;";
         db.query(addQuery, [values], function (err, result) {
             if ( err ) {
                 return res.status(500).send(err);
@@ -100,11 +101,12 @@ var router = function (app, db) {
         let end = req.body.end;
         let barcode = req.body.barcode;
         let spot = req.body.spot;
+        let vip = req.body.vip;
         let charge = req.body.charge;
         let rid = req.body.rid;
         let editQuery = "UPDATE Reservations SET Date = ?, StartTime = ?, EndTime = ?, \
-                         Barcode = ?, AssignedSpot = ?, Charge = ? WHERE rID = ?";
-        db.query(editQuery, [date, start, end, barcode, spot, charge, rid], function (err, result) {
+                         Barcode = ?, AssignedSpot = ?, VIP = ?, Charge = ? WHERE rID = ?";
+        db.query(editQuery, [date, start, end, barcode, spot, vip, charge, rid], function (err, result) {
             if ( err ) {
                 return res.status(500).send(err);
             } else {
