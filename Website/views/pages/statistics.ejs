@@ -13,11 +13,23 @@
                 <div class="jumbotron">
                     <h1> Statistics </h1>
                 </div>
+                <button id="myButton">View reservations vs hour</button>
+                <button id="theButton">View reservation vs date</button>
             </div>
         </div>
-        
+ 
         <% include ../partials/footer %>
     </div>
-
+    <script>
+    var button = document.getElementById('myButton');
+    button.onclick = function() {
+    location.assign('/byTime');
+}
+  var buttonn = document.getElementById('theButton');
+    buttonn.onclick = function() {
+    location.assign('/byDate');
+}
+    </script>
 </body>
 </html>
+

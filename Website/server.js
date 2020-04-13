@@ -30,11 +30,20 @@ app.use(express.static(path.join(__dirname, 'public'))); // configure express to
 // });
 
 // // Sam's remote database for testing:
+/*
 const db = mysql.createConnection({
     host: 'remotemysql.com',
     user: 'dhI47C5XFR',
     password: 'R5EYIRUesL',
     database: 'dhI47C5XFR',
+    port: 3306
+});*/
+// // Nandita's remote database for testing:
+const db = mysql.createConnection({
+    host: 'remotemysql.com',
+    user: '7X8Fr3nKz9',
+    password: 'M8b3pMtr9B',
+    database: '7X8Fr3nKz9',
     port: 3306
 });
 

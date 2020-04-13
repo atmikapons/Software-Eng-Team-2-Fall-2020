@@ -37,7 +37,34 @@ var router = function (app, db) {
             }
         });
     });
+    /////// STATISTICS ROUTES /////
+    app.get('/byDate', function (req, res) {
+        db.query('SELECT Date, COUNT(*) AS `Count` FROM `Records` GROUP BY Date', function (err, rows) {
+            if (err) {
+                res.render('pages/byDate', {
+                    records: null,
+                });
+            } else {
+                res.render('pages/byDate', {
+                    records: rows,
+                });
+            }
+        });
+    });
 
+    app.get('/byTime', function (req, res) {
+        db.query('SELECT HOUR(StartTime) AS `Time`, COUNT(*) AS `Count` FROM `Records` GROUP BY HOUR(StartTime)', function (err, rows) {
+            if (err) {
+                res.render('pages/byTime', {
+                    records: null,
+                });
+            } else {
+                res.render('pages/byTime', {
+                    records: rows,
+                });
+            }
+        });
+    });
     ////// DASHBOARD ROUTES //////
     app.post('/getParkingSpots', function (req, res) {
         let getParkingQuery = 'SELECT COUNT(SpotNum) AS spots FROM `Parking Spots` WHERE Status="Unoccupied"';
