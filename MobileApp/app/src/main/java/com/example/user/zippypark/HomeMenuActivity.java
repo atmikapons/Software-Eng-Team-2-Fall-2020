@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jcraft.jsch.*;
 
@@ -23,6 +24,7 @@ public class HomeMenuActivity extends AppCompatActivity {
     Button profileButton;
     Button createResButton;
     Button resHistoryButton;
+    Button logoutButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,21 @@ public class HomeMenuActivity extends AppCompatActivity {
                 Intent i = new Intent(HomeMenuActivity.this,
                         ReservationHistoryActivity.class);
                 i.putExtras(b);
+                startActivity(i);
+            }
+        });
+
+        logoutButton = findViewById(R.id.logout);
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(HomeMenuActivity.this,
+                        MainActivity.class);
+                //i.putExtras(b); //don't want to hold on to barcode ID
+                //Confirmation
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "You have logged out.", Toast.LENGTH_LONG);
+                toast.show();
                 startActivity(i);
             }
         });

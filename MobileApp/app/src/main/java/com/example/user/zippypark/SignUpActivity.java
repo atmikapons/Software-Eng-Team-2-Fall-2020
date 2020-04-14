@@ -139,17 +139,17 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
                     final String tempDay; //day
                     int num3 = picker.getDayOfMonth();
-                    System.out.println("picker day is: "+ num3);
+                    //System.out.println("picker day is: "+ num3);
                     if (num3 < 10) {
                         tempDay = "0" + picker.getDayOfMonth();
                     } else {
                         tempDay = Integer.toString(picker.getDayOfMonth());
                     }
                     final String day = tempDay;
-                    System.out.println("tempDay is: "+ tempDay);
+                    //System.out.println("tempDay is: "+ tempDay);
 
                     final String expDate = year + "-" + month + "-" + day; //combining format
-                    System.out.println("formatted date is: "+expDate);
+                    //System.out.println("formatted date is: "+expDate);
 
                     //EXECUTE SQL STATEMENT
                     AsyncTask.execute(new Runnable() {
