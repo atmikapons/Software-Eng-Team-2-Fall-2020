@@ -1,6 +1,7 @@
 package com.example.user.zippypark;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Button;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,6 +29,7 @@ import java.util.List;
 public class ReservationHistoryActivity extends AppCompatActivity {
 
     ListView listView;
+    Button homeButton;
     int barcode;
     List<Reservation> reservations;
     static CustomAdapter customAdapter;
@@ -35,9 +38,20 @@ public class ReservationHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.res_history);
 
-        Bundle b = getIntent().getExtras();
+        final Bundle b = getIntent().getExtras();
         barcode = b.getInt("barcode");
         reservations = new ArrayList<>(10);
+
+        homeButton = findViewById(R.id.resHistory_home);
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ReservationHistoryActivity.this,
+                        HomeMenuActivity.class);
+                i.putExtras(b);
+                startActivity(i);
+            }
+        });
 
         new GetReservationsTask().execute();
     }

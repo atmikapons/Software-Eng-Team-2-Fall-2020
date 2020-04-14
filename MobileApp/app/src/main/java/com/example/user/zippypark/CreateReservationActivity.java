@@ -29,6 +29,7 @@ public class CreateReservationActivity extends AppCompatActivity {
     EditText endTimeEditText;
     Button createButton;
     Button rewardButton;
+    Button cancelButton;
     TextView pointsRequired;
     int barcode;
     int multiplier;
@@ -37,6 +38,10 @@ public class CreateReservationActivity extends AppCompatActivity {
     int numpoints;
     int points;
     int varpoints;
+    String date1;
+    String start2;
+    String end1;
+    int count;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -84,75 +89,122 @@ public class CreateReservationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String date1 = resDateEditText.getText().toString();
+                date1 = resDateEditText.getText().toString();
                 final String start1 = startTimeEditText.getText().toString();
-                String end1 = endTimeEditText.getText().toString();
+                start2 = startTimeEditText.getText().toString();
+                end1 = endTimeEditText.getText().toString();
                 final String action = "CreateRes";
 
-                final Date date = Date.valueOf(date1);
-                final Time start = Time.valueOf(start1);
-                final Time end = Time.valueOf(end1);
 
+                if(resDateEditText.getText().toString().trim().equalsIgnoreCase("")) {
+                    resDateEditText.setError("Field cannot be left blank");
+                }
 
-                AsyncTask.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try{
-                            Statement statement = MainActivity.conn.createStatement(); //get points from CustomerInfo
-                            String query1 = "SELECT `Points` FROM `CustomerInfo` WHERE `Barcode`=" + barcode;
-                            ResultSet rs1 = statement.executeQuery(query1);
-                            if(rs1.next()){
-                                points = rs1.getInt("Points");
+                else if(startTimeEditText.getText().toString().trim().equalsIgnoreCase("")) {
+                    startTimeEditText.setError("Field cannot be left blank");
+                }
+
+                else if(endTimeEditText.getText().toString().trim().equalsIgnoreCase("")) {
+                    endTimeEditText.setError("Field cannot be left blank");
+                }
+
+                else{
+                    final Date date = Date.valueOf(date1);
+                    final Time start = Time.valueOf(start2);
+                    final Time end = Time.valueOf(end1);
+
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            try{
+                                Statement statement = MainActivity.conn.createStatement(); //get points from CustomerInfo
+                                String query1 = "SELECT `Points` FROM `CustomerInfo` WHERE `Barcode`=" + barcode;
+                                ResultSet rs1 = statement.executeQuery(query1);
+                                if(rs1.next()){
+                                    points = rs1.getInt("Points");
+                                }
+
+                                Statement statement1 = MainActivity.conn.createStatement(); //get the addition of points
+                                String query2 = "SELECT `Points` FROM `Points` WHERE `Action`=\"" + action + "\"";
+                                ResultSet rs2 = statement1.executeQuery(query2);
+                                if(rs2.next()){
+                                    varpoints = rs2.getInt("Points");
+                                }
+
+                                int updatePoints = points + varpoints;
+
+                                Statement statement2 = MainActivity.conn.createStatement(); //update points in CustomerInfo
+                                String query3 = "UPDATE `CustomerInfo` SET `Points`='" + updatePoints + "' " +
+                                        "WHERE `Barcode`=" + barcode;
+                                statement2.executeUpdate(query3);
+
+                                Statement stmt1 = MainActivity.conn.createStatement(); //calculate charge
+                                ResultSet rs = stmt1.executeQuery(
+                                        "SELECT * FROM `Payment` WHERE `StartTime`=\"" + start1 + "\"");
+                                if(rs.next()){
+                                    multiplier = rs.getInt("Multiplier");
+                                    base = rs.getInt("BasePrice");
+                                }
+
+                                long diff = end.getTime() - start.getTime(); //length of the reservation
+                                long minutes = TimeUnit.MILLISECONDS.toMinutes(diff); //conversion to minutes
+                                long charge1 = base * (minutes/15) * multiplier; //price formula
+                                final double charge = (double) charge1;
+
+                                Statement stmt = MainActivity.conn.createStatement();
+                                String query =("INSERT INTO `Reservations`" +
+                                        "(`Date`, `StartTime`, `EndTime`, `Barcode`, `VIP`, `Charge`)" +
+                                        "VALUES ('" + date + "', '" + start + "', '" + end + "', '" +
+                                        barcode + "', '" + vip + "', '" + charge + "')");
+                                stmt.executeUpdate(query);
+
+                                Statement stmt2 = MainActivity.conn.createStatement();
+                                ResultSet rs3 = stmt2.executeQuery("SELECT COUNT(`StartTime`)'" + count +
+                                        "' FROM `Reservations` WHERE `StartTime`=\"" + start1 + "\" AND " +
+                                        "`EndTime`=\"" + end1 + "\" AND `Date`=\"" + date1 + "\"");
+                                if(rs3.next()){
+
+                                    int count1 = count;
+
+                                    if(count1 > 20){
+                                        createButton.setEnabled(false);
+
+                                        Toast toast = Toast.makeText(getApplicationContext(),
+                                                "Reservations full", Toast.LENGTH_LONG);
+                                        toast.show();
+                                    }
+                                }
+
+                            } catch(SQLException e) {
+                                e.printStackTrace();
                             }
-
-                            Statement statement1 = MainActivity.conn.createStatement(); //get the addition of points
-                            String query2 = "SELECT `Points` FROM `Points` WHERE `Action`=\"" + action + "\"";
-                            ResultSet rs2 = statement1.executeQuery(query2);
-                            if(rs2.next()){
-                               varpoints = rs2.getInt("Points");
-                            }
-
-                            int updatePoints = points + varpoints;
-
-                            Statement statement2 = MainActivity.conn.createStatement(); //update points in CustomerInfo
-                            String query3 = "UPDATE `CustomerInfo` SET `Points`='" + updatePoints + "' " +
-                                    "WHERE `Barcode`=" + barcode;
-                            statement2.executeUpdate(query3);
-
-                            Statement stmt1 = MainActivity.conn.createStatement(); //calculate charge
-                            ResultSet rs = stmt1.executeQuery(
-                                    "SELECT * FROM `Payment` WHERE `StartTime`=\"" + start1 + "\"");
-                            if(rs.next()){
-                                multiplier = rs.getInt("Multiplier");
-                                System.out.println(multiplier);
-                                base = rs.getInt("BasePrice");
-                                System.out.println(base);
-                            }
-
-                            long diff = end.getTime() - start.getTime(); //length of the reservation
-                            long minutes = TimeUnit.MILLISECONDS.toMinutes(diff); //conversion to minutes
-                            long charge1 = base * (minutes/15) * multiplier; //price formula
-                            final double charge = (double) charge1;
-
-                            Statement stmt = MainActivity.conn.createStatement();
-                            String query =("INSERT INTO `Reservations`" +
-                                    "(`Date`, `StartTime`, `EndTime`, `Barcode`, `VIP`, `Charge`)" +
-                                    "VALUES ('" + date + "', '" + start + "', '" + end + "', '" +
-                                    barcode + "', '" + vip + "', '" + charge + "')");
-                            //System.out.println(query);
-                            stmt.executeUpdate(query);
-                        } catch(SQLException e) {
-                            e.printStackTrace();
                         }
-                    }
-                });
+                    });
 
+                    Intent i = new Intent(CreateReservationActivity.this,
+                            HomeMenuActivity.class);
+                    i.putExtras(b);
+
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Reservation Created, Payment made", Toast.LENGTH_LONG);
+                    toast.show();
+
+                    startActivity(i);
+                }
+
+            }
+        });
+
+        cancelButton = findViewById(R.id.res_cancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 Intent i = new Intent(CreateReservationActivity.this,
                         HomeMenuActivity.class);
                 i.putExtras(b);
 
                 Toast toast = Toast.makeText(getApplicationContext(),
-                        "Reservation Created, Payment made", Toast.LENGTH_LONG);
+                        "Reservation canceled", Toast.LENGTH_SHORT);
                 toast.show();
 
                 startActivity(i);
@@ -160,6 +212,7 @@ public class CreateReservationActivity extends AppCompatActivity {
         });
 
     }
+
     class GetPointsTask extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {

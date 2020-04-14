@@ -6,6 +6,8 @@
       <module fileurl="file://$PROJECT_DIR$/app/MobileApp-app.iml" filepath="$PROJECT_DIR$/app/MobileApp-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/zippypark5-MobileApp.iml" filepath="$PROJECT_DIR$/zippypark5-MobileApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zippypark6-MobileApp.iml" filepath="$PROJECT_DIR$/zippypark6-MobileApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/zippypark6-MobileApp-app.iml" filepath="$PROJECT_DIR$/app/zippypark6-MobileApp-app.iml" />
     </modules>
   </component>
 </project>

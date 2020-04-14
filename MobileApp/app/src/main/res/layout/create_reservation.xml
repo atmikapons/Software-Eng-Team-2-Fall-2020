@@ -134,6 +134,16 @@
             android:textColor="@color/colorPrimary"
             android:text="@string/create_button"/>
 
+        <Button
+            android:id="@+id/res_cancel"
+            android:layout_width="167sp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="10sp"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimary"
+            android:text="@string/cancel"/>
+
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
 

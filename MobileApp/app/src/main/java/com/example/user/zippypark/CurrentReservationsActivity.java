@@ -13,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Button;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -31,6 +32,7 @@ import java.util.List;
 public class CurrentReservationsActivity extends AppCompatActivity {
 
     ListView listView;
+    Button homeButton;
     int barcode;
     List<Reservation> reservations;
     static CustomAdapter customAdapter;
@@ -39,9 +41,20 @@ public class CurrentReservationsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.current_reservation);
 
-        Bundle b = getIntent().getExtras();
+        final Bundle b = getIntent().getExtras();
         barcode = b.getInt("barcode");
         reservations = new ArrayList<>(10);
+
+        homeButton = findViewById(R.id.currentRes_home);
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(CurrentReservationsActivity.this,
+                        HomeMenuActivity.class);
+                i.putExtras(b);
+                startActivity(i);
+            }
+        });
 
         new GetReservationsTask().execute();
 
