@@ -12,6 +12,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.*;
 
@@ -219,6 +220,10 @@ public class EditProfileActivity extends AppCompatActivity implements AdapterVie
                 //MOVE TO PROFILE
                 Intent i = new Intent(EditProfileActivity.this, ProfileActivity.class);
                 i.putExtras(b);
+                //Confirmation
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Account successfully updated.", Toast.LENGTH_LONG);
+                toast.show();
                 startActivity(i);
             }
 

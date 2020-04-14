@@ -152,7 +152,7 @@ public class CreateReservationActivity extends AppCompatActivity {
                 i.putExtras(b);
 
                 Toast toast = Toast.makeText(getApplicationContext(),
-                        "Reservation Created, Payment made", Toast.LENGTH_SHORT);
+                        "Reservation Created, Payment made", Toast.LENGTH_LONG);
                 toast.show();
 
                 startActivity(i);

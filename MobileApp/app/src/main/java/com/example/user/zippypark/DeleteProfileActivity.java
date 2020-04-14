@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,6 +56,10 @@ public class DeleteProfileActivity extends AppCompatActivity {
                 Intent i = new Intent(DeleteProfileActivity.this,
                         MainActivity.class);
                 i.putExtras(b);
+                //Confirmation
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "Account successfully deleted.", Toast.LENGTH_LONG);
+                toast.show();
                 startActivity(i);
             }
         });

@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.jcraft.jsch.*;
 
@@ -127,9 +128,10 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
                     final String year = Integer.toString(picker.getYear()); //year
 
                     final String tempMonth; //month
-                    int num2 = picker.getMonth();
+                    int num2 = picker.getMonth()+1;
+                    System.out.println("picker month is: "+ num2);
                     if (num2 < 10) {
-                        tempMonth = "0" + picker.getMonth();
+                        tempMonth = "0" + num2;
                     } else {
                         tempMonth = Integer.toString(picker.getMonth());
                     }
@@ -137,14 +139,17 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
                     final String tempDay; //day
                     int num3 = picker.getDayOfMonth();
+                    System.out.println("picker day is: "+ num3);
                     if (num3 < 10) {
                         tempDay = "0" + picker.getDayOfMonth();
                     } else {
-                        tempDay = Integer.toString(picker.getMonth());
+                        tempDay = Integer.toString(picker.getDayOfMonth());
                     }
                     final String day = tempDay;
+                    System.out.println("tempDay is: "+ tempDay);
 
                     final String expDate = year + "-" + month + "-" + day; //combining format
+                    System.out.println("formatted date is: "+expDate);
 
                     //EXECUTE SQL STATEMENT
                     AsyncTask.execute(new Runnable() {
@@ -171,6 +176,12 @@ public class SignUpActivity extends AppCompatActivity implements AdapterView.OnI
 
                     //MOVE TO HOMESCREEN
                     Intent i = new Intent(SignUpActivity.this, HomeMenuActivity.class);
+
+                    //Confirmation
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Account successfully created.", Toast.LENGTH_LONG);
+                    toast.show();
+
                     startActivity(i);
                 }
             }
