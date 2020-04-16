@@ -1,12 +1,16 @@
 package com.example.user.zippypark;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,6 +24,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button editProfileButton;
     Button homeProfileButton;
     Button deleteProfileButton;
+    Button barcodeButton;
 
     //customer's info pulled from DB
     int barcode;
@@ -126,6 +131,13 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
 
+        barcodeButton = findViewById(R.id.barcode);
+        barcodeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyCustomAlertDialog("" + barcode);
+            }
+        });
 
 
         //TRANSITION TO EDIT PROFILE SCREEN
@@ -164,5 +176,25 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void MyCustomAlertDialog(String b){
+        final Dialog MyDialog = new Dialog(ProfileActivity.this);
+        MyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        MyDialog.setContentView(R.layout.barcode_dialogue);
+
+        TextView barcodeTV = MyDialog.findViewById(R.id.barcode_number);
+        Button close = MyDialog.findViewById(R.id.closeButton);
+
+        barcodeTV.setText(b);
+
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyDialog.cancel();
+            }
+        });
+
+        MyDialog.show();
     }
 }
