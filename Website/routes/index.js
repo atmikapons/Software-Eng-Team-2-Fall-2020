@@ -85,6 +85,27 @@ var router = function (app, db) {
         });
     });
 
+    app.post('/getNumReservations', function (req, res) {
+        let date = new Date();
+        let today = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+        let getNumResQuery = 'SELECT COUNT(Date) AS num FROM Reservations WHERE Date= "' + today + '"';
+        db.query(getNumResQuery, function (err, rows) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else if ( rows.length === 0 ) {
+                return res.status(404).send({
+                    'status' : 'not found'
+                });
+            } else {
+                JSON.stringify(rows);
+                return res.status(200).send({
+                    'status' : "Success",
+                    'data' : rows,
+                });
+            }     
+        });
+    });
+
     ////// RESERVATION ROUTES //////
 
     app.get('/deleteReservation/:rid', function (req, res) {
