@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, 'public'))); // configure express to
 //     database: 'zippypark'
 // });
 
-/// Kylie's remote database for testing:
+// Kylie's remote database for testing:
 // const db = mysql.createConnection({
 //     host: 'remotemysql.com',
 //     user: 'KUU6GpyPt4',
