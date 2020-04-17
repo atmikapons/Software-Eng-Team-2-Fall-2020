@@ -75,10 +75,6 @@ var router = function (app, db) {
         db.query(getParkingQuery, function (err, rows) {
             if ( err ) {
                 return res.status(500).send(err);
-            } else if ( rows.length === 0 ) {
-                return res.status(404).send({
-                    'status' : 'not found'
-                });
             } else {
                 JSON.stringify(rows);
                 return res.status(200).send({
@@ -91,15 +87,42 @@ var router = function (app, db) {
 
     app.post('/getNumReservations', function (req, res) {
         let date = new Date();
-        let today = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
-        let getNumResQuery = 'SELECT COUNT(Date) AS num FROM Reservations WHERE Date= "' + today + '"';
+        let getNumResQuery = 'SELECT Date, COUNT(*) AS num FROM Reservations GROUP BY Date';
         db.query(getNumResQuery, function (err, rows) {
             if ( err ) {
                 return res.status(500).send(err);
-            } else if ( rows.length === 0 ) {
-                return res.status(404).send({
-                    'status' : 'not found'
+            } else {
+                JSON.stringify(rows);
+                return res.status(200).send({
+                    'status' : "Success",
+                    'data' : rows,
                 });
+            }     
+        });
+    });
+
+    app.post('/getRevenue', function (req, res) {
+        let date = new Date();
+        let yesterday = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + (date.getDate()-1);
+        let getRevQuery = 'SELECT SUM(Charge) AS rev FROM Records WHERE Date= "' + yesterday + '"';
+        db.query(getRevQuery, function (err, rows) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else {
+                JSON.stringify(rows);
+                return res.status(200).send({
+                    'status' : "Success",
+                    'data' : rows,
+                });
+            }     
+        });
+    });
+
+    app.post('/getNumCustomers', function (req, res) {
+        let getNumCustomersQuery = 'SELECT COUNT(*) AS num FROM CustomerInfo';
+        db.query(getNumCustomersQuery, function (err, rows) {
+            if ( err ) {
+                return res.status(500).send(err);
             } else {
                 JSON.stringify(rows);
                 return res.status(200).send({

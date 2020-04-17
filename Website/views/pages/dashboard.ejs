@@ -16,17 +16,40 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        <div class="card-counter success">
+                        <div class="card-counter danger">
                             <i class="fa fa-car"></i>
-                            <span class="count-numbers" id="num-parking-spots">#</span>
+                            <span class="count-numbers" id="num-parking-spots">0</span>
                             <span class="count-name">open parking spots</span>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="card-counter info">
-                            <i class="fa fa-users"></i>
-                            <span class="count-numbers" id="num-reservations">#</span>
+                            <i class="fa fa-calendar"></i>
+                            <span class="count-numbers" id="num-reservations">0</span>
                             <span class="count-name">reservations today</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-counter success">
+                            <i class="fa fa-usd"></i>
+                            <span class="count-numbers" id="revenue">$</span>
+                            <span class="count-name">yesterday's revenue</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card-counter primary">
+                            <i class="fa fa-users"></i>
+                            <span class="count-numbers" id="num-accounts">0</span>
+                            <span class="count-name">customer accounts</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-counter success">
+                            <i class="fa fa-pencil-square-o"></i>
+                            <span class="count-numbers" id="future-reservations">0</span>
+                            <span class="count-name">upcoming reservations</span>
                         </div>
                     </div>
                 </div>
@@ -43,6 +66,8 @@
     $(document).ready( function () {
         getParking();
         getNumReservations();
+        getRevenue();
+        getCustomers();
     });
 
     function getParking() {
@@ -62,10 +87,54 @@
         }, 
         function (data, status) {
             if (data.status == "Success" ) {
-                console.log(data.data[0].num);
-                $("#num-reservations").html(data.data[0].num);
+                let total = 0;
+                let date = new Date();
+                let month = date.getMonth()+1;
+                let today = "";
+                if ( month < 10 ) {
+                    today = date.getFullYear() + '-0' + (date.getMonth()+1) + '-' + date.getDate();
+                } else {
+                    today = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+                }
+               
+                for (row in data.data) {
+                    if ( data.data[row].Date.substring(0,10) === today ) {
+                        $("#num-reservations").html(data.data[row].num);
+                    } else {
+                        total += data.data[row].num;
+                    }
+                }
+                $("#future-reservations").html(total);
             } else {
                 alert("Error getting today's number of reservations");
+            }
+        });
+    }
+
+    function getRevenue() {
+        $.post("/getRevenue", {
+        }, 
+        function (data, status) {
+            if (data.status == "Success" ) {
+                if ( data.data[0].rev === null ) {
+                    $("#revenue").html("$0.00");
+                } else {
+                    $("#revenue").html("$" + data.data[0].rev.toFixed(2));
+                }
+            } else {
+                alert("Error getting yesterday's revenue");
+            }
+        });
+    }
+
+    function getCustomers() {
+        $.post("/getNumCustomers", {
+        }, 
+        function (data, status) {
+            if (data.status == "Success" ) {
+               $("#num-accounts").html(data.data[0].num);
+            } else {
+                alert("Error getting yesterday's revenue");
             }
         });
     }
