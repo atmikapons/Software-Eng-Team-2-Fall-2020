@@ -135,6 +135,62 @@
         $("#reset-points").click(function (event) {
             getPointsForm();
         })
+
+        $("#edit-price").click(function (event) {
+            let times = [];
+            let bases = [];
+            let multipliers = [];
+            let makeArrays = new Promise(function (resolve, reject) {
+                let time;
+                for ( time = 6; time <= 22; time++ ) {
+                    times.push('"'+$("#time-"+time).html()+'"');
+                    bases.push('"'+$("#base-"+time).val()+'"');
+                    multipliers.push('"'+$("#multiplier-"+time).val()+'"');
+                }
+                if (times.length === 17) {
+                    resolve();
+                } else {
+                    reject();
+                }
+            })  
+            makeArrays
+                .then( function () {  
+                        $.post("/editPriceForm", {
+                            "times" : JSON.stringify(times),
+                            "bases" : JSON.stringify(bases),
+                            "multipliers" : JSON.stringify(multipliers),
+                        },
+                        function (data, status) {
+                            if (data.status == "Success") {
+                                alert("Successfully updated price scheme");
+                            } else {
+                                alert("Error editing price scheme");
+                            }
+                        });
+                    }
+                )
+                .catch(function () {
+                    alert("Issue making arrays");
+                });
+        });
+
+        $("#edit-points").click(function (event) {
+            $.post("/editPointsForm", {
+                "createRes" : $("#pt-1").val(),
+                "createRes30x" : $("#pt-2").val(),
+                "onTime" : $("#pt-3").val(),
+                "overstay" : $("#pt-4").val(),
+                "cancels" : $("#pt-5").val(),
+                "exchangeVIP" : $("#pt-6").val(),
+            },
+            function (data, status) {
+            if (data.status == "Success") {
+                alert("Successfully updated point scheme");
+            } else {
+                alert("Error editing point scheme");
+            }
+            });
+        })
     });
 
     function getPriceForm() {

@@ -174,7 +174,12 @@ var router = function (app, db) {
         for ( index = 0; index < times.length; index++ ) {
             editQuery+=("when StartTime = " + times[index] + " then " + multipliers[index] + " ");
         }
-        editQuery+="end) WHERE StartTime in (?)";
+        editQuery+="end) WHERE StartTime in (";
+        for ( time in times ) {
+            editQuery+=(times[time]+",");
+        }
+        editQuery=editQuery.slice(0,-1);
+        editQuery+=")";
 
         db.query(editQuery, [times], function (err, result) {
             if ( err ) {
