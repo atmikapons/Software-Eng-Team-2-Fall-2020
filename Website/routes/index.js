@@ -133,6 +133,34 @@ var router = function (app, db) {
         });
     });
 
+    app.get('/getPriceForm', function (req, res) {
+        db.query('SELECT * FROM Payment', function (err, rows) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else {
+                JSON.stringify(rows);
+                return res.status(200).send({
+                    'status' : "Success",
+                    'data' : rows,
+                });
+            }
+        });
+    });
+
+    app.get('/getPointsForm', function (req, res) {
+        db.query('SELECT * FROM Points', function (err, rows) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else {
+                JSON.stringify(rows);
+                return res.status(200).send({
+                    'status' : "Success",
+                    'data' : rows,
+                });
+            }
+        });
+    });
+
     ////// RESERVATION ROUTES //////
 
     app.get('/deleteReservation/:rid', function (req, res) {
