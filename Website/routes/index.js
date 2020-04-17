@@ -1,9 +1,13 @@
 const express = require('express');
+const date = require('date-and-time');
 
 var router = function (app, db) {
     ////// GET WEBPAGES //////////
     app.get('/', function (req, res) {
-        res.render('pages/dashboard');
+        let now = new Date();
+        res.render('pages/dashboard', {
+            today: date.format(now, 'MMM DD, YYYY'),
+        });
     });
 
     app.get('/statistics', function (req, res) {
