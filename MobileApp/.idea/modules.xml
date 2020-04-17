@@ -3,11 +3,13 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MobileApp.iml" filepath="$PROJECT_DIR$/MobileApp.iml" />
-      <module fileurl="file://C:\Users\user\Documents\ZippyPark\MobileApp\app\MobileApp-app.iml" filepath="C:\Users\user\Documents\ZippyPark\MobileApp\app\MobileApp-app.iml" />
+      <module fileurl="file://C:/Users/user/Documents/ZippyPark/MobileApp/app/MobileApp-app.iml" filepath="C:/Users/user/Documents/ZippyPark/MobileApp/app/MobileApp-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\user\Documents\ZippyPark\MobileApp\zippypark5-MobileApp.iml" filepath="C:\Users\user\Documents\ZippyPark\MobileApp\zippypark5-MobileApp.iml" />
-      <module fileurl="file://C:\Users\user\Documents\ZippyPark\MobileApp\zippypark6-MobileApp.iml" filepath="C:\Users\user\Documents\ZippyPark\MobileApp\zippypark6-MobileApp.iml" />
-      <module fileurl="file://C:\Users\user\Documents\ZippyPark\MobileApp\app\zippypark6-MobileApp-app.iml" filepath="C:\Users\user\Documents\ZippyPark\MobileApp\app\zippypark6-MobileApp-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shreyapatel-zippypark6-MobileApp.iml" filepath="$PROJECT_DIR$/shreyapatel-zippypark6-MobileApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/shreyapatel-zippypark6-MobileApp-app.iml" filepath="$PROJECT_DIR$/app/shreyapatel-zippypark6-MobileApp-app.iml" />
+      <module fileurl="file://C:/Users/user/Documents/ZippyPark/MobileApp/zippypark5-MobileApp.iml" filepath="C:/Users/user/Documents/ZippyPark/MobileApp/zippypark5-MobileApp.iml" />
+      <module fileurl="file://C:/Users/user/Documents/ZippyPark/MobileApp/zippypark6-MobileApp.iml" filepath="C:/Users/user/Documents/ZippyPark/MobileApp/zippypark6-MobileApp.iml" />
+      <module fileurl="file://C:/Users/user/Documents/ZippyPark/MobileApp/app/zippypark6-MobileApp-app.iml" filepath="C:/Users/user/Documents/ZippyPark/MobileApp/app/zippypark6-MobileApp-app.iml" />
     </modules>
   </component>
 </project>

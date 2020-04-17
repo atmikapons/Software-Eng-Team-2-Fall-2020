@@ -78,10 +78,10 @@ public class DeleteReservationActivity extends AppCompatActivity {
                         HomeMenuActivity.class);
                 i.putExtras(bundle);
 
-                int duration = Toast.LENGTH_SHORT;
+                int duration = Toast.LENGTH_LONG;
 
                 Toast toast = Toast.makeText(getApplicationContext(),
-                        "Reservation Deleted", duration);
+                        "Reservation Deleted, Payment refunded", duration);
                 toast.show();
 
                 startActivity(i);
