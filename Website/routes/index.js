@@ -70,7 +70,7 @@ var router = function (app, db) {
         });
     });
     ////// DASHBOARD ROUTES //////
-    app.post('/getParkingSpots', function (req, res) {
+    app.get('/getParkingSpots', function (req, res) {
         let getParkingQuery = 'SELECT COUNT(SpotNum) AS spots FROM `Parking Spots` WHERE Status="Unoccupied"';
         db.query(getParkingQuery, function (err, rows) {
             if ( err ) {
@@ -85,7 +85,7 @@ var router = function (app, db) {
         });
     });
 
-    app.post('/getNumReservations', function (req, res) {
+    app.get('/getNumReservations', function (req, res) {
         let date = new Date();
         let getNumResQuery = 'SELECT Date, COUNT(*) AS num FROM Reservations GROUP BY Date';
         db.query(getNumResQuery, function (err, rows) {
@@ -101,7 +101,7 @@ var router = function (app, db) {
         });
     });
 
-    app.post('/getRevenue', function (req, res) {
+    app.get('/getRevenue', function (req, res) {
         let date = new Date();
         let yesterday = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + (date.getDate()-1);
         let getRevQuery = 'SELECT SUM(Charge) AS rev FROM Records WHERE Date= "' + yesterday + '"';
@@ -118,7 +118,7 @@ var router = function (app, db) {
         });
     });
 
-    app.post('/getNumCustomers', function (req, res) {
+    app.get('/getNumCustomers', function (req, res) {
         let getNumCustomersQuery = 'SELECT COUNT(*) AS num FROM CustomerInfo';
         db.query(getNumCustomersQuery, function (err, rows) {
             if ( err ) {

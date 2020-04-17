@@ -72,28 +72,15 @@
 
 <script>
     $(document).ready( function () {
-        getParking();
-        getNumReservations();
-        getRevenue();
-        getCustomers();
-    });
-
-    function getParking() {
-        $.post("/getParkingSpots", {
-        },
-        function (data, status) {
+        $.get("/getParkingSpots", function (data, status) {
             if (data.status == "Success") {
                 $("#num-parking-spots").html(data.data[0].spots);
             } else {
                 alert("Error getting parking spots");
             }
         });
-    }
 
-    function getNumReservations() {
-        $.post("/getNumReservations", {
-        }, 
-        function (data, status) {
+        $.get("/getNumReservations", function (data, status) {
             if (data.status == "Success" ) {
                 let total = 0;
                 let date = new Date();
@@ -117,12 +104,8 @@
                 alert("Error getting today's number of reservations");
             }
         });
-    }
 
-    function getRevenue() {
-        $.post("/getRevenue", {
-        }, 
-        function (data, status) {
+        $.get("/getRevenue", function (data, status) {
             if (data.status == "Success" ) {
                 if ( data.data[0].rev === null ) {
                     $("#revenue").html("$0.00");
@@ -133,17 +116,14 @@
                 alert("Error getting yesterday's revenue");
             }
         });
-    }
 
-    function getCustomers() {
-        $.post("/getNumCustomers", {
-        }, 
-        function (data, status) {
+        $.get("/getNumCustomers", function (data, status) {
             if (data.status == "Success" ) {
                $("#num-accounts").html(data.data[0].num);
             } else {
                 alert("Error getting yesterday's revenue");
             }
         });
-    }
+    });
+
 </script>
