@@ -161,6 +161,62 @@ var router = function (app, db) {
         });
     });
 
+    app.post('/editPriceForm', function (req, res) {
+        let times = JSON.parse(req.body.times);
+        let bases = JSON.parse(req.body.bases);
+        let multipliers = JSON.parse(req.body.multipliers);
+        let editQuery = "UPDATE Payment SET BasePrice = (case ";
+        let index;
+        for ( index = 0; index < times.length; index++ ) {
+            editQuery+=("when StartTime = " + times[index] + " then " + bases[index] + " ");
+        }
+        editQuery+="end), Multiplier = (case ";
+        for ( index = 0; index < times.length; index++ ) {
+            editQuery+=("when StartTime = " + times[index] + " then " + multipliers[index] + " ");
+        }
+        editQuery+="end) WHERE StartTime in (?)";
+
+        db.query(editQuery, [times], function (err, result) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else {
+                return res.status(200).send({
+                    'status': "Success",
+                });
+            }
+        });
+    });
+
+    app.post('/editPointsForm', function (req, res) {
+        let p1 = req.body.createRes;
+        let p2 = req.body.createRes30x;
+        let p3 = req.body.onTime;
+        let p4 = req.body.overstay;
+        let p5 = req.body.cancels;
+        let p6 = req.body.exchangeVIP;
+
+        let editQuery = "UPDATE Points SET Points = (case \
+                            when Action = 'CreateRes' then ? \
+                            when Action = 'CreateRes30x' then ? \
+                            when Action = 'OnTime' then ? \
+                            when Action = 'Overstay' then ? \
+                            when Action = 'Cancels' then ? \
+                            when Action = 'ExchangeVIP' then ? \
+                        end) WHERE Action in ('CreateRes', 'CreateRes30x', 'OnTime', \
+                        'Overstay', 'Cancels', 'ExchangeVIP')";
+        db.query(editQuery, [p1, p2, p3, p4, p5, p6], function (err, result) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else {
+                JSON.stringify(result);
+                return res.status(200).send({
+                    'status': "Success",
+                    'data':result,
+                });
+            }
+        });
+    });
+
     ////// RESERVATION ROUTES //////
 
     app.get('/deleteReservation/:rid', function (req, res) {
