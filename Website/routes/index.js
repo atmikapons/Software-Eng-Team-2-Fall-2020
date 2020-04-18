@@ -43,7 +43,7 @@ var router = function (app, db) {
     });
     /////// STATISTICS ROUTES /////
     app.get('/byDate', function (req, res) {
-        db.query('SELECT Date, COUNT(*) AS `Count` FROM `Records` GROUP BY Date', function (err, rows) {
+        db.query('SELECT Date, COUNT(*) AS `Count` FROM `Records` WHERE wID=-1 GROUP BY Date ORDER BY Date', function (err, rows) {
             if (err) {
                 res.render('pages/byDate', {
                     records: null,
@@ -56,14 +56,67 @@ var router = function (app, db) {
         });
     });
 
+    app.get('/byDateWI', function (req, res) {
+        db.query('SELECT Date, COUNT(*) AS `Count` FROM `Records` WHERE rID=-1 GROUP BY Date ORDER BY Date', function (err, rows) {
+            if (err) {
+                res.render('pages/byDateWI', {
+                    records: null,
+                });
+            } else {
+                res.render('pages/byDateWI', {
+                    records: rows,
+                });
+            }
+        });
+    });
+
     app.get('/byTime', function (req, res) {
-        db.query('SELECT HOUR(StartTime) AS `Time`, COUNT(*) AS `Count` FROM `Records` GROUP BY HOUR(StartTime)', function (err, rows) {
+        db.query('SELECT HOUR(StartTime) AS `Time`, COUNT(*) AS `Count` FROM `Records` WHERE wID=-1 GROUP BY HOUR(StartTime) ORDER BY Time', function (err, rows) {
             if (err) {
                 res.render('pages/byTime', {
                     records: null,
                 });
             } else {
                 res.render('pages/byTime', {
+                    records: rows,
+                });
+            }
+        });
+    });
+    app.get('/byTimeWI', function (req, res) {
+        db.query('SELECT HOUR(StartTime) AS `Time`, COUNT(*) AS `Count` FROM `Records` WHERE rID=-1 GROUP BY HOUR(StartTime) ORDER BY Time', function (err, rows) {
+            if (err) {
+                res.render('pages/byTimeWI', {
+                    records: null,
+                });
+            } else {
+                res.render('pages/byTimeWI', {
+                    records: rows,
+                });
+            }
+        });
+    });
+    app.get('/revWeek', function (req, res) {
+        db.query('SELECT WEEK(Date) as `Week`, SUM(Charge) AS `Revenue` from `Records` GROUP BY Week ORDER BY Week', function (err, rows) {
+            if (err) {
+                res.render('pages/revWeek', {
+                    records: null,
+                });
+            } else {
+                res.render('pages/revWeek', {
+                    records: rows,
+                });
+            }
+        });
+    });
+    app.get('/revPerCharge', function (req, res) {
+        db.query('SELECT Charge , SUM(Charge) AS `Revenue` from `Records` GROUP BY Charge ORDER BY Charge', function (err, rows) {
+            if (err) {
+                res.render('pages/revPerCharge', {
+                    records: null,
+                });
+            } else {
+                res.render('pages/revPerCharge', {
                     records: rows,
                 });
             }

@@ -1,0 +1,45 @@
+<!-- views/pages/byDate.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="hold-transition">
+    <div>
+        <% include ../partials/sidebar %>
+        <div class = "content-container">
+            <div class = "container-fluid">
+                <table id = "date_table" class = "table table-bordered">
+                    <thead>
+                        <tr>
+                            <!-- table headings -->
+                            <th class="text">Date</th>
+                            <th class="text">Number of Walkins </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <!-- take data from Records table -->
+                        <% if ( records!= null ) { %>
+                            <% records.forEach(function(record) {  %>
+                                <tr value="<%= record.Date %>">
+                                    <td>
+                                        <%= record.Date %>
+                                    </td>
+                                    <td>
+                                        <%= record.Count %>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+            </div>
+        </div>        
+        <% include ../partials/footer %>
+    </div>
+<script>
+    $(document).ready( function () {
+        $('#records_table').DataTable(); // from datatables.net
+    });
+</script>
+</body>
+</html>

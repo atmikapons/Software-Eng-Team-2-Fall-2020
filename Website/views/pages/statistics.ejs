@@ -13,21 +13,41 @@
                 <div class="jumbotron">
                     <h1> Statistics </h1>
                 </div>
-                <button id="myButton">View reservations vs hour</button>
-                <button id="theButton">View reservation vs date</button>
+                <button id="resTimeButton">View reservations vs hour</button>
+                <button id="resDateButton">View reservation vs date</button>
+                <button id="WIDate">View walkins vs date</button>
+                <button id="WITime">View walkins vs hour</button>
+                <button id="RevButton">View Revenue per week</button>
+                <button id="RevCharge">View Revenue per charge</button>
             </div>
         </div>
  
         <% include ../partials/footer %>
     </div>
     <script>
-    var button = document.getElementById('myButton');
+    var button = document.getElementById('resTimeButton');
     button.onclick = function() {
     location.assign('/byTime');
 }
-  var buttonn = document.getElementById('theButton');
-    buttonn.onclick = function() {
+    var buttona = document.getElementById('resDateButton');
+    buttona.onclick = function() {
     location.assign('/byDate');
+}
+    var buttonb = document.getElementById('WIDate');
+    buttonb.onclick = function() {
+    location.assign('/byDateWI');
+}
+    var buttonc = document.getElementById('WITime');
+    buttonc.onclick = function() {
+    location.assign('/byTimeWI');
+}
+var buttond = document.getElementById('RevButton');
+    buttond.onclick = function() {
+    location.assign('/revWeek');
+}
+var buttone = document.getElementById('RevCharge');
+    buttone.onclick = function() {
+    location.assign('/revPerCharge');
 }
     </script>
 </body>
