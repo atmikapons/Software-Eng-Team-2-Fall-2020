@@ -42,8 +42,10 @@ var router = function (app, db) {
         });
     });
     /////// STATISTICS ROUTES /////
+
+    //Reservations Over The Last 30 Days
     app.get('/byDate', function (req, res) {
-        db.query('SELECT Date, COUNT(*) AS `Count` FROM `Records` WHERE wID=-1 GROUP BY Date ORDER BY Date', function (err, rows) {
+        db.query('SELECT DATE_FORMAT(Date,"%m/%d") AS `Date`, COUNT(*) AS `Count` FROM `Records` WHERE wID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Date ORDER BY Date', function (err, rows) {
             if (err) {
                 res.render('pages/byDate', {
                     records: null,
@@ -55,9 +57,9 @@ var router = function (app, db) {
             }
         });
     });
-
+    //Walkins Over the Last 30 Days
     app.get('/byDateWI', function (req, res) {
-        db.query('SELECT Date, COUNT(*) AS `Count` FROM `Records` WHERE rID=-1 GROUP BY Date ORDER BY Date', function (err, rows) {
+        db.query('SELECT DATE_FORMAT(Date,"%m/%d") AS `Date`, COUNT(*) AS `Count` FROM `Records` WHERE rID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Date ORDER BY Date', function (err, rows) {
             if (err) {
                 res.render('pages/byDateWI', {
                     records: null,
@@ -69,9 +71,9 @@ var router = function (app, db) {
             }
         });
     });
-
+    //Average Reservations per time(hour) over last 30 days
     app.get('/byTime', function (req, res) {
-        db.query('SELECT HOUR(StartTime) AS `Time`, COUNT(*) AS `Count` FROM `Records` WHERE wID=-1 GROUP BY HOUR(StartTime) ORDER BY Time', function (err, rows) {
+        db.query('SELECT CONVERT(HOUR(StartTime),SIGNED) AS `Time`, COUNT(*)/30 AS `Count` FROM `Records` WHERE wID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE()GROUP BY Time ORDER BY Time', function (err, rows) {
             if (err) {
                 res.render('pages/byTime', {
                     records: null,
@@ -83,8 +85,9 @@ var router = function (app, db) {
             }
         });
     });
+    //Average Walkins per time(hour) over the last 30 days
     app.get('/byTimeWI', function (req, res) {
-        db.query('SELECT HOUR(StartTime) AS `Time`, COUNT(*) AS `Count` FROM `Records` WHERE rID=-1 GROUP BY HOUR(StartTime) ORDER BY Time', function (err, rows) {
+        db.query('SELECT CONVERT(HOUR(StartTime),SIGNED) AS `Time`, COUNT(*)/30 AS `Count` FROM `Records` WHERE rID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Time ORDER BY Time', function (err, rows) {
             if (err) {
                 res.render('pages/byTimeWI', {
                     records: null,
@@ -96,8 +99,9 @@ var router = function (app, db) {
             }
         });
     });
+    //Revenue per day last week--EJS file changed bc of 
     app.get('/revWeek', function (req, res) {
-        db.query('SELECT WEEK(Date) as `Week`, SUM(Charge) AS `Revenue` from `Records` GROUP BY Week ORDER BY Week', function (err, rows) {
+        db.query('SELECT CONVERT(DAY(Date),SIGNED) AS `Day`, SUM(Charge) AS `Revenue` from `Records` WHERE YEARWEEK(Date) BETWEEN (YEARWEEK(CURDATE(),1)-1) AND YEARWEEK(CURDATE(),1) GROUP BY Day ORDER BY Day', function (err, rows) {
             if (err) {
                 res.render('pages/revWeek', {
                     records: null,
