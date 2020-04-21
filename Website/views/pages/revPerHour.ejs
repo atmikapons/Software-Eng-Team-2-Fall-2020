@@ -12,7 +12,7 @@
                     <thead>
                         <tr>
                             <!-- table headings -->
-                            <th class="text">Charge</th>
+                            <th class="text">Hour</th>
                             <th class="text">Revenue</th>
                         </tr>
                     </thead>
@@ -20,9 +20,9 @@
                     <!-- take data from Records table -->
                         <% if ( records!= null ) { %>
                             <% records.forEach(function(record) {  %>
-                                <tr value="<%= record.Charge %>">
+                                <tr value="<%= record.Time %>">
                                     <td>
-                                        <%= record.Charge %>
+                                        <%= record.Time %>
                                     </td>
                                     <td>
                                         <%= record.Revenue %>

@@ -99,9 +99,10 @@ var router = function (app, db) {
             }
         });
     });
-    //Revenue per day last week--EJS file changed bc of 
+    //Revenue per day last week--EJS file changed bc of variable name change from week to day.
+    //Week starts from monday as 0
     app.get('/revWeek', function (req, res) {
-        db.query('SELECT CONVERT(DAY(Date),SIGNED) AS `Day`, SUM(Charge) AS `Revenue` from `Records` WHERE YEARWEEK(Date) BETWEEN (YEARWEEK(CURDATE(),1)-1) AND YEARWEEK(CURDATE(),1) GROUP BY Day ORDER BY Day', function (err, rows) {
+        db.query('SELECT CONVERT(WEEKDAY(Date),SIGNED) AS `Day`, SUM(Charge) AS `Revenue` FROM `Records` WHERE YEARWEEK(Date) BETWEEN (YEARWEEK(CURDATE()) - 1) AND YEARWEEK(CURDATE()) GROUP BY Date ORDER BY Date', function (err, rows) {
             if (err) {
                 res.render('pages/revWeek', {
                     records: null,
@@ -113,14 +114,15 @@ var router = function (app, db) {
             }
         });
     });
-    app.get('/revPerCharge', function (req, res) {
-        db.query('SELECT Charge , SUM(Charge) AS `Revenue` from `Records` GROUP BY Charge ORDER BY Charge', function (err, rows) {
+    //Average Revenue per time(hour) last 30 days--EJS file changed(renamed and Time variable in place of charge)
+    app.get('/revPerHour', function (req, res) {
+        db.query('SELECT CONVERT(HOUR(StartTime),SIGNED) AS `Time` , SUM(Charge)/30 AS `Revenue` from `Records` WHERE Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Time ORDER BY Time', function (err, rows) {
             if (err) {
-                res.render('pages/revPerCharge', {
+                res.render('pages/revPerHour', {
                     records: null,
                 });
             } else {
-                res.render('pages/revPerCharge', {
+                res.render('pages/revPerHour', {
                     records: rows,
                 });
             }

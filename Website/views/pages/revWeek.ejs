@@ -13,7 +13,7 @@
                     <thead>
                         <tr>
                             <!-- table headings -->
-                            <th class="text">Week</th>
+                            <th class="text">Day</th>
                             <th class="text">Revenue</th>
                         </tr>
                     </thead>
@@ -21,9 +21,9 @@
                     <!-- take data from Records table -->
                         <% if ( records!= null ) { %>
                             <% records.forEach(function(record) {  %>
-                                <tr value="<%= record.Week %>">
+                                <tr value="<%= record.Day %>">
                                     <td>
-                                        <%= record.Week %>
+                                        <%= record.Day %>
                                     </td>
                                     <td>
                                         <%= record.Revenue %>
