@@ -2,12 +2,55 @@
 <html lang="en">
 <head>
     <% include ../partials/head %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" type="text/javascript"></script>
 </head>
 <body class="hold-transition">
     <div>
         <% include ../partials/sidebar %>
         <div class = "content-container">
+            <p align="center" style="font-size:20px"> Average Revenue per Hour</p>
+            <p align="left" style="padding-left:20px;font-size:12px"> Data recorded from the past 30 days.</p>
             <div class = "container-fluid">
+
+                <!-- Chart -->
+                <canvas id="myChart"></canvas>
+                <script>
+                var test = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
+                <% if ( records!= null ) { %>
+                    <% records.forEach(function(record) {  %>
+                        test.splice(<%= record.Time %>,1,<%= record.Revenue %>);
+                    <% }) %>
+                <% } %>
+
+                var ctx = document.getElementById('myChart');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['0:00','1:00','2:00','3:00','4:00','5:00',
+                        '6:00','7:00','8:00','9:00','10:00','11:00',
+                        '12:00','13:00','14:00','15:00','16:00','17:00',
+                        '18:00','19:00','20:00','21:00','22:00','23:00'],
+                        datasets: [{
+                            label: 'Revenue in USD',
+                            data: test,
+                            lineTension: 0,
+                            backgroundColor: "#2574a9"
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+                </script>
+
+                <!-- Table -->
                 <table id = "date_table" class = "table table-bordered">
                     <thead>
                         <tr>
@@ -32,7 +75,7 @@
                         <% } %>
                     </tbody>
             </div>
-        </div>        
+        </div>
         <% include ../partials/footer %>
     </div>
 <script>

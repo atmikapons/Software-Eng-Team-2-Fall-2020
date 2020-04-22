@@ -3,12 +3,52 @@
 <html lang="en">
 <head>
     <% include ../partials/head %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" type="text/javascript"></script>
 </head>
 <body class="hold-transition">
     <div>
         <% include ../partials/sidebar %>
         <div class = "content-container">
+            <p align="center" style="font-size:20px"> Revenue per Day</p>
+            <p align="left" style="padding-left:20px;font-size:12px"> Data recorded from the past week.</p>
             <div class = "container-fluid">
+
+                <!-- Chart -->
+                <canvas id="myChart"></canvas>
+                <script>
+                var test = [0,0,0,0,0,0,0];
+
+                <% if ( records!= null ) { %>
+                    <% records.forEach(function(record) {  %>
+                        test.splice(<%= record.Day %>,1,<%= record.Revenue %>);
+                    <% }) %>
+                <% } %>
+
+                var ctx = document.getElementById('myChart');
+                var myChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Monday', 'Tuseday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                        datasets: [{
+                            label: 'Revenue in USD',
+                            data: test,
+                            lineTension: 0,
+                            backgroundColor: "#2574a9"
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+                </script>
+
+                <!-- Table -->
                 <table id = "date_table" class = "table table-bordered">
                     <thead>
                         <tr>
@@ -33,7 +73,7 @@
                         <% } %>
                     </tbody>
             </div>
-        </div>        
+        </div>
         <% include ../partials/footer %>
     </div>
 <script>
