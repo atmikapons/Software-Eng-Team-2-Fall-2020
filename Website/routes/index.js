@@ -43,9 +43,9 @@ var router = function (app, db) {
     });
     /////// STATISTICS ROUTES /////
 
-    //Reservations Over The Last 30 Days
+    //Reservations Over The Last 30 Days--changed var from date to day
     app.get('/byDate', function (req, res) {
-        db.query('SELECT DATE_FORMAT(Date,"%m/%d") AS `Date`, COUNT(*) AS `Count` FROM `Records` WHERE wID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Date ORDER BY Date', function (err, rows) {
+        db.query('SELECT CONVERT(DATE_FORMAT(Date,"%m/%d"),CHAR) AS `Day`, COUNT(*) AS `Count` FROM `Records` WHERE wID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Day ORDER BY Day', function (err, rows) {
             if (err) {
                 res.render('pages/byDate', {
                     records: null,
@@ -57,9 +57,9 @@ var router = function (app, db) {
             }
         });
     });
-    //Walkins Over the Last 30 Days
+    //Walkins Over the Last 30 Days--changed var from date to day
     app.get('/byDateWI', function (req, res) {
-        db.query('SELECT DATE_FORMAT(Date,"%m/%d") AS `Date`, COUNT(*) AS `Count` FROM `Records` WHERE rID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Date ORDER BY Date', function (err, rows) {
+        db.query('SELECT CONVERT(DATE_FORMAT(Date,"%m/%d"),CHAR) AS `Day`, COUNT(*) AS `Count` FROM `Records` WHERE rID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Day ORDER BY Day', function (err, rows) {
             if (err) {
                 res.render('pages/byDateWI', {
                     records: null,
