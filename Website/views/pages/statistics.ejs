@@ -3,6 +3,21 @@
 <html lang="en">
 <head>
     <% include ../partials/head %>
+    <style>
+.button {
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+</style>
 </head>
 <body class="hold-transition">
     <div>
@@ -10,15 +25,26 @@
         <% include ../partials/sidebar %>
         <div class = "content-container">
             <div class = "container-fluid">
-                <div class="jumbotron">
+                <div class="jumbotron" align="center">
                     <h1> Statistics </h1>
+                    <p> Click a Button Below to View The Corresponding Graph</p>
                 </div>
-                <button id="resTimeButton">Average number of Reservations per hour over last 30 days</button>
-                <button id="resDateButton">Number of reservations per date over the last 30 days</button>
-                <button id="WIDate">Number of walkins per date over last 30 days</button>
-                <button id="WITime">Average number if walkins per hour over the last 30 days</button>
-                <button id="RevButton">Revenue per day last week</button>
-                <button id="RevHour">Average Revenue per hour over the last 30 days</button>
+                <div>
+                <button id="resTimeButton" class="button">View Reservations per Hour</button>
+                </div>
+                <div>
+                <button id="resDateButton" class="button">View Reservations per Day</button>
+                </div>
+                <div>
+                <button id="WIDate" class="button">View Walkins per Day</button>
+                </div>
+                <div>
+                <button id="WITime" class="button">View Walkins per Hour</button>
+                </div>
+                <div>
+                <button id="RevButton" class="button">View Revenue per Day Last Week</button>
+                </div>
+                <button id="RevHour" class="button">View Revenue per Hour</button>
             </div>
         </div>
  
