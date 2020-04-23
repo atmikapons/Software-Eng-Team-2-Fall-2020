@@ -3,79 +3,68 @@
 <html lang="en">
 <head>
     <% include ../partials/head %>
-    <style>
-.button {
-  background-color: #4CAF50;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
-</style>
 </head>
 <body class="hold-transition">
     <div>
-        
         <% include ../partials/sidebar %>
         <div class = "content-container">
             <div class = "container-fluid">
-                <div class="jumbotron" align="center">
+                <!-- <div class="jumbotron" align="center">
                     <h1> Statistics </h1>
                     <p> Click a Button Below to View The Corresponding Graph</p>
+                </div> -->
+                <div style="margin:20px">
+                    <h1>Statistics </h1>
+                    <h5 style="font-style:italic">Click a button below to view the corresponding graph</h5>
                 </div>
                 <div>
-                <button id="resTimeButton" class="button">View Reservations per Hour</button>
+                    <button id="resTimeButton" class="stat-button">View Reservations per Hour</button>
                 </div>
                 <div>
-                <button id="resDateButton" class="button">View Reservations per Day</button>
+                    <button id="resDateButton" class="stat-button">View Reservations per Day</button>
                 </div>
                 <div>
-                <button id="WIDate" class="button">View Walkins per Day</button>
+                    <button id="WIDate" class="stat-button">View Walkins per Day</button>
                 </div>
                 <div>
-                <button id="WITime" class="button">View Walkins per Hour</button>
+                    <button id="WITime" class="stat-button">View Walkins per Hour</button>
                 </div>
                 <div>
-                <button id="RevButton" class="button">View Revenue per Day Last Week</button>
+                    <button id="RevButton" class="stat-button">View Revenue per Day Last Week</button>
                 </div>
-                <button id="RevHour" class="button">View Revenue per Hour</button>
+                <div>
+                    <button id="RevHour" class="stat-button">View Revenue per Hour</button>
+                </div>
             </div>
         </div>
  
         <% include ../partials/footer %>
     </div>
     <script>
-    var button = document.getElementById('resTimeButton');
-    button.onclick = function() {
-    location.assign('/byTime');
-}
-    var buttona = document.getElementById('resDateButton');
-    buttona.onclick = function() {
-    location.assign('/byDate');
-}
-    var buttonb = document.getElementById('WIDate');
-    buttonb.onclick = function() {
-    location.assign('/byDateWI');
-}
-    var buttonc = document.getElementById('WITime');
-    buttonc.onclick = function() {
-    location.assign('/byTimeWI');
-}
-var buttond = document.getElementById('RevButton');
-    buttond.onclick = function() {
-    location.assign('/revWeek');
-}
-var buttone = document.getElementById('RevHour');
-    buttone.onclick = function() {
-    location.assign('/revPerHour');
-}
+        var button = document.getElementById('resTimeButton');
+        button.onclick = function() {
+            location.assign('/byTime');
+        }
+        var buttona = document.getElementById('resDateButton');
+        buttona.onclick = function() {
+            location.assign('/byDate');
+        }
+        var buttonb = document.getElementById('WIDate');
+        buttonb.onclick = function() {
+            location.assign('/byDateWI');
+        }
+        var buttonc = document.getElementById('WITime');
+        buttonc.onclick = function() {
+            location.assign('/byTimeWI');
+        }
+        var buttond = document.getElementById('RevButton');
+        buttond.onclick = function() {
+            location.assign('/revWeek');
+        }
+        var buttone = document.getElementById('RevHour');
+        buttone.onclick = function() {
+            location.assign('/revPerHour');
+        }
     </script>
 </body>
 </html>
-
