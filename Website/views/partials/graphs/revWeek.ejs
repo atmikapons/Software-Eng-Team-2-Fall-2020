@@ -1,65 +1,65 @@
 <!-- views/partials/graphs/revWeek.ejs -->
-<p align="center" style="font-size:20px"> Revenue per Day</p>
-<p align="left" style="padding-left:20px;font-size:12px"> Data recorded from the past week.</p>
-<div class = "container-fluid">
+<div id = "revWeek-collapse" class="collapse">
+    <p align="center" style="font-size:20px"> Revenue per Day</p>
+    <p align="left" style="padding-left:20px;font-size:12px"> Data recorded from the past week.</p>
+    <!-- Chart -->
+    <canvas id="chartRevWeek"></canvas>
+    <%let count = [0,0,0,0,0,0,0];%>
 
-<!-- Chart -->
-<canvas id="chartRevWeek"></canvas>
-<%let count = [0,0,0,0,0,0,0];%>
-
-<% if ( recordsRevWeek!= null ) { %>
-    <% recordsRevWeek.forEach(function(record) {  %>
-        <%count.splice(record.Day,1,record.Revenue ); %>
-    <% }) %>
-<% } %>
-<script>
-    let chartRevWeekData = [<%=count%>];
-    let ctxRevWeek = document.getElementById('chartRevWeek');
-    let chartRevWeek = new Chart(ctxRevWeek, {
-        type: 'line',
-        data: {
-            labels: ['Monday', 'Tuseday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-            datasets: [{
-                label: 'Revenue in USD',
-                data: chartRevWeekData,
-                lineTension: 0,
-                backgroundColor: "#2574a9"
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
+    <% if ( recordsRevWeek!= null ) { %>
+        <% recordsRevWeek.forEach(function(record) {  %>
+            <%count.splice(record.Day,1,record.Revenue ); %>
+        <% }) %>
+    <% } %>
+    <script>
+        let chartRevWeekData = [<%=count%>];
+        let ctxRevWeek = document.getElementById('chartRevWeek');
+        let chartRevWeek = new Chart(ctxRevWeek, {
+            type: 'line',
+            data: {
+                labels: ['Monday', 'Tuseday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                datasets: [{
+                    label: 'Revenue in USD',
+                    data: chartRevWeekData,
+                    lineTension: 0,
+                    backgroundColor: "#2574a9"
                 }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
             }
-        }
-    });
-</script>
+        });
+    </script>
 
-<!-- Table -->
-<table id = "revWeek-table" class = "table table-bordered">
-    <thead>
-        <tr>
-            <!-- table headings -->
-            <th class="text">Day</th>
-            <th class="text">Revenue</th>
-        </tr>
-    </thead>
-    <tbody>
-    <!-- take data from Records table -->
-        <% if ( recordsRevWeek!= null ) { %>
-            <% recordsRevWeek.forEach(function(record) {  %>
-                <tr value="<%= record.Day %>">
-                    <td>
-                        <%= record.Day %>
-                    </td>
-                    <td>
-                        <%= record.Revenue %>
-                    </td>
-                </tr>
-            <% }) %>
-        <% } %>
-    </tbody>
-</table>
+    <!-- Table -->
+    <table id = "revWeek-table" class = "table table-bordered">
+        <thead>
+            <tr>
+                <!-- table headings -->
+                <th class="text">Day</th>
+                <th class="text">Revenue</th>
+            </tr>
+        </thead>
+        <tbody>
+        <!-- take data from Records table -->
+            <% if ( recordsRevWeek!= null ) { %>
+                <% recordsRevWeek.forEach(function(record) {  %>
+                    <tr value="<%= record.Day %>">
+                        <td>
+                            <%= record.Day %>
+                        </td>
+                        <td>
+                            <%= record.Revenue %>
+                        </td>
+                    </tr>
+                <% }) %>
+            <% } %>
+        </tbody>
+    </table>
+</div>

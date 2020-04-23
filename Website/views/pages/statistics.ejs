@@ -14,27 +14,27 @@
                     <h5 style="font-style:italic">Click a button below to view the corresponding graph</h5>
                 </div>
                 <div>
-                    <button id="resTimeButton" class="stat-button">View Reservations per Hour</button>
+                    <button id="resTimeButton" class="stat-button" data-toggle="collapse" data-target="#byTime-collapse">View Reservations per Hour</button>
                 </div>
                 <% include ../partials/graphs/byTime.ejs %>
                 <div>
-                    <button id="resDateButton" class="stat-button">View Reservations per Day</button>
+                    <button id="resDateButton" class="stat-button" data-toggle="collapse" data-target="#byDate-collapse">View Reservations per Day</button>
                 </div>
                 <% include ../partials/graphs/byDate.ejs %>
                 <div>
-                    <button id="WIDate" class="stat-button">View Walkins per Day</button>
+                    <button id="WIDate" class="stat-button" data-toggle="collapse" data-target="#byDateWI-collapse">View Walkins per Day</button>
                 </div>
                 <% include ../partials/graphs/byDateWI.ejs %>
                 <div>
-                    <button id="WITime" class="stat-button">View Walkins per Hour</button>
+                    <button id="WITime" class="stat-button" data-toggle="collapse" data-target="#byTimeWI-collapse">View Walkins per Hour</button>
                 </div>
                 <% include ../partials/graphs/byTimeWI.ejs %>
                 <div>
-                    <button id="RevButton" class="stat-button">View Revenue per Day Last Week</button>
+                    <button id="RevButton" class="stat-button" data-toggle="collapse" data-target="#revWeek-collapse">View Revenue per Day Last Week</button>
                 </div>
                 <% include ../partials/graphs/revWeek.ejs %>
                 <div>
-                    <button id="RevHour" class="stat-button">View Revenue per Hour</button>
+                    <button id="RevHour" class="stat-button" data-toggle="collapse" data-target="#revPerHour-collapse">View Revenue per Hour</button>
                 </div>
                 <% include ../partials/graphs/revPerHour.ejs %>
             </div>
@@ -51,31 +51,6 @@
             $('#revPerHour-table').DataTable();
             $('#revWeek-table').DataTable();
         });
-
-        var button = document.getElementById('resTimeButton');
-        button.onclick = function() {
-            location.assign('/byTime');
-        }
-        var buttona = document.getElementById('resDateButton');
-        buttona.onclick = function() {
-            location.assign('/byDate');
-        }
-        var buttonb = document.getElementById('WIDate');
-        buttonb.onclick = function() {
-            location.assign('/byDateWI');
-        }
-        var buttonc = document.getElementById('WITime');
-        buttonc.onclick = function() {
-            location.assign('/byTimeWI');
-        }
-        var buttond = document.getElementById('RevButton');
-        buttond.onclick = function() {
-            location.assign('/revWeek');
-        }
-        var buttone = document.getElementById('RevHour');
-        buttone.onclick = function() {
-            location.assign('/revPerHour');
-        }
     </script>
 </body>
 </html>
