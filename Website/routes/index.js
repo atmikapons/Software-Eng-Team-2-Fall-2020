@@ -11,7 +11,52 @@ var router = function (app, db) {
     });
 
     app.get('/statistics', function (req, res) {
-        res.render('pages/statistics');
+        //Reservations Over The Last 30 Days
+        const dbByDate = new Promise(function(resolve, reject) {
+            db.query('SELECT CONVERT(DATE_FORMAT(Date,"%m/%d"),CHAR) AS `Day`, COUNT(*) AS `Count` FROM `Records` WHERE wID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Day ORDER BY Day', function (err, rows) {
+                if (err) {resolve(null); } else {resolve(rows);}
+            });
+        });
+        //Walkins Over the Last 30 Days
+        const dbByDateWI = new Promise (function(resolve, reject) {
+            db.query('SELECT CONVERT(DATE_FORMAT(Date,"%m/%d"),CHAR) AS `Day`, COUNT(*) AS `Count` FROM `Records` WHERE rID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Day ORDER BY Day', function (err, rows) {
+                if (err) {resolve(null); } else {resolve(rows);}
+            });
+        });
+        //Average Reservations per time(hour) over last 30 days
+        const dbByTime = new Promise (function(resolve, reject) {
+            db.query('SELECT CONVERT(HOUR(StartTime),SIGNED) AS `Time`, COUNT(*)/30 AS `Count` FROM `Records` WHERE wID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE()GROUP BY Time ORDER BY Time', function (err, rows) {
+                if (err) {resolve(null); } else {resolve(rows);}
+            });
+        });
+        //Average Walkins per time(hour) over the last 30 days
+        const dbByTimeWI = new Promise (function(resolve, reject) {
+            db.query('SELECT CONVERT(HOUR(StartTime),SIGNED) AS `Time`, COUNT(*)/30 AS `Count` FROM `Records` WHERE rID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Time ORDER BY Time', function (err, rows) {
+                if (err) {resolve(null); } else {resolve(rows);}
+            });
+        });
+        //Revenue per day last week (week starts from Monday as 0)
+        const dbRevWeek = new Promise (function(resolve, reject) {
+            db.query('SELECT CONVERT(WEEKDAY(Date),SIGNED) AS `Day`, SUM(Charge) AS `Revenue` FROM `Records` WHERE YEARWEEK(Date) BETWEEN (YEARWEEK(CURDATE()) - 1) AND YEARWEEK(CURDATE()) GROUP BY Date ORDER BY Date', function (err, rows) {
+                if (err) {resolve(null); } else {resolve(rows);}
+            });
+        });
+        //Average Revenue per time(hour) last 30 days
+        const dbRevPerHour = new Promise (function(resolve, reject) {
+            db.query('SELECT CONVERT(HOUR(StartTime),SIGNED) AS `Time` , SUM(Charge)/30 AS `Revenue` from `Records` WHERE Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Time ORDER BY Time', function (err, rows) {
+                if (err) {resolve(null); } else {resolve(rows);}
+            });
+        });
+        Promise.all([dbByDate, dbByDateWI, dbByTime, dbByTimeWI, dbRevWeek, dbRevPerHour]).then(function(values) {
+            res.render('pages/statistics', {
+                recordsByDate: values[0],
+                recordsByDateWI: values[1],
+                recordsByTime: values[2],
+                recordsByTimeWI: values[3],
+                recordsRevWeek: values[4],
+                recordsRevPerHour: values[5]
+            });
+        }) 
     });
 
     app.get('/reservations', function (req, res) {
@@ -41,93 +86,7 @@ var router = function (app, db) {
             }
         });
     });
-    /////// STATISTICS ROUTES /////
-
-    //Reservations Over The Last 30 Days--changed var from date to day
-    app.get('/byDate', function (req, res) {
-        db.query('SELECT CONVERT(DATE_FORMAT(Date,"%m/%d"),CHAR) AS `Day`, COUNT(*) AS `Count` FROM `Records` WHERE wID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Day ORDER BY Day', function (err, rows) {
-            if (err) {
-                res.render('pages/byDate', {
-                    records: null,
-                });
-            } else {
-                res.render('pages/byDate', {
-                    records: rows,
-                });
-            }
-        });
-    });
-    //Walkins Over the Last 30 Days--changed var from date to day
-    app.get('/byDateWI', function (req, res) {
-        db.query('SELECT CONVERT(DATE_FORMAT(Date,"%m/%d"),CHAR) AS `Day`, COUNT(*) AS `Count` FROM `Records` WHERE rID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Day ORDER BY Day', function (err, rows) {
-            if (err) {
-                res.render('pages/byDateWI', {
-                    records: null,
-                });
-            } else {
-                res.render('pages/byDateWI', {
-                    records: rows,
-                });
-            }
-        });
-    });
-    //Average Reservations per time(hour) over last 30 days
-    app.get('/byTime', function (req, res) {
-        db.query('SELECT CONVERT(HOUR(StartTime),SIGNED) AS `Time`, COUNT(*)/30 AS `Count` FROM `Records` WHERE wID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE()GROUP BY Time ORDER BY Time', function (err, rows) {
-            if (err) {
-                res.render('pages/byTime', {
-                    records: null,
-                });
-            } else {
-                res.render('pages/byTime', {
-                    records: rows,
-                });
-            }
-        });
-    });
-    //Average Walkins per time(hour) over the last 30 days
-    app.get('/byTimeWI', function (req, res) {
-        db.query('SELECT CONVERT(HOUR(StartTime),SIGNED) AS `Time`, COUNT(*)/30 AS `Count` FROM `Records` WHERE rID=-1 AND Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Time ORDER BY Time', function (err, rows) {
-            if (err) {
-                res.render('pages/byTimeWI', {
-                    records: null,
-                });
-            } else {
-                res.render('pages/byTimeWI', {
-                    records: rows,
-                });
-            }
-        });
-    });
-    //Revenue per day last week--EJS file changed bc of variable name change from week to day.
-    //Week starts from monday as 0
-    app.get('/revWeek', function (req, res) {
-        db.query('SELECT CONVERT(WEEKDAY(Date),SIGNED) AS `Day`, SUM(Charge) AS `Revenue` FROM `Records` WHERE YEARWEEK(Date) BETWEEN (YEARWEEK(CURDATE()) - 1) AND YEARWEEK(CURDATE()) GROUP BY Date ORDER BY Date', function (err, rows) {
-            if (err) {
-                res.render('pages/revWeek', {
-                    records: null,
-                });
-            } else {
-                res.render('pages/revWeek', {
-                    records: rows,
-                });
-            }
-        });
-    });
-    //Average Revenue per time(hour) last 30 days--EJS file changed(renamed and Time variable in place of charge)
-    app.get('/revPerHour', function (req, res) {
-        db.query('SELECT CONVERT(HOUR(StartTime),SIGNED) AS `Time` , SUM(Charge)/30 AS `Revenue` from `Records` WHERE Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE() GROUP BY Time ORDER BY Time', function (err, rows) {
-            if (err) {
-                res.render('pages/revPerHour', {
-                    records: null,
-                });
-            } else {
-                res.render('pages/revPerHour', {
-                    records: rows,
-                });
-            }
-        });
-    });
+   
     ////// DASHBOARD ROUTES //////
     app.get('/getParkingSpots', function (req, res) {
         let getParkingQuery = 'SELECT COUNT(SpotNum) AS spots FROM `Parking Spots` WHERE Status="Unoccupied"';
@@ -444,7 +403,6 @@ var router = function (app, db) {
         let cccvv = req.body.cccvv;
         let points = req.body.points;
         let handicap = req.body.handicap;
-
         let editQuery = "UPDATE CustomerInfo SET FirstName = ?, LastName = ?, Email = ?, \
                          PhoneNum = ?, Password = ?, LicenseNum = ?, RegistrationNum = ?, \
                          CreditCardType = ?, CreditCardNum = ?, ExpDate = ?, CVV = ?, Points = ?, \
