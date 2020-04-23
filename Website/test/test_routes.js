@@ -1,7 +1,4 @@
 // automated route testing
-const Reservation = require('../models').Reservation;
-const User = require('../models').User;
-
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../server');
@@ -17,7 +14,7 @@ describe('Initializing...', () => {
             done();
         });
     });
-    it('check STATISTICS', (done) => {
+    it('check STATISTICS and send DB information', (done) => {
         chai.request(server).get('/statistics').end((err, res) => {
             should.not.exist(err);
             res.should.have.status(200);
@@ -211,51 +208,6 @@ describe('Reservations', () => {
         chai.request(server)
         .get('/deleteReservation/' + reservation.rid)
         .end((err, res) => {
-            res.should.have.status(200);
-            done();
-        });
-    });
-});
-
-describe('Statistics', () => {  
-    it('GET reservations by date over last 30 days', (done) => {
-        chai.request(server).get('/byDate').end((err, res) => {
-            should.not.exist(err);
-            res.should.have.status(200);
-            done();
-        });
-    });
-    it('GET walk-ins by date over last 30 days', (done) => {
-        chai.request(server).get('/byDateWI').end((err, res) => {
-            should.not.exist(err);
-            res.should.have.status(200);
-            done();
-        });
-    });
-    it('GET average reservations per hour over last 30 days', (done) => {
-        chai.request(server).get('/byTime').end((err, res) => {
-            should.not.exist(err);
-            res.should.have.status(200);
-            done();
-        });
-    });
-    it('GET average reservations per hour over last 30 days', (done) => {
-        chai.request(server).get('/byTimeWI').end((err, res) => {
-            should.not.exist(err);
-            res.should.have.status(200);
-            done();
-        });
-    });
-    it('GET revenue per day over the last week', (done) => {
-        chai.request(server).get('/revWeek').end((err, res) => {
-            should.not.exist(err);
-            res.should.have.status(200);
-            done();
-        });
-    });
-    it('GET average revenue per hour over last 30 days', (done) => {
-        chai.request(server).get('/revPerHour').end((err, res) => {
-            should.not.exist(err);
             res.should.have.status(200);
             done();
         });

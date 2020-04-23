@@ -12,8 +12,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json()); // parse form data client
 app.use(express.static(path.join(__dirname, 'public'))); // configure express to use public folder
 
-// // database connection
-var db = mysql.createConnection({
+// database connection
+let db = mysql.createConnection({
     host: '127.0.0.1', // local host
     user: 'zippypark',
     password: 'goyhVynIiLcJgHpN',
@@ -31,3 +31,5 @@ const routes = require('./routes/index.js')(app,db);
 
 const httpServer = http.createServer( app );
 httpServer.listen(8080); // can change port
+
+module.exports = app; // used for test_route.js
