@@ -1,70 +1,72 @@
 <!-- views/partials/graphs/byDateWI.ejs -->
 <div id = "byDateWI-collapse" class="collapse">
-    <p align="center" style="font-size:20px"> Average Walk-Ins per Day</p>
-    <p align="left" style="padding-left:20px;font-size:12px"> Data recorded from the past 30 days.</p>
+    <div class="card-body">
+        <p align="center" style="font-size:20px"> Average Walk-Ins per Day</p>
+        <p align="left" style="padding-left:20px;font-size:12px"> Data recorded from the past 30 days.</p>
 
-    <!-- Chart -->
-    <canvas id="chartByDateWI"></canvas>
-    <%let date = [];%>
-    <%let count = [];%>
+        <!-- Chart -->
+        <canvas id="chartByDateWI"></canvas>
+        <%let date = [];%>
+        <%let count = [];%>
 
-    <% if ( recordsByDateWI!= null ) { %>
-        <% recordsByDateWI.forEach(function(record) {  %>
-            <% date.push(record.Day); %>
-            <% count.push(record.Count);%>
-        <% }) %>
-    <% } %>
-    <script>
-        let chartByDateWILabels = "<%= date %>";
-        chartByDateWILabels = chartByDateWILabels.split(',');
-        let chartByDateWIData = [<%= count %>];
-        let ctxByDateWI = document.getElementById('chartByDateWI');
-        let chartByDateWI = new Chart(ctxByDateWI, {
-            type: 'bar',
-            data: {
-                labels: chartByDateWILabels,
-                datasets: [{
-                    label: '# of Walk-Ins',
-                    data: chartByDateWIData,
-                    borderWidth: 1,
-                    backgroundColor: "#2574a9"
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
-                        }
+        <% if ( recordsByDateWI!= null ) { %>
+            <% recordsByDateWI.forEach(function(record) {  %>
+                <% date.push(record.Day); %>
+                <% count.push(record.Count);%>
+            <% }) %>
+        <% } %>
+        <script>
+            let chartByDateWILabels = "<%= date %>";
+            chartByDateWILabels = chartByDateWILabels.split(',');
+            let chartByDateWIData = [<%= count %>];
+            let ctxByDateWI = document.getElementById('chartByDateWI');
+            let chartByDateWI = new Chart(ctxByDateWI, {
+                type: 'bar',
+                data: {
+                    labels: chartByDateWILabels,
+                    datasets: [{
+                        label: '# of Walk-Ins',
+                        data: chartByDateWIData,
+                        borderWidth: 1,
+                        backgroundColor: "#2574a9"
                     }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
                 }
-            }
-        });
-    </script>
+            });
+        </script>
 
-    <!-- Table -->
-    <table id = "byDateWI-table" class = "table table-bordered">
-        <thead>
-            <tr>
-                <!-- table headings -->
-                <th class="text">Date</th>
-                <th class="text">Number of Walkins </th>
-            </tr>
-        </thead>
-        <tbody>
-        <!-- take data from Records table -->
-            <% if ( recordsByDateWI!= null ) { %>
-                <% recordsByDateWI.forEach(function(record) {  %>
-                    <tr value="<%= record.Dayy %>">
-                        <td>
-                            <%= record.Day %>
-                        </td>
-                        <td>
-                            <%= record.Count %>
-                        </td>
-                    </tr>
-                <% }) %>
-            <% } %>
-        </tbody>
-    </table>
+        <!-- Table -->
+        <table id = "byDateWI-table" class = "table table-bordered">
+            <thead>
+                <tr>
+                    <!-- table headings -->
+                    <th class="text">Date</th>
+                    <th class="text">Number of Walkins </th>
+                </tr>
+            </thead>
+            <tbody>
+            <!-- take data from Records table -->
+                <% if ( recordsByDateWI!= null ) { %>
+                    <% recordsByDateWI.forEach(function(record) {  %>
+                        <tr value="<%= record.Dayy %>">
+                            <td>
+                                <%= record.Day %>
+                            </td>
+                            <td>
+                                <%= record.Count %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
 </div>

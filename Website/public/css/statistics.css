@@ -1,13 +1,40 @@
 .stat-button {
-    background-color: #4CAF50;
-    border: none;
-    border-radius: 8px;
-    color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
+    text-align:left;
+    border:none;
+    padding:10px;
+    color:white;
+}
+
+.accordion .card-header {
+    padding: 0px !important;
+}
+
+.stat-button:hover, .stat-button:active {
+    background-color:blue;
+    -webkit-transition: width 0.2s ease-in;
+    transition: width 0.2s ease-in;
+}
+
+#byTime-button {
+    background-color:#86CEFA;
+}
+
+#byDate-button {
+    background-color:#73B9EE;
+}
+
+#byDateWI-button {
+    background-color:#5494DA;
+}
+                       
+#byTimeWI-button {
+    background-color:#3373C4
+}
+                           
+#revWeek-button {
+    background-color:#1750AC
+}
+
+#revPerHour-button {
+    background-color:#003396
 }

@@ -11,32 +11,46 @@
             <div class = "container-fluid">
                 <div style="margin:20px">
                     <h1>Statistics </h1>
-                    <h5 style="font-style:italic">Click a button below to view the corresponding graph</h5>
+                    <h5 style="font-style:italic">Click a tab below to view the corresponding graph</h5>
                 </div>
-                <div>
-                    <button id="resTimeButton" class="stat-button" data-toggle="collapse" data-target="#byTime-collapse">View Reservations per Hour</button>
-                </div>
-                <% include ../partials/graphs/byTime.ejs %>
-                <div>
-                    <button id="resDateButton" class="stat-button" data-toggle="collapse" data-target="#byDate-collapse">View Reservations per Day</button>
-                </div>
-                <% include ../partials/graphs/byDate.ejs %>
-                <div>
-                    <button id="WIDate" class="stat-button" data-toggle="collapse" data-target="#byDateWI-collapse">View Walkins per Day</button>
-                </div>
-                <% include ../partials/graphs/byDateWI.ejs %>
-                <div>
-                    <button id="WITime" class="stat-button" data-toggle="collapse" data-target="#byTimeWI-collapse">View Walkins per Hour</button>
-                </div>
-                <% include ../partials/graphs/byTimeWI.ejs %>
-                <div>
-                    <button id="RevButton" class="stat-button" data-toggle="collapse" data-target="#revWeek-collapse">View Revenue per Day Last Week</button>
-                </div>
-                <% include ../partials/graphs/revWeek.ejs %>
-                <div>
-                    <button id="RevHour" class="stat-button" data-toggle="collapse" data-target="#revPerHour-collapse">View Revenue per Hour</button>
-                </div>
-                <% include ../partials/graphs/revPerHour.ejs %>
+                <div class="accordion" id="graph-accordion">
+                    <div class="card">
+                        <div class="card-header">
+                            <button id="byTime-button" class="stat-button btn-block" data-toggle="collapse" data-target="#byTime-collapse">View Reservations per Hour</button>
+                        </div>
+                        <% include ../partials/graphs/byTime.ejs %>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <button id="byDate-button" class="stat-button btn-block" data-toggle="collapse" data-target="#byDate-collapse">View Reservations per Day</button>
+                        </div>
+                        <% include ../partials/graphs/byDate.ejs %>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <button id="byDateWI-button" class="stat-button btn-block" data-toggle="collapse" data-target="#byDateWI-collapse">View Walkins per Day</button>
+                        </div>
+                        <% include ../partials/graphs/byDateWI.ejs %>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <button id="byTimeWI-button" class="stat-button btn-block" data-toggle="collapse" data-target="#byTimeWI-collapse">View Walkins per Hour</button>
+                        </div>
+                        <% include ../partials/graphs/byTimeWI.ejs %>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <button id="revWeek-button" class="stat-button btn-block" data-toggle="collapse" data-target="#revWeek-collapse">View Revenue per Day Last Week</button>
+                        </div>
+                        <% include ../partials/graphs/revWeek.ejs %>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <button id="revPerHour-button" class="stat-button btn-block" data-toggle="collapse" data-target="#revPerHour-collapse">View Revenue per Hour</button>
+                        </div>
+                        <% include ../partials/graphs/revPerHour.ejs %>
+                    </div>
+                </div>                
             </div>
         </div>
  
