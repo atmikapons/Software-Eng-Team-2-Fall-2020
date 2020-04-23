@@ -179,6 +179,39 @@ var router = function (app, db) {
         });
     });
 
+    app.get('/getPriceSuggestion', function (req, res) {
+        db.query('SELECT CONVERT(HOUR(StartTime),SIGNED) AS `Start`, CONVERT(HOUR(EndTime),SIGNED) AS `End` FROM `Records` WHERE Date BETWEEN (CURDATE() - INTERVAL 1 MONTH ) AND CURDATE()', function (err, rows) {
+            if (err) {
+                return res.status(500).send(err);
+            } else {
+                let frequency = new Array(17).fill(0);
+                let calcFreqPromise = new Promise(function(resolve, reject){
+                    for (entry in rows) {
+                        let startTime = rows[entry].Start;
+                        let endTime = rows[entry].End;
+                        do {
+                            frequency[startTime-6]+=1;
+                            startTime++;
+                        } while ( startTime < endTime)
+                    }
+                    resolve(frequency);
+                })
+
+                calcFreqPromise.then((result) => {
+                    return res.status(200).send({
+                        'status' : "Success",
+                        'data' : result,
+                    });
+                }).catch((error) => {
+                    return res.status(404).send({
+                        'status' : "Error",
+                        'data' : error,
+                    });
+                })
+            }
+        });
+    });
+
     app.post('/editPriceForm', function (req, res) {
         let times = JSON.parse(req.body.times);
         let bases = JSON.parse(req.body.bases);
@@ -198,7 +231,6 @@ var router = function (app, db) {
         }
         editQuery=editQuery.slice(0,-1);
         editQuery+=")";
-
         db.query(editQuery, [times], function (err, result) {
             if ( err ) {
                 return res.status(500).send(err);

@@ -134,7 +134,30 @@
 
         $("#reset-points").click(function (event) {
             getPointsForm();
-        })
+        });
+
+        $("#suggest-price").click(function (event) {
+            $.get("/getPriceSuggestion", function (data, status) {
+                if (data.status == "Success") {
+                    let time = 6;
+                    const frequency = data.data;
+                    const avg = (arr => arr.reduce((a,b)=> a+b, 0)/arr.length);
+                    const frequencyAvg = avg(frequency);
+                    for (row in frequency) {
+                        let multiplier = Math.round(frequency[row]/frequencyAvg*10)/10;
+                        if ( multiplier < 0.5 ) {
+                            multiplier = 0.5
+                        } else if ( multiplier > 3 ) { 
+                            multiplier = 3;
+                        }
+                        $("#multiplier-"+(time)).val(multiplier);
+                        time++;
+                    }
+                } else {
+                    alert("Error getting price scheme");
+                }
+            });
+        });
 
         $("#edit-price").click(function (event) {
             let times = [];
