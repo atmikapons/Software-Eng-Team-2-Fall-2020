@@ -9,10 +9,6 @@
         <% include ../partials/sidebar %>
         <div class = "content-container">
             <div class = "container-fluid">
-                <!-- <div class="jumbotron" align="center">
-                    <h1> Statistics </h1>
-                    <p> Click a Button Below to View The Corresponding Graph</p>
-                </div> -->
                 <div style="margin:20px">
                     <h1>Statistics </h1>
                     <h5 style="font-style:italic">Click a button below to view the corresponding graph</h5>
@@ -20,27 +16,42 @@
                 <div>
                     <button id="resTimeButton" class="stat-button">View Reservations per Hour</button>
                 </div>
+                <% include ../partials/graphs/byTime.ejs %>
                 <div>
                     <button id="resDateButton" class="stat-button">View Reservations per Day</button>
                 </div>
+                <% include ../partials/graphs/byDate.ejs %>
                 <div>
                     <button id="WIDate" class="stat-button">View Walkins per Day</button>
                 </div>
+                <% include ../partials/graphs/byDateWI.ejs %>
                 <div>
                     <button id="WITime" class="stat-button">View Walkins per Hour</button>
                 </div>
+                <% include ../partials/graphs/byTimeWI.ejs %>
                 <div>
                     <button id="RevButton" class="stat-button">View Revenue per Day Last Week</button>
                 </div>
+                <% include ../partials/graphs/revWeek.ejs %>
                 <div>
                     <button id="RevHour" class="stat-button">View Revenue per Hour</button>
                 </div>
+                <% include ../partials/graphs/revPerHour.ejs %>
             </div>
         </div>
  
         <% include ../partials/footer %>
     </div>
     <script>
+        $(document).ready( function () {
+            $('#byDate-table').DataTable();
+            $('#byTime-table').DataTable();
+            $('#byDateWI-table').DataTable();
+            $('#byTimeWI-table').DataTable();
+            $('#revPerHour-table').DataTable();
+            $('#revWeek-table').DataTable();
+        });
+
         var button = document.getElementById('resTimeButton');
         button.onclick = function() {
             location.assign('/byTime');
