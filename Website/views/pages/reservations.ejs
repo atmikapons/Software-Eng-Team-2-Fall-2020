@@ -71,6 +71,7 @@
 <script>
     $(document).ready( function () {
         $('#reservation_table').DataTable(); //from datatables.net
+        $('#add-reservation-payment').tooltip();
     });
 
     $('#reservationModal').on('hidden.bs.modal', function() {
@@ -86,23 +87,70 @@
 
     $("#add-reservation-button").click(function (event) {
         event.preventDefault();
-        $.post("/addReservation", {
-            "date" : $("#dt").val(),
-            "start" : $("#start-time").val(),
-            "end" : $("#end-time").val(),
-            "barcode" : $("#barcode").val(),
-            "spot" : $("#assigned-spot").val(),
-            "vip" : ($('#vip').prop('checked')) ? 1 : 0,
-            "charge" : $("#charge").val(),
-            "rid" : $("#rid").val(),
-        },
-        function (data, status) {
-            if (data.status == "Success") {
-                location.reload();
-            } else {
-                alert("Error adding reservation");
-            }
-        });
+        let charge = $("#charge").val();
+        if ( charge === "" ) {
+            let startHour = parseInt($("#start-time").val().substring(0,2));
+            let startMin = parseInt($("#start-time").val().substring(3));
+            let endHour = parseInt($("#end-time").val().substring(0,2));
+            let endMin = parseInt($("#end-time").val().substring(3));
+            let startQuarters = priceFifteen(startMin);
+            let endQuarters = priceFifteen(endMin);
+            let payment = 0;
+
+            $.get("/getPriceForm", function (data, status) {
+                if (data.status == "Success" ) {
+                    let pay = data.data;
+                    console.log(startHour);
+                    console.log(data.data[startHour-6]);
+                    payment += (pay[startHour-6].Multiplier * pay[startHour-6].BasePrice * startQuarters);
+                    if ( startHour != endHour ) {
+                        payment += (pay[startHour-6].Multiplier * pay[startHour-6].BasePrice * endQuarters);
+                    }
+                    startHour++;
+                    while ( startHour < endHour ) {
+                        payment += (pay[startHour-6].Multiplier * pay[startHour-6].BasePrice * 4);
+                        startHour++;
+                    }       
+                     $.post("/addReservation", {
+                        "date" : $("#dt").val(),
+                        "start" : $("#start-time").val(),
+                        "end" : $("#end-time").val(),
+                        "barcode" : $("#barcode").val(),
+                        "spot" : $("#assigned-spot").val(),
+                        "vip" : ($('#vip').prop('checked')) ? 1 : 0,
+                        "charge" : payment,
+                        "rid" : $("#rid").val(),
+                    },
+                    function (data, status) {
+                        if (data.status == "Success") {
+                            location.reload();
+                        } else {
+                            alert("Error adding reservation");
+                        }
+                    });
+                } else {
+                    alert("Error getting today's number of reservations");
+                }
+            });
+        } else {
+            $.post("/addReservation", {
+                "date" : $("#dt").val(),
+                "start" : $("#start-time").val(),
+                "end" : $("#end-time").val(),
+                "barcode" : $("#barcode").val(),
+                "spot" : $("#assigned-spot").val(),
+                "vip" : ($('#vip').prop('checked')) ? 1 : 0,
+                "charge" : $("#charge").val(),
+                "rid" : $("#rid").val(),
+            },
+            function (data, status) {
+                if (data.status == "Success") {
+                    location.reload();
+                } else {
+                    alert("Error adding reservation");
+                }
+            });
+        }
     });
 
     $(".delete-reservation").click(function (event) {
@@ -157,6 +205,21 @@
           }
         });
     });
+
+    function priceFifteen(minute) {
+        if ( minute == 0 ) {
+            return 0;
+        } else if ( minute <= 15 ) {
+            return 1;
+        } else if ( minute <= 30 ) {
+            return 2;
+        } else if ( minute <= 45 ) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
+
   </script>
 </body>
 </html>
