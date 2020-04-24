@@ -2,8 +2,31 @@ const express = require('express');
 const date = require('date-and-time');
 
 var router = function (app, db) {
-    ////// GET WEBPAGES //////////
+    /////// LOGIN ////////
     app.get('/', function (req, res) {
+        res.render('pages/login', {
+        });
+    });
+
+    app.post('/auth', function (request, response) {
+        var username = request.body.username;
+        var password = request.body.password;
+        if (username && password) {
+            db.query('SELECT * FROM Managers WHERE username = (?) AND password = (?)', [username, password], function (error, results,fields) {
+                if (results.length>0) {
+                    response.redirect('/dashboard');
+                } else {
+                    response.redirect('/');
+                }
+                response.end();
+            });
+        } else {
+            response.send('Please enter Username and Password!');
+            response.end();
+        }
+    });
+    ////// GET WEBPAGES //////////
+    app.get('/dashboard', function (req, res) {
         let now = new Date();
         res.render('pages/dashboard', {
             today: date.format(now, 'MMM DD, YYYY'),
