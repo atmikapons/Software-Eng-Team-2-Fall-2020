@@ -29,7 +29,7 @@
                             <% reservations.forEach(function(reservation) {  %>
                                 <tr value="<%= reservation.rID %>">
                                     <td>
-                                        <%= reservation.Date %>
+                                        <%= reservation.Date.toDateString() %>
                                     </td>
                                     <td>
                                         <%= reservation.StartTime %>
