@@ -13,21 +13,13 @@ app.use(bodyParser.json()); // parse form data client
 app.use(express.static(path.join(__dirname, 'public'))); // configure express to use public folder
 
 // database connection
-/*
 let db = mysql.createConnection({
     host: '127.0.0.1', // local host
     user: 'zippypark',
     password: 'goyhVynIiLcJgHpN',
     database: 'zippypark'
-});*/
-// // Nandita's remote database for testing:
-const db = mysql.createConnection({
-    host: 'remotemysql.com',
-    user: '7X8Fr3nKz9',
-    password: 'M8b3pMtr9B',
-    database: '7X8Fr3nKz9',
-    port: 3306
 });
+
 
 db.connect( function (err) {
     if ( err ) {
