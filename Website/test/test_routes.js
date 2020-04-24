@@ -1,14 +1,21 @@
 // automated route testing
 let chai = require('chai');
 let chaiHttp = require('chai-http');
-let server = require('../server');
+let server = require('../server'); // server.js
 let should = chai.should();
 
 chai.use(chaiHttp);
 
-describe('Initializing...', () => {  
-    it('check DASHBOARD', (done) => {
+describe('Initializing...', () => {  // check basic pages
+    it('check LOGIN', (done) => {
         chai.request(server).get('/').end((err, res) => {
+            should.not.exist(err);
+            res.should.have.status(200);
+            done();
+        });
+    });
+    it('check DASHBOARD', (done) => {
+        chai.request(server).get('/dashboard').end((err, res) => {
             should.not.exist(err);
             res.should.have.status(200);
             done();
@@ -37,8 +44,8 @@ describe('Initializing...', () => {
     });
 });
 
-describe('Customer Account', () => {
-    it('ADD a customer account', (done) => {
+describe('Customer Account', () => { // Check routes specific to Customer page
+    it('ADD a customer account', (done) => { // Add an example account
         const customer = {
             first: 'Sam',
             last: 'Cheng',
@@ -63,7 +70,7 @@ describe('Customer Account', () => {
             done();
         });
     });
-    it('UPDATE a customer with an existing account', (done) => {
+    it('UPDATE a customer with an existing account', (done) => { // Update the same account
         const customer = {
             first: 'Bob',
             last: 'Cheng',
@@ -88,7 +95,7 @@ describe('Customer Account', () => {
             done();
         });
     });
-    it('GET an existing customer', (done) => {
+    it('GET an existing customer', (done) => { // Get the same account by barcode
         const customer = {
             barcode: 314159
         }
@@ -100,7 +107,7 @@ describe('Customer Account', () => {
             done();
         });
     });
-    it('DELETE a customer given the barcode', (done) => {
+    it('DELETE a customer given the barcode', (done) => { // Delete the test account
         const customer = {
             barcode: 314159
         }
@@ -113,8 +120,8 @@ describe('Customer Account', () => {
     });  
 });
 
-describe('Reservations', () => {
-    before((done) => {
+describe('Reservations', () => { // Check routes specific to Reservations page
+    before((done) => { // Making a reservation requires an existing barcode, so create a Customer account first
         const customer = {
             first: 'Sam',
             last: 'Cheng',
@@ -139,7 +146,7 @@ describe('Reservations', () => {
             done();
         });
     });
-    after((done) => {
+    after((done) => { // Delete the customer account when done testing Reservation routes
         const customer = {
             barcode: 314159
         }
@@ -150,7 +157,7 @@ describe('Reservations', () => {
             done();
         });
     })
-    it('ADD a reservation for an existing account', (done) => {
+    it('ADD a reservation for an existing account', (done) => { // Add a reservation for this customer
         const reservation = {
             date: '2020-04-30',
             start: '10:00',
@@ -170,7 +177,7 @@ describe('Reservations', () => {
             done();
         });
     });
-    it('GET a reservation given the reservation id', (done) => {
+    it('GET a reservation given the reservation id', (done) => { // Get the reservation just made
         const reservation = {
             rid: '265358979'
         }
@@ -182,7 +189,7 @@ describe('Reservations', () => {
             done();
         });
     });
-    it('UPDATE a reservation given the reservation id', (done) => {
+    it('UPDATE a reservation given the reservation id', (done) => { // Update the reservation just made
         const reservation = {
             date: '2020-05-30',
             start: '10:00',
@@ -201,7 +208,7 @@ describe('Reservations', () => {
             done();
         });
     });
-    it('DELETE a reservation given the reservation id', (done) => {
+    it('DELETE a reservation given the reservation id', (done) => { // Delete hte reservation just made
         const reservation = {
             rid: '265358979'
         }
@@ -214,8 +221,8 @@ describe('Reservations', () => {
     });
 });
 
-describe('Dashboard', () => {  
-    it('GET number of open parking spots', (done) => {
+describe('Dashboard', () => {  // Check routes specific to Dashboard page
+    it('GET number of open parking spots', (done) => { 
         chai.request(server)
         .get('/getParkingSpots')
         .end((err, res) => {
@@ -256,7 +263,7 @@ describe('Dashboard', () => {
         });
     });
     let createRes, createRes30x, onTime, overstay, cancels, exchangeVIP;
-    it('GET points scheme', (done) => {
+    it('GET points scheme', (done) => { // Get points and keep track of original points scheme
         chai.request(server)
         .get('/getPointsForm')
         .end((err, res) => {
@@ -271,7 +278,7 @@ describe('Dashboard', () => {
             done();
         });
     });
-    it('UPDATE points scheme', (done) => {
+    it('UPDATE points scheme', (done) => { // Update point scheme (temporarily for testing)
         const pointScheme = {
             createRes: createRes,
             createRes30x: createRes30x,
@@ -288,7 +295,7 @@ describe('Dashboard', () => {
             done();
         });
     });
-    after((done) => { // reset to normal
+    after((done) => { // Reset point scheme to normal after updating it
         const pointScheme = {
             createRes: createRes,
             createRes30x: createRes30x,
