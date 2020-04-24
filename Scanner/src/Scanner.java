@@ -16,6 +16,7 @@ import com.jcraft.jsch.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -62,7 +63,7 @@ public class Scanner {
 		frmScanner.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//ScarletAccount Login Panel
-		while(!isValid(netID, password)) {
+		while(!isValid(netID, password)) { 
 			JPanel panel = new JPanel(new GridLayout(0, 1));
 			JLabel uLabel = new JLabel("NetID", SwingConstants.CENTER);
 			JTextField user = new JTextField(10);
@@ -158,11 +159,29 @@ public class Scanner {
             }
             else return("Barcode Does Not Exist\n");
             
+            //Get Payment
+            double[] hCost = new double[24];
+            rs = stmt.executeQuery("SELECT BasePrice, Multiplier FROM Payment");
+            for (int i = 6; i < 23; i++) {
+            	rs.next();
+            	hCost[i] = rs.getDouble("BasePrice") * rs.getDouble("Multiplier");
+            }
+            
+            
+            //Get Points
+            rs = stmt.executeQuery("SELECT Points FROM Points WHERE Action = 'OnTime'");
+            rs.next();
+            int onTime = rs.getInt("Points");
+            rs = stmt.executeQuery("SELECT Points FROM Points WHERE Action = 'Overstay'");
+            rs.next();
+            int overstay = rs.getInt("Points");
+            
             //Get Reservations
-            rs = stmt.executeQuery("SELECT Date, StartTime, EndTime, AssignedSpot, Charge, rID FROM Reservations WHERE Barcode = " + bc + " ORDER BY `Date`, `StartTime` ASC");
+            rs = stmt.executeQuery("SELECT Date, StartTime, EndTime, AssignedSpot, VIP, Charge, rID FROM Reservations WHERE Barcode = " + bc + " ORDER BY `Date`, `StartTime` ASC");
             String Date = "";
             String StartTime = "";
             String EndTime = "";
+            int vip = 0;
             float Charge = 0;
             int rID = 0;
             int AssignedSpot = 0;
@@ -171,22 +190,21 @@ public class Scanner {
 	            StartTime = rs.getString("StartTime");
 	            EndTime = rs.getString("EndTime");
 	            AssignedSpot = rs.getInt("AssignedSpot");
+	            vip = rs.getInt("VIP");
 	            Charge = rs.getFloat("Charge");
 	            rID = rs.getInt("rID");
             }
             
             //Get Walk-in
-            rs = stmt.executeQuery("SELECT Date, StartTime, AssignedSpot, Charge, wID FROM WalkIns WHERE Barcode = " + bc + " ORDER BY `Date`, `StartTime` ASC");
+            rs = stmt.executeQuery("SELECT Date, StartTime, AssignedSpot, wID FROM WalkIns WHERE Barcode = " + bc + " ORDER BY `Date`, `StartTime` ASC");
             String wDate = "";
             String wStartTime = "";
             int wID = 0;
             int wAssignedSpot = 0;
-            float wCharge = 0;
             if(rs.next()) {
 	            wDate = rs.getString("Date");
 	            wStartTime = rs.getString("StartTime");
 	            wAssignedSpot = rs.getInt("AssignedSpot");
-	            wCharge = rs.getFloat("Charge");
 	            wID = rs.getInt("wID");
             }
             
@@ -198,6 +216,8 @@ public class Scanner {
             String wEnterTime = wDate + " " + wStartTime;
             String exitTime = Date + " " + EndTime;
         	String currentTime = fullDate.format(currentDate);
+        	
+        	DecimalFormat df = new DecimalFormat("0.00");
             
         	//Process Walk-In Entry
         	if((AssignedSpot == 0 || currentTime.compareTo(enterTime) < 0) && wAssignedSpot == 0) {
@@ -207,13 +227,12 @@ public class Scanner {
         			spot = rs.getInt("SpotNum");
         			stmt.executeUpdate("UPDATE `Parking Spots` SET Status = \"" + bc + "\" WHERE SpotNum = " + spot);
         			stmt.executeUpdate("INSERT INTO `WalkIns` (`Date`, `StartTime`, `Barcode`, `AssignedSpot`, `Charge`) "
-        					+ "VALUES ('" + dayFormat.format(currentDate) + "', '" + hourFormat.format(currentDate) + "', '" + bc + "', '" + spot + "', '35')");
+        					+ "VALUES ('" + dayFormat.format(currentDate) + "', '" + hourFormat.format(currentDate) + "', '" + bc + "', '" + spot + "', '0')");
         			output += "No reservation found for this time...creating walk-in.\n";
-        			output += ("\nYour Walk-in Information\nDate:\t" + dayFormat.format(currentDate) + "\nStart Time:\t" + hourFormat.format(currentDate) 
-        			+ "\nCharge:\t$35/hr" + "\nAssigned Spot:\t" + spot + "\n");
+        			output += ("\nYour Walk-in Information\nDate:\t" + dayFormat.format(currentDate) + "\nStart Time:\t" + hourFormat.format(currentDate) + "\nAssigned Spot:\t" + spot + "\n");
         		}
         		else
-        			output += "\nThere are no walkin spots available.\n";
+        			output += "\nThere are no walk-in spots available.\n";
         	}
         	//Exit Walk-in
         	else if(wAssignedSpot > 0) {
@@ -221,45 +240,60 @@ public class Scanner {
         		String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(elapsedMillis),
         	            TimeUnit.MILLISECONDS.toMinutes(elapsedMillis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(elapsedMillis)),
         	            TimeUnit.MILLISECONDS.toSeconds(elapsedMillis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(elapsedMillis)));
-        		float cost = (elapsedMillis / 3600000 + 1) * wCharge;
+//        		float cost = (elapsedMillis / 3600000 + 1) * wCharge;
+        		
+        		float cost = 0;
+        		for(int i = fullDate.parse(wEnterTime).getHours(); i <= currentDate.getHours(); i++)
+        			cost += hCost[i];
+        		
         		stmt.executeUpdate("UPDATE `Parking Spots` SET Status = \"unoccupied\" WHERE SpotNum = " + wAssignedSpot);
                 stmt.executeUpdate("INSERT INTO `Records` (`Date`, `StartTime`, `EndTime`, `Barcode`, `AssignedSpot`, `Charge`, `Deleted`, `rID`, `wID`) "
-                		+ "SELECT Date, StartTime, '" + hourFormat.format(currentDate) + "', Barcode, AssignedSpot, '" + cost + "', 'Yes', '-1', wID FROM WalkIns WHERE wID = " + wID);
+                		+ "SELECT Date, StartTime, '" + hourFormat.format(currentDate) + "', Barcode, AssignedSpot, '" + df.format(cost) + "', 'Yes', '-1', wID FROM WalkIns WHERE wID = " + wID);
                 stmt.executeUpdate("DELETE FROM `WalkIns` WHERE wID = " + wID);
                 output += ("\nYour Walk-in Information\nDate:\t" + wDate + "\nStart Time:\t" + wStartTime + "\nWalk-in ID:\t" + wID + "\nAssigned Spot:\t" + wAssignedSpot 
-                		+ "\nTime Elapsed:\t" + hms + "\nTotal Cost:\t$" + cost + "\n");
+                		+ "\nTime Elapsed:\t" + hms + "\nTotal Cost:\t$" + df.format(cost) + "\n");
                 output += "\nThank you for choosing ZippyPark!\n";
         	}
             //Reservation Entrance
         	else if(AssignedSpot == -1) {
-        		output += ("\nYour Reservation Information\nDate:\t" + Date + "\nStart Time:\t" + StartTime + "\nEnd Time:\t" + EndTime + "\nCharge:\t$" + Charge + "\nReservation ID:\t" + rID + "\n");
+        		output += ("\nYour Reservation Information\nDate:\t" + Date + "\nStart Time:\t" + StartTime + "\nEnd Time:\t" + EndTime + "\nCharge:\t$" + df.format(Charge) + "\nReservation ID:\t" + rID + "\n");
             	//OnTime
             	if(exitTime.compareTo(currentTime) >= 0 && enterTime.compareTo(currentTime) < 0) {
-            		//Pick from regular spots
 	            	int spot = 0;
-	            	if(Handicapped == 0) {
-	            		rs = stmt.executeQuery("SELECT * FROM `Parking Spots` WHERE Type = \"reserved\" AND Status = \"unoccupied\"");
-	            		if(rs.next()) {
-	            			spot = rs.getInt("SpotNum");
-	            			stmt.executeUpdate("UPDATE `Parking Spots` SET Status = \"" + bc + "\" WHERE SpotNum = " + spot);
-	            			stmt.executeUpdate("UPDATE `Reservations` SET AssignedSpot = " + spot + " WHERE rID  = " + rID);
-	            			stmt.executeUpdate("UPDATE `CustomerInfo` SET Points = Points + 5 WHERE Barcode  = " + bc);
-	            			output += "Assigned Spot:\t" + spot + "\n";
-	            		}
-	            		else output += "\nThere are no regular spots available.\n";
-	            	}
 	            	//Pick from handicapped spots
-	            	else {
+	            	if (Handicapped != 0) {
 	            		rs = stmt.executeQuery("SELECT * FROM `Parking Spots` WHERE Type = \"handicap\" AND Status = \"unoccupied\"");
 	            		if(rs.next()) {
 	            			spot = rs.getInt("SpotNum");
 	            			stmt.executeUpdate("UPDATE `Parking Spots` SET Status = \"" + bc + "\" WHERE SpotNum = " + spot);
 	            			stmt.executeUpdate("UPDATE `Reservations` SET AssignedSpot = " + spot + " WHERE rID  = " + rID);
-	            			stmt.executeUpdate("UPDATE `CustomerInfo` SET Points = Points + 5 WHERE Barcode  = " + bc);
 	            			output += "Assigned Spot:\t" + spot + "\n";
 	            		}
 	            		else
 	            			output += "\nThere are no handicap spots available.\n";
+	            	}
+	            	//Pick from VIP spots
+	            	else if (vip != 0) {
+	            		rs = stmt.executeQuery("SELECT * FROM `Parking Spots` WHERE Type = \"VIP\" AND Status = \"unoccupied\"");
+	            		if(rs.next()) {
+	            			spot = rs.getInt("SpotNum");
+	            			stmt.executeUpdate("UPDATE `Parking Spots` SET Status = \"" + bc + "\" WHERE SpotNum = " + spot);
+	            			stmt.executeUpdate("UPDATE `Reservations` SET AssignedSpot = " + spot + " WHERE rID  = " + rID);
+	            			output += "Assigned Spot:\t" + spot + "\n";
+	            		}
+	            		else
+	            			output += "\nThere are no VIP spots available.\n";
+	            	}
+	            	//Pick from regular spots
+	            	else {
+	            		rs = stmt.executeQuery("SELECT * FROM `Parking Spots` WHERE Type = \"reserved\" AND Status = \"unoccupied\"");
+	            		if(rs.next()) {
+	            			spot = rs.getInt("SpotNum");
+	            			stmt.executeUpdate("UPDATE `Parking Spots` SET Status = \"" + bc + "\" WHERE SpotNum = " + spot);
+	            			stmt.executeUpdate("UPDATE `Reservations` SET AssignedSpot = " + spot + " WHERE rID  = " + rID);
+	            			output += "Assigned Spot:\t" + spot + "\n";
+	            		}
+	            		else output += "\nThere are no regular spots available.\n";
 	            	}
             	}
             	//Early: should make Walk-in instead
@@ -283,25 +317,30 @@ public class Scanner {
                     stmt.executeUpdate("INSERT INTO `Records` (`Date`, `StartTime`, `EndTime`, `Barcode`, `AssignedSpot`, `Charge`, `Deleted`, `rID`, `wID`) "
                     		+ "SELECT Date, StartTime, EndTime, Barcode, AssignedSpot, Charge, 'Yes', rID, '-1' FROM Reservations WHERE rID = " + rID);
                     stmt.executeUpdate("DELETE FROM `Reservations` WHERE rID = " + rID);
-                    output += "Total Cost:\t$" + Charge + "\n";
+                    stmt.executeUpdate("UPDATE `CustomerInfo` SET Points = Points + " + onTime + " WHERE Barcode  = " + bc);
+                    output += "Total Cost:\t$" + df.format(Charge) + "\n";
                     output += "\nThank you for choosing Zippypark!\n";
             	}
             	//Late
             	else if (exitTime.compareTo(currentTime) < 0){
             		output += "\nYou have exited late.\n";
             		long elapsedMillisLate = currentDate.getTime() - fullDate.parse(exitTime).getTime();
-            		float lateCost = Charge + (elapsedMillisLate / 3600000 + 1) * 25;
+            		//float lateCost = Charge + (elapsedMillisLate / 3600000 + 1) * 25;
             		String hmsLate = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(elapsedMillisLate),
             	            TimeUnit.MILLISECONDS.toMinutes(elapsedMillisLate) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(elapsedMillisLate)),
             	            TimeUnit.MILLISECONDS.toSeconds(elapsedMillisLate) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(elapsedMillisLate)));
+            		
+            		float lateCost = Charge;
+            		for(int i = fullDate.parse(exitTime).getHours(); i <= currentDate.getHours(); i++)
+            			lateCost += hCost[i] * 2;
+            		
             		stmt.executeUpdate("UPDATE `Parking Spots` SET Status = \"unoccupied\" WHERE SpotNum = " + AssignedSpot);
             		stmt.executeUpdate("INSERT INTO `Records` (`Date`, `StartTime`, `EndTime`, `Barcode`, `AssignedSpot`, `Charge`, `Deleted`, `rID`, `wID`) "
-                    		+ "SELECT Date, StartTime, EndTime, Barcode, AssignedSpot, '" + lateCost + "', 'Yes', rID, '-1' FROM Reservations WHERE rID = " + rID);
+                    		+ "SELECT Date, StartTime, EndTime, Barcode, AssignedSpot, '" + df.format(lateCost) + "', 'Yes', rID, '-1' FROM Reservations WHERE rID = " + rID);
                     stmt.executeUpdate("DELETE FROM `Reservations` WHERE rID = " + rID);
-                    stmt.executeUpdate("UPDATE `CustomerInfo` SET Points = Points - 5 WHERE Barcode = " + bc);
+                    stmt.executeUpdate("UPDATE `CustomerInfo` SET Points = Points - " + overstay + " WHERE Barcode = " + bc);
             		output += "Time Over:\t" + hmsLate + "\n";
-                    output += "Total Cost:\t$" + lateCost + "\n";
-                    //Notification of Extra Payment Required Here
+                    output += "Total Cost:\t$" + df.format(lateCost) + "\n";
             	}
             	//Early to Reservation (should not occur)
             	else output += "Your parking reservation has not begun yet.\n";	
