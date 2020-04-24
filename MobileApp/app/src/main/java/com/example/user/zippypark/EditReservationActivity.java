@@ -108,8 +108,13 @@ public class EditReservationActivity extends AppCompatActivity {
 
                                 long diff = end.getTime() - start.getTime(); //length of the reservation
                                 long minutes = TimeUnit.MILLISECONDS.toMinutes(diff); //conversion to minutes
-                                charge = base * ((minutes/15) * multiplier); //price formula
 
+                                if((minutes) % 15 == 0) {
+                                    charge = base * ((minutes/15) * multiplier); //price formula
+                                }
+                                else{
+                                    charge = base * ((minutes/15) + 1) * multiplier;
+                                }
 
                                 Statement stmt = MainActivity.conn.createStatement();
                                 String query = "UPDATE `Reservations` SET `Date`='" + date +
