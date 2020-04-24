@@ -32,7 +32,7 @@ public class CreateReservationActivity extends AppCompatActivity {
     Button cancelButton;
     TextView pointsRequired;
     int barcode;
-    int multiplier;
+    double multiplier;
     int base;
     int vip;
     int numpoints;
@@ -42,6 +42,7 @@ public class CreateReservationActivity extends AppCompatActivity {
     String start2;
     String end1;
     int count;
+    double charge;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -49,6 +50,7 @@ public class CreateReservationActivity extends AppCompatActivity {
 
         final Bundle b = getIntent().getExtras();
         barcode = b.getInt("barcode");
+
 
         resDateEditText = findViewById(R.id.reservationDateEditText);
         startTimeEditText = findViewById(R.id.startTime);
@@ -139,17 +141,18 @@ public class CreateReservationActivity extends AppCompatActivity {
                                 statement2.executeUpdate(query3);
 
                                 Statement stmt1 = MainActivity.conn.createStatement(); //calculate charge
-                                ResultSet rs = stmt1.executeQuery(
-                                        "SELECT * FROM `Payment` WHERE `StartTime`=\"" + start1 + "\"");
-                                if(rs.next()){
-                                    multiplier = rs.getInt("Multiplier");
-                                    base = rs.getInt("BasePrice");
-                                }
+                                    ResultSet rs = stmt1.executeQuery(
+                                            "SELECT * FROM `Payment` WHERE `StartTime`=\"" + start1 + "\"");
+                                    if(rs.next()){
+                                        multiplier = rs.getDouble("Multiplier");
+                                        base = rs.getInt("BasePrice");
+                                    }
 
-                                long diff = end.getTime() - start.getTime(); //length of the reservation
-                                long minutes = TimeUnit.MILLISECONDS.toMinutes(diff); //conversion to minutes
-                                long charge1 = base * (minutes/15) * multiplier; //price formula
-                                final double charge = (double) charge1;
+
+                                    long diff = end.getTime() - start.getTime(); //length of the reservation
+                                    long minutes = TimeUnit.MILLISECONDS.toMinutes(diff); //conversion to minutes
+                                    charge = base * ((minutes/15) * multiplier); //price formula
+
 
                                 Statement stmt = MainActivity.conn.createStatement();
                                 String query =("INSERT INTO `Reservations`" +
@@ -181,12 +184,14 @@ public class CreateReservationActivity extends AppCompatActivity {
                         }
                     });
 
+
                     Intent i = new Intent(CreateReservationActivity.this,
-                            HomeMenuActivity.class);
+                            CurrentReservationsActivity.class);
                     i.putExtras(b);
 
                     Toast toast = Toast.makeText(getApplicationContext(),
-                            "Reservation Created, Payment made", Toast.LENGTH_LONG);
+                            "Reservation Created", Toast.LENGTH_LONG);
+
                     toast.show();
 
                     startActivity(i);

@@ -26,11 +26,12 @@ public class EditReservationActivity extends AppCompatActivity {
     Button deleteResButton;
     int barcode;
     int resID;
-    int multiplier;
+    double multiplier;
     int base;
     String date1;
     String start2;
     String end1;
+    double charge;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -101,14 +102,13 @@ public class EditReservationActivity extends AppCompatActivity {
                                 Statement stmt1 = MainActivity.conn.createStatement();
                                 ResultSet rs = stmt1.executeQuery("SELECT * FROM `Payment` WHERE `StartTime`=\"" + start1 + "\"");
                                 if(rs.next()){
-                                    multiplier = rs.getInt("Multiplier");
+                                    multiplier = rs.getDouble("Multiplier");
                                     base = rs.getInt("BasePrice");
                                 }
 
                                 long diff = end.getTime() - start.getTime(); //length of the reservation
                                 long minutes = TimeUnit.MILLISECONDS.toMinutes(diff); //conversion to minutes
-                                long charge1 = base * (minutes/15) * multiplier; //price formula
-                                final double charge = (double) charge1;
+                                charge = base * ((minutes/15) * multiplier); //price formula
 
 
                                 Statement stmt = MainActivity.conn.createStatement();
@@ -125,7 +125,7 @@ public class EditReservationActivity extends AppCompatActivity {
                     });
 
                     Intent i = new Intent(EditReservationActivity.this,
-                            HomeMenuActivity.class);
+                            CurrentReservationsActivity.class);
                     i.putExtras(bundle);
 
                     int duration = Toast.LENGTH_SHORT;
