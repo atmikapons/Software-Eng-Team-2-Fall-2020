@@ -7,6 +7,19 @@
     android:layout_height="match_parent"
     android:layout_margin="20sp">
 
+    <ImageView
+        android:id="@+id/img"
+        android:layout_height="100dp"
+        android:layout_width="100dp"
+        android:contentDescription="@string/app_name"
+        app:srcCompat="@drawable/zippyparklogo_web"
+        android:layout_marginBottom="30dp"
+        android:layout_margin="5dp"
+        app:layout_constraintBottom_toTopOf="@id/welcome"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
     <TextView
         android:id="@+id/zippy"
         android:layout_width="wrap_content"
@@ -17,7 +30,7 @@
         android:textColor="@color/colorPrimaryDark"
         android:fontFamily="sans-serif-smallcaps"
         app:layout_constraintBottom_toTopOf="@id/welcome"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/img"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
@@ -29,65 +42,73 @@
         android:text="@string/welcome"
         android:textColor="@color/text"
         android:textSize="25sp"
-        
+        android:layout_marginBottom="30dp"
         app:layout_constraintTop_toBottomOf="@id/zippy"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
     <Button
         android:id="@+id/viewProfile"
-        android:layout_width="wrap_content"
+        android:layout_width="155dp"
         android:layout_height="120sp"
+        android:layout_marginTop="25dp"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:drawableTop="@drawable/ic_person_outline_black_24dp"
         android:padding="30sp"
         android:text="@string/view_profile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/welcome"
         app:layout_constraintEnd_toStartOf="@id/currentReservations"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/reservationHistory"
         android:background="@color/hint"/>
 
     <Button
         android:id="@+id/currentReservations"
-        android:layout_width="wrap_content"
+        android:layout_width="155dp"
         android:layout_height="120sp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
         android:drawableTop="@drawable/ic_list_black_24dp"
         android:padding="30sp"
+        android:layout_marginTop="25dp"
         android:text="@string/view_reservations"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@string/view_profile"
         app:layout_constraintTop_toBottomOf="@id/welcome"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/createReservation"
         android:background="@color/hint"/>
 
     <Button
         android:id="@+id/reservationHistory"
-        android:layout_width="wrap_content"
+        android:layout_width="155dp"
         android:layout_height="120sp"
         android:drawableTop="@drawable/ic_archive_black_24dp"
         android:padding="30sp"
-        android:layout_marginLeft="7sp"
+        android:layout_marginStart="8sp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/reservation_history"
         app:layout_constraintEnd_toStartOf="@id/createReservation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/viewProfile"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/logout"
         android:background="@color/hint"/>
 
     <Button
         android:id="@+id/createReservation"
-        android:layout_width="160sp"
+        android:layout_width="155sp"
         android:layout_height="120sp"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:drawableTop="@drawable/ic_create_black_24dp"
         android:padding="30sp"
         android:text="@string/create_reservation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@string/reservation_history"
         app:layout_constraintTop_toBottomOf="@id/currentReservations"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/logout"
         android:background="@color/hint"/>
 
     <Button
@@ -95,12 +116,13 @@
         android:layout_width="75dp"
         android:layout_height="40dp"
         android:layout_margin="10sp"
+        android:layout_marginTop="10dp"
         android:background="@color/colorPrimaryDark"
         android:text="@string/logout"
         android:textColor="@color/colorPrimary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/reservationHistory" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </android.support.constraint.ConstraintLayout>
