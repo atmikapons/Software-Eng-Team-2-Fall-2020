@@ -32,6 +32,7 @@ public class EditReservationActivity extends AppCompatActivity {
     String start2;
     String end1;
     double charge;
+    String hour;
 
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -77,6 +78,15 @@ public class EditReservationActivity extends AppCompatActivity {
                 start2 = startTimeEditText.getText().toString();
                 end1 = endTimeEditText.getText().toString();
 
+                int j = Integer.parseInt(start1.substring(0,2));
+                if(j >= 10){
+                    hour = Integer.toString(j) + ":00:00";
+                }
+                else{
+                    hour = "0" + Integer.toString(j) + ":00:00";
+                }
+
+
 
                 if(resDateEditText.getText().toString().trim().equalsIgnoreCase("")) {
                     resDateEditText.setError("Field cannot be left blank");
@@ -100,7 +110,7 @@ public class EditReservationActivity extends AppCompatActivity {
                         public void run() {
                             try{
                                 Statement stmt1 = MainActivity.conn.createStatement();
-                                ResultSet rs = stmt1.executeQuery("SELECT * FROM `Payment` WHERE `StartTime`=\"" + start1 + "\"");
+                                ResultSet rs = stmt1.executeQuery("SELECT * FROM `Payment` WHERE `StartTime`=\"" + hour + "\"");
                                 if(rs.next()){
                                     multiplier = rs.getDouble("Multiplier");
                                     base = rs.getInt("BasePrice");
