@@ -1,0 +1,71 @@
+<!-- views/partials/graphs/byDate.ejs -->
+<div id = "byDate-collapse" class="collapse">
+    <div class="card-body">
+        <p align="center" style="font-size:20px"> Average Reservations per Day</p>
+        <p align="left" style="padding-left:20px;font-size:12px"> Data recorded from the past 30 days.</p>
+        <!-- Chart -->
+        <canvas id="chartByDate"></canvas>
+        <%let date = [];%>
+        <%let count = [];%>
+
+        <% if ( recordsByDate!= null ) { %>
+            <% recordsByDate.forEach(function(record) {  %>
+                <% date.push(record.Day); %>
+                <% count.push(record.Count);%>
+            <% }) %>
+        <% } %>
+        <script>
+            let ctxByDate = document.getElementById('chartByDate');
+            let chartByDateLabels = "<%= date %>";
+            chartByDateLabels = chartByDateLabels.split(',');
+            let chartByDateData = [<%= count %>];
+            let chartByDate = new Chart(ctxByDate, {
+                type: 'bar',
+                data: {
+                    labels: chartByDateLabels,
+                    datasets: [{
+                        label: '# of Reservations',
+                        data: chartByDateData,
+                        borderWidth: 1,
+                        backgroundColor: "#2574a9"
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        </script>
+
+        <!-- Table -->
+        <table id = "byDate-table" class = "table table-bordered">
+            <thead>
+                <tr>
+                    <!-- table headings -->
+                    <th class="text">Date</th>
+                    <th class="text">Number of Reservations </th>
+                </tr>
+            </thead>
+            <tbody>
+            <!-- take data from Records table -->
+                <% if ( recordsByDate!= null ) { %>
+                    <% recordsByDate.forEach(function(record) {  %>
+                        <tr value="<%= record.Day %>">
+                            <td>
+                                <%= record.Day %>
+                            </td>
+                            <td>
+                                <%= record.Count %>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

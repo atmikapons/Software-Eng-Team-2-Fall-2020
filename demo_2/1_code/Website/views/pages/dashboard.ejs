@@ -1,0 +1,248 @@
+<!-- views/pages/dashboard.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="hold-transition">
+    <div>
+        
+        <% include ../partials/sidebar %>
+        <div class = "content-container">
+            <div class = "container-fluid">
+                <div style="margin:20px">
+                    <h1>Dashboard </h1>
+                    <h5 style="font-style:italic">Today is <%= today %></h5>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card-counter danger">
+                            <i class="fa fa-car"></i>
+                            <span class="count-numbers" id="num-parking-spots">0</span>
+                            <span class="count-name">open parking spots</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-counter info">
+                            <i class="fa fa-calendar"></i>
+                            <span class="count-numbers" id="num-reservations">0</span>
+                            <span class="count-name">reservations today</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-counter success">
+                            <i class="fa fa-usd"></i>
+                            <span class="count-numbers" id="revenue">$</span>
+                            <span class="count-name">yesterday's revenue</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card-counter primary">
+                            <i class="fa fa-users"></i>
+                            <span class="count-numbers" id="num-accounts">0</span>
+                            <span class="count-name">customer accounts</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-counter success">
+                            <i class="fa fa-pencil-square-o"></i>
+                            <span class="count-numbers" id="future-reservations">0</span>
+                            <span class="count-name">upcoming reservations</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row forms">
+                    <div class="col-md-6">
+                        <% include ../partials/price-adjustment %>
+                    </div>
+                    <div class="col-md-6">
+                        <% include ../partials/points-adjustment %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <% include ../partials/footer %>
+    </div>
+
+</body>
+</html>
+
+<script>
+    $(document).ready( function () {
+        $.get("/getParkingSpots", function (data, status) {
+            if (data.status == "Success") {
+                $("#num-parking-spots").html(data.data[0].spots);
+            } else {
+                alert("Error getting parking spots");
+            }
+        });
+
+        $.get("/getNumReservations", function (data, status) {
+            if (data.status == "Success" ) {
+                let total = 0;
+                let date = new Date();
+                let month = date.getMonth()+1;
+                let today = "";
+                if ( month < 10 ) {
+                    today = date.getFullYear() + '-0' + (date.getMonth()+1) + '-' + date.getDate();
+                } else {
+                    today = date.getFullYear() + '-' + (date.getMonth()+1) + '-' + date.getDate();
+                }
+               
+                for (row in data.data) {
+                    if ( data.data[row].Date.substring(0,10) === today ) {
+                        $("#num-reservations").html(data.data[row].num);
+                    } else {
+                        total += data.data[row].num;
+                    }
+                }
+                $("#future-reservations").html(total);
+            } else {
+                alert("Error getting today's number of reservations");
+            }
+        });
+
+        $.get("/getRevenue", function (data, status) {
+            if (data.status == "Success" ) {
+                if ( data.data[0].rev === null ) {
+                    $("#revenue").html("$0.00");
+                } else {
+                    $("#revenue").html("$" + data.data[0].rev.toFixed(2));
+                }
+            } else {
+                alert("Error getting yesterday's revenue");
+            }
+        });
+
+        $.get("/getNumCustomers", function (data, status) {
+            if (data.status == "Success" ) {
+               $("#num-accounts").html(data.data[0].num);
+            } else {
+                alert("Error getting yesterday's revenue");
+            }
+        });
+     
+        getPriceForm();
+        getPointsForm();
+
+        $("#reset-price").click(function (event) {
+            getPriceForm();
+        });
+
+        $("#reset-points").click(function (event) {
+            getPointsForm();
+        });
+
+        $("#suggest-price").click(function (event) {
+            $.get("/getPriceSuggestion", function (data, status) {
+                if (data.status == "Success") {
+                    let time = 6;
+                    const frequency = data.data;
+                    const avg = (arr => arr.reduce((a,b)=> a+b, 0)/arr.length);
+                    const frequencyAvg = avg(frequency);
+                    for (row in frequency) {
+                        let multiplier = Math.round(frequency[row]/frequencyAvg*10)/10;
+                        if ( multiplier < 0.5 ) {
+                            multiplier = 0.5
+                        } else if ( multiplier > 3 ) { 
+                            multiplier = 3;
+                        }
+                        $("#multiplier-"+(time)).val(multiplier);
+                        time++;
+                    }
+                } else {
+                    alert("Error getting price scheme");
+                }
+            });
+        });
+
+        $("#edit-price").click(function (event) {
+            let times = [];
+            let bases = [];
+            let multipliers = [];
+            let makeArrays = new Promise(function (resolve, reject) {
+                let time;
+                for ( time = 6; time <= 22; time++ ) {
+                    times.push('"'+$("#time-"+time).html()+'"');
+                    bases.push('"'+$("#base-"+time).val()+'"');
+                    multipliers.push('"'+$("#multiplier-"+time).val()+'"');
+                }
+                if (times.length === 17) {
+                    resolve();
+                } else {
+                    reject();
+                }
+            })  
+            makeArrays
+                .then( function () {  
+                        $.post("/editPriceForm", {
+                            "times" : JSON.stringify(times),
+                            "bases" : JSON.stringify(bases),
+                            "multipliers" : JSON.stringify(multipliers),
+                        },
+                        function (data, status) {
+                            if (data.status == "Success") {
+                                alert("Successfully updated price scheme");
+                            } else {
+                                alert("Error editing price scheme");
+                            }
+                        });
+                    }
+                )
+                .catch(function () {
+                    alert("Issue making arrays");
+                });
+        });
+
+        $("#edit-points").click(function (event) {
+            $.post("/editPointsForm", {
+                "createRes" : $("#pt-1").val(),
+                "createRes30x" : $("#pt-2").val(),
+                "onTime" : $("#pt-3").val(),
+                "overstay" : $("#pt-4").val(),
+                "cancels" : $("#pt-5").val(),
+                "exchangeVIP" : $("#pt-6").val(),
+            },
+            function (data, status) {
+            if (data.status == "Success") {
+                alert("Successfully updated point scheme");
+            } else {
+                alert("Error editing point scheme");
+            }
+            });
+        })
+    });
+
+    function getPriceForm() {
+        $.get("/getPriceForm", function (data, status) {
+            if (data.status == "Success") {
+                let time = 6;
+                for (row in data.data) {
+                    $("#base-"+(time)).val(data.data[row].BasePrice);
+                    $("#multiplier-"+(time)).val(data.data[row].Multiplier);
+                    time++;
+                }
+            } else {
+                alert("Error getting price scheme");
+            }
+        })
+    }
+
+    function getPointsForm() {
+        $.get("/getPointsForm", function (data, status) {
+            if (data.status == "Success") {
+                let id = 1;
+                for (row in data.data) {
+                    $("#pt-"+(id)).val(data.data[row].Points);
+                    id++;
+                }
+            } else {
+                alert("Error getting price scheme");
+            }
+        })
+    }
+
+</script>
