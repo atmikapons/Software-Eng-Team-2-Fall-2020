@@ -308,6 +308,68 @@ var router = function (app, db) {
         });
     });
 
+    app.post('/getAllReservations', function (req, res) {
+        let vip = req.body.vip;
+        let date = JSON.parse(req.body.date);
+        let query = 'SELECT CONVERT(HOUR(StartTime),SIGNED) AS `StartHour`, CONVERT(HOUR(EndTime),SIGNED) AS `EndHour`, \
+                    CONVERT(MINUTE(StartTime), SIGNED) AS `StartMin`, CONVERT(MINUTE(EndTime), SIGNED) AS `EndMin` \
+                    FROM Reservations WHERE VIP="' + vip + '" AND DATE="' + date + '"';
+        db.query(query, function (err, rows) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else {
+                let filledSpaces = new Array(68).fill(0);
+                let filledSpacesPromise = new Promise(function(resolve, reject){
+                    for (entry in rows) {
+                        // 6:00 to 23:00 = 17*60 = 1020 minutes
+                        let startMin = (rows[entry].StartHour-6)*60+rows[entry].StartMin;
+                        let endMin = (rows[entry].EndHour-6)*60+rows[entry].EndMin;
+
+                        let startQuarter = Math.trunc(startMin/15);
+                        let endQuarter = Math.ceil(endMin/15);
+                        if ( endMin%15 == 0 ) { endQuarter--; }
+
+                        for (let time = startQuarter; time <= endQuarter; time++ ) {
+                            filledSpaces[time] += 1;
+                        }
+                    }
+                    resolve(filledSpaces);
+                })
+                filledSpacesPromise.then((result) => {
+                    return res.status(200).send({
+                        'status' : "Success",
+                        'data' : result,
+                    });
+                }).catch((error) => {
+                    return res.status(404).send({
+                        'status' : "Error",
+                        'data' : error,
+                    });
+                })
+            }
+        });
+    });
+
+    app.post('/getNumParkingSpots', function (req, res) {
+        let vip = req.body.vip;
+        let query;
+        if ( vip == 1 ) {
+            query = 'SELECT COUNT(SpotNum) AS spots FROM `Parking Spots` WHERE Type="VIP"';
+        } else {
+            query = 'SELECT COUNT(SpotNum) AS spots FROM `Parking Spots` WHERE Type="Reserved"'; 
+        }
+        db.query(query, function (err, rows) {
+            if ( err ) {
+                return res.status(500).send(err);
+            } else {
+                return res.status(200).send({
+                    'status' : "Success",
+                    'data' : rows,
+                });
+            }
+        })
+    })
+
     app.post('/getReservation', function (req, res) {
         let rid = req.body.rid;
         let getReservationQuery = 'SELECT Date, StartTime, EndTime, Barcode, AssignedSpot, VIP, Charge FROM Reservations WHERE rID = (?)';

@@ -87,38 +87,107 @@
 
     $("#add-reservation-button").click(function (event) {
         event.preventDefault();
-        let charge = $("#charge").val();
-        if ( charge === "" ) {
-            let startHour = parseInt($("#start-time").val().substring(0,2));
-            let startMin = parseInt($("#start-time").val().substring(3));
-            let endHour = parseInt($("#end-time").val().substring(0,2));
-            let endMin = parseInt($("#end-time").val().substring(3));
-            let startQuarters = priceFifteen(startMin);
-            let endQuarters = priceFifteen(endMin);
-            let payment = 0;
+        let vip = (($('#vip').prop('checked')) ? 1 : 0);
 
-            $.get("/getPriceForm", function (data, status) {
-                if (data.status == "Success" ) {
-                    let pay = data.data;
-                    console.log(startHour);
-                    console.log(data.data[startHour-6]);
-                    payment += (pay[startHour-6].Multiplier * pay[startHour-6].BasePrice * startQuarters);
-                    if ( startHour != endHour ) {
-                        payment += (pay[startHour-6].Multiplier * pay[startHour-6].BasePrice * endQuarters);
-                    }
-                    startHour++;
-                    while ( startHour < endHour ) {
-                        payment += (pay[startHour-6].Multiplier * pay[startHour-6].BasePrice * 4);
-                        startHour++;
-                    }       
-                     $.post("/addReservation", {
+        let checkTimesPromise = new Promise(function (resolve, reject) {
+            let vip = (($('#vip').prop('checked')) ? 1 : 0);
+            let startTime = $("#start-time").val();
+            let endTime = $("#end-time").val();
+            let date = $("#dt").val();
+            $.post("/getAllReservations", {
+                "vip" : vip,
+                "date" : JSON.stringify(date),
+            }, 
+            function (data, status) {
+                if (data.status == "Success") {
+                    let filledSpaces = data.data;
+                    $.post("/getNumParkingSpots", {
+                        "vip" : vip,
+                    }, 
+                    function (parkingData, status) {
+                        if (parkingData.status == "Success") {
+                            let totalSpots = parkingData.data[0].spots
+
+                            let startMin = (parseInt(startTime.substring(0,2))-6)*60 + parseInt(startTime.substring(3));
+                            let endMin = (parseInt(endTime.substring(0,2))-6)*60 + parseInt(endTime.substring(3));
+
+                            let startQuarter = Math.trunc(startMin/15);
+                            let endQuarter = Math.ceil(endMin/15);
+                            if ( endMin%15 == 0 ) { endQuarter--; }
+
+                            for ( let time = startQuarter; time <= endQuarter; time ++ ) {
+                                if ( totalSpots - filledSpaces[time] <= 0 ) {
+                                    console.log("here");
+                                    resolve(0);
+                                }
+                            }
+                            resolve(1);
+                        }
+                    });
+                } else {
+                    alert("Error checking times");
+                    reject(0);
+                }
+            });
+        })        
+
+        checkTimesPromise.then((result) => {
+            console.log(result);
+            if ( result === 0 ) { // not available
+                alert("Error: The times you entered are not available.");
+            } else { // available
+                let charge = $("#charge").val();
+                if ( charge === "" ) {
+                    let startHour = parseInt($("#start-time").val().substring(0,2));
+                    let startMin = parseInt($("#start-time").val().substring(3));
+                    let endHour = parseInt($("#end-time").val().substring(0,2));
+                    let endMin = parseInt($("#end-time").val().substring(3));
+                    let startQuarters = priceFifteen(startMin);
+                    let endQuarters = priceFifteen(endMin);
+                    let payment = 0;
+
+                    $.get("/getPriceForm", function (data, status) {
+                        if (data.status == "Success" ) {
+                            let pay = data.data;
+                            payment += (pay[startHour-6].Multiplier * pay[startHour-6].BasePrice * startQuarters);
+                            if ( startHour != endHour ) {
+                                payment += (pay[startHour-6].Multiplier * pay[startHour-6].BasePrice * endQuarters);
+                            }
+                            startHour++;
+                            while ( startHour < endHour ) {
+                                payment += (pay[startHour-6].Multiplier * pay[startHour-6].BasePrice * 4);
+                                startHour++;
+                            }       
+                            $.post("/addReservation", {
+                                "date" : $("#dt").val(),
+                                "start" : $("#start-time").val(),
+                                "end" : $("#end-time").val(),
+                                "barcode" : $("#barcode").val(),
+                                "spot" : $("#assigned-spot").val(),
+                                "vip" : ($('#vip').prop('checked')) ? 1 : 0,
+                                "charge" : payment,
+                                "rid" : $("#rid").val(),
+                            },
+                            function (data, status) {
+                                if (data.status == "Success") {
+                                    location.reload();
+                                } else {
+                                    alert("Error adding reservation");
+                                }
+                            });
+                        } else {
+                            alert("Error getting today's number of reservations");
+                        }
+                    });
+                } else {
+                    $.post("/addReservation", {
                         "date" : $("#dt").val(),
                         "start" : $("#start-time").val(),
                         "end" : $("#end-time").val(),
                         "barcode" : $("#barcode").val(),
                         "spot" : $("#assigned-spot").val(),
-                        "vip" : ($('#vip').prop('checked')) ? 1 : 0,
-                        "charge" : payment,
+                        "vip" : vip,
+                        "charge" : $("#charge").val(),
                         "rid" : $("#rid").val(),
                     },
                     function (data, status) {
@@ -128,29 +197,9 @@
                             alert("Error adding reservation");
                         }
                     });
-                } else {
-                    alert("Error getting today's number of reservations");
                 }
-            });
-        } else {
-            $.post("/addReservation", {
-                "date" : $("#dt").val(),
-                "start" : $("#start-time").val(),
-                "end" : $("#end-time").val(),
-                "barcode" : $("#barcode").val(),
-                "spot" : $("#assigned-spot").val(),
-                "vip" : ($('#vip').prop('checked')) ? 1 : 0,
-                "charge" : $("#charge").val(),
-                "rid" : $("#rid").val(),
-            },
-            function (data, status) {
-                if (data.status == "Success") {
-                    location.reload();
-                } else {
-                    alert("Error adding reservation");
-                }
-            });
-        }
+            }
+        });
     });
 
     $(".delete-reservation").click(function (event) {
@@ -219,7 +268,7 @@
             return 4;
         }
     }
-
+    
   </script>
 </body>
 </html>
