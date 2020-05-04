@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * Created by user on 3/19/2020.
+ * written by: Samantha Moy
  */
 
 public class ProfileActivity extends AppCompatActivity {
