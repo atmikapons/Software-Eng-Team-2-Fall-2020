@@ -1,3 +1,8 @@
+/*written by: Kylie Chow, Samantha Cheng, Nandita Shenoy
+tested by: Kylie Chow, Samantha Cheng, Nandita Shenoy
+debugged by: Kylie Chow, Samantha Cheng, Nandita Shenoy*/
+
+
 const express = require('express');
 const mysql = require('mysql');
 const http = require('http');
