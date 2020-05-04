@@ -19,9 +19,8 @@ import com.jcraft.jsch.*;
 
 import java.sql.*;
 
-
 /**
- * Created by user on 3/19/2020.
+ * written by: Atmika Ponnusamy
  */
 
 public class SignUpActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
