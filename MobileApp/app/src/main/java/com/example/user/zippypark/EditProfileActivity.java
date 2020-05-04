@@ -17,7 +17,7 @@ import android.widget.Toast;
 import java.sql.*;
 
 /**
- * Created by user on 3/19/2020.
+ * written by: Samantha Moy
  */
 
 public class EditProfileActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
