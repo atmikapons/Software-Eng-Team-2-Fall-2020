@@ -17,6 +17,10 @@ import com.jcraft.jsch.*;
 
 import java.sql.*;
 
+/**
+ * written by: Atmika Ponnusamy
+ */
+
 public class EditReservationActivity extends AppCompatActivity {
 
     EditText resDateEditText;
