@@ -100,28 +100,28 @@ public class Scanner {
 						System.out.println(displayPoints("12345678"));
 						Thread.sleep(4000);
 						System.out.println("------------------------------\nEntering Reservation\n");
-						System.out.println(process("12345678"));
+						System.out.println(processScan("12345678"));
 						Thread.sleep(8000);
 						System.out.println("------------------------------\nExiting Reservation On Time\n");
-						System.out.println(process("12345678"));
+						System.out.println(processScan("12345678"));
 						Thread.sleep(8000);
 						System.out.println("------------------------------\nDisplaying New Point Total\n");
 						System.out.println(displayPoints("12345678"));
 						Thread.sleep(4000);
 						System.out.println("------------------------------\nEntering Reservation\n");
-						System.out.println(process("12345678"));
+						System.out.println(processScan("12345678"));
 						Thread.sleep(8000);
 						System.out.println("------------------------------\nModifying Reservation to Be Late");
 						editReservation("12345678");
 						System.out.println("------------------------------\nExiting Reservation Late\n");
-						System.out.println(process("12345678"));
+						System.out.println(processScan("12345678"));
 						Thread.sleep(8000);
 						System.out.println("------------------------------\nDisplaying New Point Total\n");
 						System.out.println(displayPoints(""));
 						System.out.println("------------------------------\nTest Complete\n");
 					}
 					else
-						textArea.setText(process(txtenterIdHere.getText()));
+						textArea.setText(processScan(txtenterIdHere.getText()));
 				} catch (ClassNotFoundException | SQLException | ParseException | InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -144,10 +144,10 @@ public class Scanner {
 		frmScanner.getRootPane().setDefaultButton(btnValidate);
 	}
 	
-	// Processes user actions
+	// processScanes user actions
 	// Written by Parth Patel, Andrew Ko, Piotr Zakrevski
 	@SuppressWarnings("resource")
-	private static String process(String bc) throws ClassNotFoundException, SQLException, ParseException {
+	private static String processScan(String bc) throws ClassNotFoundException, SQLException, ParseException {
 		
 		if(bc.compareTo("") == 0) return null;
 		
