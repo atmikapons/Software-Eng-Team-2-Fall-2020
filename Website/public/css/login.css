@@ -1,19 +1,21 @@
-/*written by: Kylie Chow, Samantha Cheng, Nandita Shenoy
-tested by: Kylie Chow, Samantha Cheng, Nandita Shenoy
-debugged by: Kylie Chow, Samantha Cheng, Nandita Shenoy*/
+/*
+written by: Nandita Shenoy
+tested by: Samantha Cheng, Kylie Chow, Nandita Shenoy 
+debugged by: Nandita Shenoy
+*/
 
 .login-form {
-        width: 300px;
-        margin: 0 auto;
-        font-family: Tahoma, Geneva, sans-serif;
-    }
+    width: 300px;
+    margin: 0 auto;
+    font-family: Tahoma, Geneva, sans-serif;
+}
 
-    .login-form h1 {
-        text-align: center;
-        color: #4d4d4d;
-        font-size: 24px;
-        padding: 20px 0 20px 0;
-    }
+.login-form h1 {
+    text-align: center;
+    color: #4d4d4d;
+    font-size: 24px;
+    padding: 20px 0 20px 0;
+}
 
 .login-logo {
     padding: 10px 15px 10px 30px;
@@ -22,22 +24,22 @@ debugged by: Kylie Chow, Samantha Cheng, Nandita Shenoy*/
     margin:0 auto;
 }
 
-    .login-form input[type="password"],
-    .login-form input[type="text"] {
-        width: 100%;
-        padding: 15px;
-        border: 1px solid #dddddd;
-        margin-bottom: 15px;
-        box-sizing: border-box;
-    }
+.login-form input[type="password"],
+.login-form input[type="text"] {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #dddddd;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+}
 
-    .login-form input[type="submit"] {
-        width: 100%;
-        padding: 15px;
-        background-color: #535b63;
-        border: 0;
-        box-sizing: border-box;
-        cursor: pointer;
-        font-weight: bold;
-        color: #ffffff;
-    }
+.login-form input[type="submit"] {
+    width: 100%;
+    padding: 15px;
+    background-color: #535b63;
+    border: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ffffff;
+}

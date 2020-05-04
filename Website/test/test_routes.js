@@ -1,6 +1,8 @@
-/*written by: Kylie Chow, Samantha Cheng, Nandita Shenoy
+/*
+written by: Samantha Cheng
 tested by: Kylie Chow, Samantha Cheng, Nandita Shenoy
-debugged by: Kylie Chow, Samantha Cheng, Nandita Shenoy*/
+debugged by: Samantha Cheng
+*/
 
 // automated route testing
 let chai = require('chai');

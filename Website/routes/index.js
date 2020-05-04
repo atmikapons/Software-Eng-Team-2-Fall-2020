@@ -1,6 +1,8 @@
-//written by: Kylie Chow, Samantha Cheng, Nandita Shenoy
-//tested by: Kylie Chow, Samantha Cheng, Nandita Shenoy
-//debugged by: Kylie Chow, Samantha Cheng, Nandita Shenoy
+/*
+written by: Samantha Cheng, Kylie Chow, Nandita Shenoy
+tested by: Samantha Cheng, Kylie Chow, Nandita Shenoy
+debugged by: Samantha Cheng, Kylie Chow, Nandita Shenoy 
+*/
 
 const express = require('express');
 const date = require('date-and-time');
