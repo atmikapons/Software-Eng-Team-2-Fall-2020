@@ -16,6 +16,9 @@ import com.jcraft.jsch.*;
 
 import java.sql.*;
 
+/**
+ * written by: Atmika Ponnusamy
+ */
 
 public class MainActivity extends AppCompatActivity {
     EditText userNameEditText;
