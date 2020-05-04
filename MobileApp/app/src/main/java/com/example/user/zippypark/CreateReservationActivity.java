@@ -21,7 +21,9 @@ import com.jcraft.jsch.*;
 
 import java.sql.*;
 
-//written by: Shreya Patel
+/**
+ * written by: Shreya Patel
+ */
 
 public class CreateReservationActivity extends AppCompatActivity {
 
