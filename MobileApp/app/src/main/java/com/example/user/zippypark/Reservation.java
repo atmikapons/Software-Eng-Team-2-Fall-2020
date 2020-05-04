@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.Time;
 
 /**
- * Created by user on 3/21/2020.
+ * written by: Atmika Ponnusamy
  */
 
 public class Reservation {
