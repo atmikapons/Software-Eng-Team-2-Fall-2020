@@ -13,6 +13,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * written by: Shreya Patel
+ */
+
 public class DeleteReservationActivity extends AppCompatActivity {
 
     Button confirmReservationDelete;
