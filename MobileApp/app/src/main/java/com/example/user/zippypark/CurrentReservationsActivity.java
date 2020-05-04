@@ -26,7 +26,7 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * written by: Atmika Ponnusamy
+ * written by: Shreya Patel
  */
 
 public class CurrentReservationsActivity extends AppCompatActivity {
