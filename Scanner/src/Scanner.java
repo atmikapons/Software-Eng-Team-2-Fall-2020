@@ -1,3 +1,7 @@
+// written by: Parth Patel, Andrew Ko, Piotr Zakrevski
+// tested by: Andrew Ko, Piotr Zakrevski
+// debugged by: Parth Patel
+
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 
@@ -46,16 +50,12 @@ public class Scanner {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public Scanner() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
+	// Sets up GUI for Scanner App
+	// Written by Parth Patel, Andrew Ko, Piotr Zakrevski
 	private void initialize() {
 		frmScanner = new JFrame();
 		frmScanner.setTitle("Scanner");
@@ -63,7 +63,7 @@ public class Scanner {
 		frmScanner.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//ScarletAccount Login Panel
-		while(!isValid(netID, password)) { 
+		while(!isValid(netID, password)) {
 			JPanel panel = new JPanel(new GridLayout(0, 1));
 			JLabel uLabel = new JLabel("NetID", SwingConstants.CENTER);
 			JTextField user = new JTextField(10);
@@ -93,8 +93,36 @@ public class Scanner {
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					textArea.setText(null);
-					textArea.setText(process(txtenterIdHere.getText()));
-				} catch (ClassNotFoundException | SQLException | ParseException e) {
+					
+					if(txtenterIdHere.getText().compareTo("unitTest") == 0) {
+						System.out.println("Testing Points and Pricing System.");
+						System.out.println("------------------------------\n");
+						System.out.println(displayPoints("12345678"));
+						Thread.sleep(4000);
+						System.out.println("------------------------------\nEntering Reservation\n");
+						System.out.println(process("12345678"));
+						Thread.sleep(8000);
+						System.out.println("------------------------------\nExiting Reservation On Time\n");
+						System.out.println(process("12345678"));
+						Thread.sleep(8000);
+						System.out.println("------------------------------\nDisplaying New Point Total\n");
+						System.out.println(displayPoints("12345678"));
+						Thread.sleep(4000);
+						System.out.println("------------------------------\nEntering Reservation\n");
+						System.out.println(process("12345678"));
+						Thread.sleep(8000);
+						System.out.println("------------------------------\nModifying Reservation to Be Late");
+						editReservation("12345678");
+						System.out.println("------------------------------\nExiting Reservation Late\n");
+						System.out.println(process("12345678"));
+						Thread.sleep(8000);
+						System.out.println("------------------------------\nDisplaying New Point Total\n");
+						System.out.println(displayPoints(""));
+						System.out.println("------------------------------\nTest Complete\n");
+					}
+					else
+						textArea.setText(process(txtenterIdHere.getText()));
+				} catch (ClassNotFoundException | SQLException | ParseException | InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
@@ -116,6 +144,8 @@ public class Scanner {
 		frmScanner.getRootPane().setDefaultButton(btnValidate);
 	}
 	
+	// Processes user actions
+	// Written by Parth Patel, Andrew Ko, Piotr Zakrevski
 	@SuppressWarnings("resource")
 	private static String process(String bc) throws ClassNotFoundException, SQLException, ParseException {
 		
@@ -243,8 +273,27 @@ public class Scanner {
 //        		float cost = (elapsedMillis / 3600000 + 1) * wCharge;
         		
         		float cost = 0;
-        		for(int i = fullDate.parse(wEnterTime).getHours(); i <= currentDate.getHours(); i++)
-        			cost += hCost[i];
+        		Date begin = fullDate.parse(wEnterTime);
+        		
+        		while(begin.before(currentDate)) {
+        			if(begin.getMinutes() >= 0 && begin.getMinutes() < 15) cost += hCost[begin.getHours()];
+        			else if(begin.getMinutes() >= 15 && begin.getMinutes() < 30) cost += hCost[begin.getHours()];
+        			else if(begin.getMinutes() >= 30 && begin.getMinutes() < 45) cost += hCost[begin.getHours()];
+        			else if(begin.getMinutes() >= 45 && begin.getMinutes() < 60) cost += hCost[begin.getHours()];
+        			
+//        			if (begin.getTime() + 900000 > currentDate.getTime()) {
+//        				begin.setTime(currentDate.getTime());
+//        				
+//        				if(begin.getMinutes() >= 0 && begin.getMinutes() < 15) cost += hCost[begin.getHours()];
+//            			else if(begin.getMinutes() >= 15 && begin.getMinutes() < 30) cost += hCost[begin.getHours()];
+//            			else if(begin.getMinutes() >= 30 && begin.getMinutes() < 45) cost += hCost[begin.getHours()];
+//            			else if(begin.getMinutes() >= 45 && begin.getMinutes() < 60) cost += hCost[begin.getHours()];
+//        			}
+        			
+//        			cost += hCost[begin.getHours()];
+        			begin.setTime(begin.getTime() + 900000);
+        		}
+        		
         		
         		stmt.executeUpdate("UPDATE `Parking Spots` SET Status = \"unoccupied\" WHERE SpotNum = " + wAssignedSpot);
                 stmt.executeUpdate("INSERT INTO `Records` (`Date`, `StartTime`, `EndTime`, `Barcode`, `AssignedSpot`, `Charge`, `Deleted`, `rID`, `wID`) "
@@ -331,14 +380,25 @@ public class Scanner {
             	            TimeUnit.MILLISECONDS.toSeconds(elapsedMillisLate) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(elapsedMillisLate)));
             		
             		float lateCost = Charge;
-            		for(int i = fullDate.parse(exitTime).getHours(); i <= currentDate.getHours(); i++)
-            			lateCost += hCost[i] * 2;
+            		Date begin = fullDate.parse(exitTime);
+//            		for(int i = fullDate.parse(exitTime).getHours(); i <= currentDate.getHours(); i++)
+//            			lateCost += hCost[i] * 2;
+            		
+            		
+            		while(begin.before(currentDate)) {
+            			if(begin.getMinutes() >= 0 && begin.getMinutes() < 15) lateCost += hCost[begin.getHours()] * 1.5;
+            			else if(begin.getMinutes() >= 15 && begin.getMinutes() < 30) lateCost += hCost[begin.getHours()] * 1.5;
+            			else if(begin.getMinutes() >= 30 && begin.getMinutes() < 45) lateCost += hCost[begin.getHours()] * 1.5;
+            			else if(begin.getMinutes() >= 45 && begin.getMinutes() < 60) lateCost += hCost[begin.getHours()] * 1.5;
+            			
+            			begin.setTime(begin.getTime() + 900000);
+            		}
             		
             		stmt.executeUpdate("UPDATE `Parking Spots` SET Status = \"unoccupied\" WHERE SpotNum = " + AssignedSpot);
             		stmt.executeUpdate("INSERT INTO `Records` (`Date`, `StartTime`, `EndTime`, `Barcode`, `AssignedSpot`, `Charge`, `Deleted`, `rID`, `wID`) "
                     		+ "SELECT Date, StartTime, EndTime, Barcode, AssignedSpot, '" + df.format(lateCost) + "', 'Yes', rID, '-1' FROM Reservations WHERE rID = " + rID);
                     stmt.executeUpdate("DELETE FROM `Reservations` WHERE rID = " + rID);
-                    stmt.executeUpdate("UPDATE `CustomerInfo` SET Points = Points - " + overstay + " WHERE Barcode = " + bc);
+                    stmt.executeUpdate("UPDATE `CustomerInfo` SET Points = Points + " + overstay + " WHERE Barcode = " + bc);
             		output += "Time Over:\t" + hmsLate + "\n";
                     output += "Total Cost:\t$" + df.format(lateCost) + "\n";
             	}
@@ -359,6 +419,8 @@ public class Scanner {
 		return output;
 	}
 	
+	// Checks if the NetID and Password is valid
+	// Written by Parth Patel
 	private static Boolean isValid(String user, char[] pass) {
 		if(user == null || user.isEmpty() || pass == null) return false;
 		JSch jsch = new JSch();
@@ -373,5 +435,121 @@ public class Scanner {
 		} catch (JSchException e) {
 			return false;
 		}
+	}
+	
+	// Displays points for test routine
+	// Written by Parth Patel
+	@SuppressWarnings("resource")
+	private static String displayPoints(String bc) throws ClassNotFoundException, SQLException, ParseException {
+		int flag = 0;
+		if (bc.compareTo("") == 0) {
+			flag = 1;
+			bc = "12345678";
+		}
+		
+		int rport = 3306;
+        String rhost = "coewww.rutgers.edu";
+        String dbUsername = "zippypark";
+        String dbPassword = "goyhVynIiLcJgHpN";
+        Session session = null;
+        Connection conn = null;
+        String output = new String("");
+
+        try {
+            JSch jsch = new JSch();
+            session = jsch.getSession(netID, rhost, 22);
+            session.setPassword(new String(password));
+            session.setConfig("StrictHostKeyChecking", "no");
+            session.connect();
+            
+            int assigned_port = session.setPortForwardingL(0, "localhost", rport);
+	    	conn = DriverManager.getConnection("jdbc:mysql://localhost:" + assigned_port + "/zippypark?user=" + dbUsername + "&password=" + dbPassword + "&useUnicode=true&characterEncoding=UTF-8");
+	    	Statement stmt = conn.createStatement();
+            
+	    	//Get CustomerInfo
+            ResultSet rs = stmt.executeQuery("SELECT FirstName, LastName, Points FROM CustomerInfo WHERE Barcode = " + bc);
+            if(rs.next()) {
+	            String FirstName = rs.getString("FirstName");
+	            String LastName = rs.getString("LastName");
+	            int Points = rs.getInt("Points");
+	            output += FirstName + " " + LastName + " currently has " + Points + " points.\n\n";
+            }
+            
+            //Get Points
+            rs = stmt.executeQuery("SELECT Points FROM Points WHERE Action = 'OnTime'");
+            rs.next();
+            int onTime = rs.getInt("Points");
+            rs = stmt.executeQuery("SELECT Points FROM Points WHERE Action = 'Overstay'");
+            rs.next();
+            int overstay = rs.getInt("Points");
+            
+            output += "Points Table: \nOnTime: +" + onTime + "\nOverstay: " + overstay + "\n";
+            
+            if(flag == 1)
+            	return output;
+            
+            Date currentDate = new Date();
+            Date begin = new Date();
+            begin.setTime(currentDate.getTime() - 3600000);
+            Date end = new Date();
+            end.setTime(currentDate.getTime() + 3600000);
+            SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+        	
+            stmt.executeUpdate("INSERT INTO `Reservations` (`Date`, `StartTime`, `EndTime`, `Barcode`, `AssignedSpot`, `VIP`, `Charge`, `rID`) VALUES ('" + dayFormat.format(currentDate) + "', '" + hourFormat.format(begin) + "', '" + hourFormat.format(end) + "', '12345678', '-1', '0', '0', NULL)");
+
+        }catch (JSchException e) {
+            e.printStackTrace();
+        }finally {
+	    	if(conn != null && !conn.isClosed()){
+	    		conn.close();
+	    	}
+	    	if(session !=null && session.isConnected()){
+	    		session.disconnect();
+	    	}
+	    }
+		return output;
+	}
+	
+	// Creates and modifies reservations as part of the test routine
+	// Written by Andrew Ko, Piotr Zakrevski
+	@SuppressWarnings("resource")
+	private static void editReservation(String bc) throws ClassNotFoundException, SQLException, ParseException {
+		int rport = 3306;
+        String rhost = "coewww.rutgers.edu";
+        String dbUsername = "zippypark";
+        String dbPassword = "goyhVynIiLcJgHpN";
+        Session session = null;
+        Connection conn = null;
+        String output = new String("");
+
+        try {
+            JSch jsch = new JSch();
+            session = jsch.getSession(netID, rhost, 22);
+            session.setPassword(new String(password));
+            session.setConfig("StrictHostKeyChecking", "no");
+            session.connect();
+            
+            int assigned_port = session.setPortForwardingL(0, "localhost", rport);
+	    	conn = DriverManager.getConnection("jdbc:mysql://localhost:" + assigned_port + "/zippypark?user=" + dbUsername + "&password=" + dbPassword + "&useUnicode=true&characterEncoding=UTF-8");
+	    	Statement stmt = conn.createStatement();
+            
+            Date currentDate = new Date();
+            Date begin = new Date();
+            begin.setTime(currentDate.getTime() - 3600000);
+            SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+        	
+            stmt.executeUpdate("UPDATE `Reservations` SET EndTime = '" + hourFormat.format(begin) + "' WHERE Barcode = " + bc);
+
+        }catch (JSchException e) {
+            e.printStackTrace();
+        }finally {
+	    	if(conn != null && !conn.isClosed()){
+	    		conn.close();
+	    	}
+	    	if(session !=null && session.isConnected()){
+	    		session.disconnect();
+	    	}
+	    }
 	}
 }
