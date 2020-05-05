@@ -16,6 +16,8 @@ To Access the Website
    3. Run: ‘npm start’ to start the server
    4. Go to zippypark.rutgers.edu and view the website
    5. Pages can be navigated to using the sidebar
+Additional information on local vs remote setup, as well as manager login credentials,
+can be found at code/Website/README.md
 -------------------------------------------------------------------------------------------------------------------------------
 To Run the Scanner GUI
 Prereq: Install JRE 8.0 or higher
