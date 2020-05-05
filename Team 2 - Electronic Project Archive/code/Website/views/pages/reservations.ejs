@@ -1,0 +1,225 @@
+<!-- views/pages/reservations.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="hold-transition">
+    <div>
+        <% include ../partials/sidebar %>
+        <div class = "content-container">
+            <div class = "container-fluid">
+                <table id = "reservation_table" class = "table table-bordered">
+                    <thead>
+                        <tr>
+                            <!-- table headings -->
+                            <th class="text">Date</th>
+                            <th class="text">Start Time</th>
+                            <th class="text">End Time</th>
+                            <th class="text">Barcode</th>
+                            <th class="text">Assigned Spot</th>
+                            <th class="text">Charge</th>
+                            <th class="text">rID</th>
+                            <th class="text">Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <!-- take data from Reservations table-->
+                        <% if ( reservations != null ) { %>
+                            <% reservations.forEach(function(reservation) {  %>
+                                <tr value="<%= reservation.rID %>">
+                                    <td>
+                                        <%= reservation.Date.toDateString() %>
+                                    </td>
+                                    <td>
+                                        <%= reservation.StartTime %>
+                                    </td>
+                                    <td>
+                                        <%= reservation.EndTime %>
+                                    </td>
+                                    <td>
+                                        <%= reservation.Barcode %>
+                                    </td>
+                                    <td>
+                                        <%= reservation.AssignedSpot %>
+                                    </td>
+                                    <td>
+                                        <%= reservation.Charge %>
+                                    </td>
+                                    <td>
+                                        <%= reservation.rID %>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary get-reservation">Update</button>
+                                        <button class="btn btn-primary btn-danger delete-reservation" data-toggle="modal" data-target="#deleteReservationModal">Delete</button>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-primary" id="add-reservation" data-toggle="modal" data-target="#reservationModal">
+                    Add Reservation
+                </button>
+            </div>
+        </div>
+
+        <% include ../partials/footer %>
+    </div>
+    <% include ../partials/add-reservation%>
+    <% include ../partials/delete-reservation %>
+<script>
+    $(document).ready( function () {
+        $('#reservation_table').DataTable(); //from datatables.net
+        $('#add-reservation-payment').tooltip();
+    });
+
+    $('#reservationModal').on('hidden.bs.modal', function() {
+        $('#reservationModal form')[0].reset();
+    }); //reset form
+
+    $("#add-reservation").click(function (event) {
+        $("#rid").removeAttr("readonly");
+        $("#add-reservation-button").show();
+        $("#edit-reservation-button").hide();
+        $("#reservationModalLabel").html("Add new reservation");
+    })
+
+    $("#add-reservation-button").click(function (event) {
+        event.preventDefault();
+        let charge = $("#charge").val();
+        if ( charge === "" ) {
+            let startHour = parseInt($("#start-time").val().substring(0,2));
+            let startMin = parseInt($("#start-time").val().substring(3));
+            let endHour = parseInt($("#end-time").val().substring(0,2));
+            let endMin = parseInt($("#end-time").val().substring(3));
+            let startQuarters = priceFifteen(startMin);
+            let endQuarters = priceFifteen(endMin);
+            let payment = 0;
+
+            $.get("/getPriceForm", function (data, status) {
+                if (data.status == "Success" ) {
+                    let pay = data.data;
+                    console.log(startHour);
+                    console.log(data.data[startHour-6]);
+                    payment += (pay[startHour-6].Multiplier * pay[startHour-6].BasePrice * startQuarters);
+                    if ( startHour != endHour ) {
+                        payment += (pay[startHour-6].Multiplier * pay[startHour-6].BasePrice * endQuarters);
+                    }
+                    startHour++;
+                    while ( startHour < endHour ) {
+                        payment += (pay[startHour-6].Multiplier * pay[startHour-6].BasePrice * 4);
+                        startHour++;
+                    }       
+                     $.post("/addReservation", {
+                        "date" : $("#dt").val(),
+                        "start" : $("#start-time").val(),
+                        "end" : $("#end-time").val(),
+                        "barcode" : $("#barcode").val(),
+                        "spot" : $("#assigned-spot").val(),
+                        "vip" : ($('#vip').prop('checked')) ? 1 : 0,
+                        "charge" : payment,
+                        "rid" : $("#rid").val(),
+                    },
+                    function (data, status) {
+                        if (data.status == "Success") {
+                            location.reload();
+                        } else {
+                            alert("Error adding reservation");
+                        }
+                    });
+                } else {
+                    alert("Error getting today's number of reservations");
+                }
+            });
+        } else {
+            $.post("/addReservation", {
+                "date" : $("#dt").val(),
+                "start" : $("#start-time").val(),
+                "end" : $("#end-time").val(),
+                "barcode" : $("#barcode").val(),
+                "spot" : $("#assigned-spot").val(),
+                "vip" : ($('#vip').prop('checked')) ? 1 : 0,
+                "charge" : $("#charge").val(),
+                "rid" : $("#rid").val(),
+            },
+            function (data, status) {
+                if (data.status == "Success") {
+                    location.reload();
+                } else {
+                    alert("Error adding reservation");
+                }
+            });
+        }
+    });
+
+    $(".delete-reservation").click(function (event) {
+        let rid = $(this).closest('tr').attr('value');
+        $("#delete-reservation-button").attr("href", "/deleteReservation/" + rid);
+    });
+
+    $(".get-reservation").click(function (event) {
+        event.preventDefault();
+        $("#add-reservation-button").hide();
+        $("#edit-reservation-button").show();
+        $("#reservationModalLabel").html("Update reservation");
+        $("#rid").attr("readonly", "readonly");
+        
+        let rid = $(this).closest('tr').attr('value');
+        $.post("/getReservation", {
+            "rid" : rid
+        },
+        function (data, status) {
+            let date = (data.data[0].Date).substring(0,10);
+            $("#dt").val(date);
+            $("#start-time").val(data.data[0].StartTime);
+            $("#end-time").val(data.data[0].EndTime);
+            $("#barcode").val(data.data[0].Barcode);
+            $("#assigned-spot").val(data.data[0].AssignedSpot);
+            if ( data.data[0].VIP === 1 ) {
+                $("#vip").prop("checked", true);
+            }
+            $("#charge").val(data.data[0].Charge);
+            $("#rid").val(rid);
+        });
+        $("#reservationModal").modal();
+    });
+
+    $("#edit-reservation-button").click(function (event) {
+        event.preventDefault();
+        $.post("/editReservation", {
+            "date" : $("#dt").val(),
+            "start" : $("#start-time").val(),
+            "end" : $("#end-time").val(),
+            "barcode" : $("#barcode").val(),
+            "spot" : $("#assigned-spot").val(),
+            "vip" : ($('#vip').prop('checked')) ? 1 : 0,
+            "charge" : $("#charge").val(),
+            "rid" : $("#rid").val(),
+        },
+        function (data, status) {
+          if (data.status == "Success") {
+            location.reload();
+          } else {
+            alert("Error editing reservation");
+          }
+        });
+    });
+
+    function priceFifteen(minute) {
+        if ( minute == 0 ) {
+            return 0;
+        } else if ( minute <= 15 ) {
+            return 1;
+        } else if ( minute <= 30 ) {
+            return 2;
+        } else if ( minute <= 45 ) {
+            return 3;
+        } else {
+            return 4;
+        }
+    }
+
+  </script>
+</body>
+</html>

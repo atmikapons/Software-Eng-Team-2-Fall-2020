@@ -1,0 +1,4 @@
+#Sat Apr 25 10:22:09 EDT 2020
+base.0=C\:\\Users\\user\\Documents\\ZippyPark\\MobileApp\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\21
+path.0=classes.dex
+renamed.0=classes.dex

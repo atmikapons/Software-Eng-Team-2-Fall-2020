@@ -1,0 +1,87 @@
+<!-- views/partials/add-customer.ejs -->
+<div class="modal fade" id="customerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class = "modal-dialog" role = "document">
+        <div class = "modal-content">
+            <div class = "modal-header">
+                <h5 class = "modal-title" id = "customerModalLabel">Add New Customer</h5>
+            </div>
+            <form class="add-customer-form" action="" method="post" enctype="multipart/form-data">
+                <div class = "modal-body">
+                    <div class="form-group">
+                        <label for="first-name">First name</label>
+                        <input type="text" class="form-control" id="first-name" placeholder="First Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="last-name">Last name</label>
+                        <input type="text" class="form-control" id="last-name" placeholder="Last Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-email">Email address</label>
+                        <input type="email" class="form-control" id="customer-email" placeholder="name@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone-number">Phone number</label>
+                        <input type="text" class="form-control" id="phone-number" placeholder="555-555-5555" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="license">License Plate</label>
+                        <input type="text" class="form-control" name="license" id="license" placeholder="License" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-password">Password</label>
+                        <input type="password" class="form-control" id="customer-password" placeholder="Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="barcode">Barcode</label>
+                        <input type="number" class="form-control" name="barcode" id="barcode" placeholder="Barcode">
+                    </div>
+                    <div class="form-group">
+                        <label for="registration">Registration Number</label>
+                        <input type="number" class="form-control" name="registration" id="registration" placeholder="12345">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="points">Points</label>
+                            <select id="points" name="points" class="form-control col-md-6" required>
+                                <option selected disabled>Select number of points</option>
+                                <option>0</option>
+                                <option>10</option>
+                                <option>20</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <input class="form-check-input" type="checkbox" value="" id="handicap">
+                            <label class="form-check-label" for="handicap"> Handicap </label>
+                        </div>
+                    </div>
+                    <div class = "form-row">
+                        <label for="cc-number" class="col-md-9">Credit Card Number</label>
+                        <label for="cc-cvv" class="col-md-3">CVV</label>
+                    </div>
+                    <div class = "form-row">
+                        <input type="number" class="form-control col-md-9" name="cc-num" id="cc-num" placeholder="Credit card number">
+                        <input type="number" class="form-control col-md-3" name="cc-cvv" id="cc-cvv" placeholder="123">
+                    </div>
+                    <div class = "form-row">
+                        <label for="cc-exp" class="col-md-6">Expiration Date</label>
+                        <label for="cc-type" class="col-md-6">Type</label>
+                    </div>
+                    <div class = "form-row">
+                        <input type="text" class="form-control col-md-6" name="cc-exp" id="cc-exp" placeholder="01/20">
+                        <select id="cc-type" name="cc-type" class="form-control col-md-6">
+                            <option selected disabled>Credit card type</option>
+                            <option>Visa</option>
+                            <option>MasterCard</option>
+                            <option>American Express</option>
+                        </select>
+                    </div>
+                </div>
+                <div class = "modal-footer">
+                    <button type="submit" class="btn btn-primary float-right" id="add-customer-button">Add Customer</button>
+                    <button type="submit" class="btn btn-primary float-right" id="edit-customer-button">Update</button>
+                    <button type = "button" class = "btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

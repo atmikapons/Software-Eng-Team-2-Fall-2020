@@ -1,0 +1,69 @@
+<!-- views/partials/points-adjustment.ejs -->
+<div class = "modal-dialog" role = "document">
+
+    <div class = "modal-content">
+
+        <div class = "modal-header">
+            <h5 class = "modal-title" id = "reservationModalLabel">Points Adjustment</h5>
+        </div>
+
+        <form class="edit-points-form" action="" method="post" enctype="multipart/form-data">
+            <div class = "modal-body">
+                <div class="form-row">
+                    <div class="col">
+                        <label for="create-res">Created a Reservation</label>
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" name="create-res" id="pt-1" placeholder="30">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <label for="create-res-30">Created 30 Reservations</label>
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" name="create-res-30" id="pt-2" placeholder="30">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <label for="on-time">On Time</label>
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" name="on-time" id="pt-3" placeholder="30">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <label for="overstay">Overstayed</label>
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" name="overstay" id="pt-4" placeholder="30">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <label for="cancels">Cancellation</label>
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" name="cancels" id="pt-5" placeholder="30">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col">
+                        <label for="exchange-vip">VIP Cost</label>
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" name="exchange-vip" id="pt-6" placeholder="30">
+                    </div>
+                </div>
+            </div>
+
+            <div class = "modal-footer">
+                <button type="button" class="btn btn-primary float-right" id="edit-points">Update</button>
+                <button type = "button" class = "btn btn-secondary" id="reset-points">Reset</button>
+            </div>
+
+        </form>
+    </div>
+</div>

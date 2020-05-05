@@ -1,0 +1,175 @@
+<!-- views/pages/customers.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% include ../partials/head %>
+</head>
+<body class="hold-transition">
+    <div>
+        <% include ../partials/sidebar %>
+        <div class = "content-container">
+            <div class = "container-fluid">
+                <table id = "customer_table" class = "table table-bordered">
+                    <thead>
+                        <tr>
+                            <!-- table headings -->
+                            <th class="text">First Name</th>
+                            <th class="text">Last Name</th>
+                            <th class="text">Barcode</th>
+                            <th class="text">License Number</th>
+                            <th class="text">Points</th>
+                            <th class="text">Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <!-- take data from CustomerInfo table -->
+                        <% if ( customers != null ) { %>
+                            <% customers.forEach(function(customer) {  %>
+                                <tr value="<%= customer.Barcode %>">
+                                    <td>
+                                        <%= customer.FirstName %>
+                                    </td>
+                                    <td>
+                                        <%= customer.LastName %>
+                                    </td>
+                                    <td>
+                                        <%= customer.Barcode %>
+                                    </td>
+                                    <td>
+                                        <%= customer.LicenseNum %>
+                                    </td>
+                                    <td>
+                                        <%= customer.Points %>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary get-customer">Update</button>
+                                        <button class="btn btn-primary btn-danger delete-customer" data-toggle="modal" data-target="#deleteCustomerModal">Delete</button>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-primary" id="add-customer" data-toggle="modal" data-target="#customerModal">
+                    Add Customer
+                </button>
+            </div>
+        </div>
+        
+        <% include ../partials/footer %>
+    </div>
+    <% include ../partials/add-customer %>
+    <% include ../partials/delete-customer %>
+<script>
+    $(document).ready( function () {
+        $('#customer_table').DataTable(); // from datatables.net
+    });
+
+    $('#customerModal').on('hidden.bs.modal', function () {
+        $('#customerModal form')[0].reset();
+    }); // reset form
+
+    $("#add-customer").click(function (event) {
+        $("#barcode").removeAttr("readonly");
+        $("#add-customer-button").show();
+        $("#edit-customer-button").hide();
+        $("#customerModalLabel").html("Add new customer");
+    })
+
+    $("#add-customer-button").click(function (event) {
+        event.preventDefault();
+        let date = $("#cc-exp").val();
+        let year = parseInt(date.substring(3)) + 2000;
+        let month = date.substring(0,2);
+        let dateString = year + "-" + month + "-01";
+        $.post("/addCustomer", {
+            "first" : $("#first-name").val(),
+            "last" : $("#last-name").val(),
+            "email" : $("#customer-email").val(),
+            "phone" : $("#phone-number").val(),
+            "password" : $("#customer-password").val(),
+            "barcode" : $("#barcode").val(),
+            "license" : $("#license").val(),
+            "reg" : $("#registration").val(),
+            "cctype" : $("#cc-type").val(),
+            "ccnum" : $("#cc-num").val(),
+            "ccexp" : dateString,
+            "cccvv" : $("#cc-cvv").val(),
+            "points" : $("#points").val(),
+            "handicap" : ($('#handicap').prop('checked')) ? 1 : 0,
+        },
+        function (data, status) {
+            if (data.status == "Success") {
+                location.reload();
+            } else {
+                alert("Error adding customer");
+            }
+        });
+    });
+
+    $(".delete-customer").click(function (event) {
+        let barcode = $(this).closest('tr').attr('value');
+        $("#delete-customer-button").attr("href", "/deleteCustomer/" + barcode);
+    });
+
+    $(".get-customer").click(function (event) {
+        event.preventDefault();
+        $("#customerModalLabel").html("Update customer");
+        $("#add-customer-button").hide();
+        $("#edit-customer-button").show();
+        $("#barcode").attr("readonly", "readonly");
+
+        let barcode = $(this).closest('tr').attr('value');
+        $.post("/getCustomer", {
+            "barcode" : barcode
+        },
+        function (data, status) {
+            $("#first-name").val(data.data[0].FirstName);
+            $("#last-name").val(data.data[0].LastName);
+            $("#customer-email").val(data.data[0].Email);
+            $("#phone-number").val(data.data[0].PhoneNum);
+            $("#customer-password").val(data.data[0].Password);
+            $("#barcode").val(barcode);
+            $("#license").val(data.data[0].LicenseNum);
+            $("#registration").val(data.data[0].RegistrationNum);
+            $("#cc-type").val(data.data[0].CreditCardType);
+            $("#cc-num").val(data.data[0].CreditCardNum);
+            $("#cc-exp").val(data.data[0].ExpDate);
+            $("#cc-cvv").val(data.data[0].CVV);
+            $("#points").val(data.data[0].Points);
+            if ( data.data[0].Handicapped === 1 ) {
+                $("#handicap").prop("checked", true);
+            }
+        });
+        $("#customerModal").modal();
+    });
+
+    $("#edit-customer-button").click(function (event) {
+        event.preventDefault();
+        $.post("/editCustomer", {
+            "first" : $("#first-name").val(),
+            "last" : $("#last-name").val(),
+            "email" : $("#customer-email").val(),
+            "phone" : $("#phone-number").val(),
+            "password" : $("#customer-password").val(),
+            "barcode" : $("#barcode").val(),
+            "license" : $("#license").val(),
+            "reg" : $("#registration").val(),
+            "cctype" : $("#cc-type").val(),
+            "ccnum" : $("#cc-num").val(),
+            "ccexp" : $("#cc-exp").val(),
+            "cccvv" : $("#cc-cvv").val(),
+            "points" : $("#points").val(),
+            "handicap" : ($('#handicap').prop('checked')) ? 1 : 0,
+        },
+        function (data, status) {
+          if (data.status == "Success") {
+            location.reload();
+          } else {
+            alert("Error editing customer");
+          }
+        });
+    });
+</script>
+</body>
+</html>
